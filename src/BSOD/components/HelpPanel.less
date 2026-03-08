@@ -1,0 +1,157 @@
+.bs-help {
+  position: absolute;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(4, 6, 14, 0.72);
+    pointer-events: all;
+  }
+
+  &__panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #1e2028;
+    border: 2px solid #0a0c14;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 8px 0 #0a0c14;
+    padding: 0 16px 16px;
+    pointer-events: all;
+    animation: bs-help-drop 0.18s ease forwards;
+    max-height: 85dvh;
+    overflow-y: auto;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0 10px;
+    border-bottom: 1px solid rgba(180, 190, 210, 0.08);
+    margin-bottom: 12px;
+  }
+
+  &__title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: rgba(180, 190, 210, 0.7);
+    letter-spacing: 0.1em;
+  }
+
+  &__close {
+    all: unset;
+    font-size: 14px;
+    color: rgba(180, 190, 210, 0.4);
+    cursor: pointer;
+    padding: 4px 6px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+    &:active { color: rgba(180, 190, 210, 0.9); }
+  }
+
+  &__section-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: rgba(180, 190, 210, 0.3);
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+    margin-top: 4px;
+  }
+
+  // ── Stat rows ───────────────────────────────────────────────────────────────
+  &__stats {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  &__stat {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  &__stat-icon {
+    width: 28px;
+    height: 28px;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  &__stat-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  &__stat-name {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    line-height: 1.3;
+  }
+
+  &__stat-desc {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 11px;
+    color: rgba(180, 190, 210, 0.5);
+    line-height: 1.6;
+  }
+
+  // ── Timeline segments ───────────────────────────────────────────────────────
+  &__timeline-desc {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 14px;
+  }
+
+  &__seg {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  &__seg-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    min-width: 46px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  &__seg-live {
+    font-size: 6px;
+    opacity: 0.8;
+  }
+
+  &__seg-desc {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 11px;
+    color: rgba(180, 190, 210, 0.5);
+    line-height: 1.5;
+  }
+
+  // ── Tip ─────────────────────────────────────────────────────────────────────
+  &__tip {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 11px;
+    color: rgba(180, 190, 210, 0.38);
+    line-height: 1.6;
+    margin: 0;
+    padding-top: 12px;
+    border-top: 1px solid rgba(180, 190, 210, 0.07);
+  }
+}
+
+@keyframes bs-help-drop {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

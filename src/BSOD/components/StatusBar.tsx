@@ -1,8 +1,9 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import iconEnergy from '../img/icon_energy.png';
 import iconMood from '../img/icon_mood.png';
 import iconFocus from '../img/icon_focus.png';
 import iconFollowers from '../img/icon_followers.png';
+import HelpPanel from './HelpPanel';
 import './StatusBar.less';
 
 interface Props {
@@ -30,6 +31,8 @@ const StatusBar = React.memo(
   forwardRef<HTMLDivElement, Props>(function StatusBar(
     { energy, mood, focus, followers, day, phase, streamedToday }, ref
   ) {
+    const [showHelp, setShowHelp] = useState(false);
+
     const activePhase: DayPhase | null =
       (DAY_PHASES as readonly string[]).includes(phase) ? phase as DayPhase
       : phase === 'stream' ? 'evening' : null;
@@ -37,7 +40,8 @@ const StatusBar = React.memo(
     const fillPct = PHASE_FILL[phase] ?? 0;
 
     return (
-      <div className="bs-status" ref={ref}>
+      <div className="bs-status" ref={ref} onPointerDown={() => setShowHelp(true)}>
+        {showHelp && <HelpPanel onClose={() => setShowHelp(false)} />}
 
         {/* Row 1: DAY + followers */}
         <div className="bs-status__top">
@@ -46,9 +50,12 @@ const StatusBar = React.memo(
             <span className="bs-status__day-num">{day}</span>
             <span className="bs-status__day-slash">/ 13</span>
           </div>
-          <div className="bs-status__flw">
-            <img className="bs-status__flw-icon" src={iconFollowers} alt="" draggable={false} />
-            <span className="bs-status__flw-num">{followers.toLocaleString()}</span>
+          <div className="bs-status__right">
+            <div className="bs-status__flw">
+              <img className="bs-status__flw-icon" src={iconFollowers} alt="" draggable={false} />
+              <span className="bs-status__flw-num">{followers.toLocaleString()}</span>
+            </div>
+            <span className="bs-status__help-hint">?</span>
           </div>
         </div>
 
