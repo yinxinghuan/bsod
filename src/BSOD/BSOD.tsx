@@ -11,6 +11,7 @@ import DeathScreen from './components/DeathScreen';
 import ActionResultScreen from './components/ActionResultScreen';
 import SplashScreen from './components/SplashScreen';
 import NoiseCanvas from './components/NoiseCanvas';
+import HelpPanel from './components/HelpPanel';
 import bgRoom from './img/bg_room.png';
 import laisaIdle from './img/laisa_idle.png';
 import laisaHappy from './img/laisa_happy.png';
@@ -69,6 +70,7 @@ const BSOD = React.memo(
     const { phase, day, energy, mood, focus, followers, streamedToday } = state;
 
     const [showSplash, setShowSplash] = useState(true);
+    const [showHelp, setShowHelp] = useState(false);
 
     const { visible: laisaVisible, emotion: laisaEmotion } = getLaisaVisible(state);
     const laisaSrc = LAISA_IMGS[laisaEmotion] ?? laisaIdle;
@@ -139,10 +141,12 @@ const BSOD = React.memo(
       return (
         <div className="bs" ref={ref}>
           <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
+          {showHelp && <HelpPanel onClose={() => setShowHelp(false)} />}
           <StatusBar
             energy={energy} mood={mood} focus={focus}
             followers={followers} day={day} phase={phase}
             streamedToday={state.streamedToday}
+            onHelpOpen={() => setShowHelp(true)}
           />
           <DayEndScreen state={state} onContinue={actions.confirmDayEnd} />
         </div>
@@ -153,6 +157,7 @@ const BSOD = React.memo(
     return (
       <div className="bs" ref={ref}>
         <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
+        {showHelp && <HelpPanel onClose={() => setShowHelp(false)} />}
 
         {/* Room background with time-of-day filter */}
         <div className={`bs__bg-wrap${phase === 'event' ? ' bs__bg-wrap--blur' : ''}`}>
@@ -169,6 +174,7 @@ const BSOD = React.memo(
           energy={energy} mood={mood} focus={focus}
           followers={followers} day={day} phase={phase}
           streamedToday={streamedToday}
+          onHelpOpen={() => setShowHelp(true)}
         />
 
         {/* Laisa character sprite — only during events / big stat changes */}

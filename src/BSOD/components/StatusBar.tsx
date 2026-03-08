@@ -1,9 +1,8 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef } from 'react';
 import iconEnergy from '../img/icon_energy.png';
 import iconMood from '../img/icon_mood.png';
 import iconFocus from '../img/icon_focus.png';
 import iconFollowers from '../img/icon_followers.png';
-import HelpPanel from './HelpPanel';
 import './StatusBar.less';
 
 interface Props {
@@ -14,6 +13,7 @@ interface Props {
   day: number;
   phase: string;
   streamedToday: boolean;
+  onHelpOpen: () => void;
 }
 
 const DAY_PHASES = ['morning', 'afternoon', 'evening', 'night'] as const;
@@ -29,10 +29,8 @@ const PHASE_FILL: Record<string, number> = {
 
 const StatusBar = React.memo(
   forwardRef<HTMLDivElement, Props>(function StatusBar(
-    { energy, mood, focus, followers, day, phase, streamedToday }, ref
+    { energy, mood, focus, followers, day, phase, streamedToday, onHelpOpen }, ref
   ) {
-    const [showHelp, setShowHelp] = useState(false);
-
     const activePhase: DayPhase | null =
       (DAY_PHASES as readonly string[]).includes(phase) ? phase as DayPhase
       : phase === 'stream' ? 'evening' : null;
@@ -40,8 +38,7 @@ const StatusBar = React.memo(
     const fillPct = PHASE_FILL[phase] ?? 0;
 
     return (
-      <div className="bs-status" ref={ref} onPointerDown={() => setShowHelp(true)}>
-        {showHelp && <HelpPanel onClose={() => setShowHelp(false)} />}
+      <div className="bs-status" ref={ref} onPointerDown={onHelpOpen}>
 
         {/* Row 1: DAY + followers */}
         <div className="bs-status__top">
