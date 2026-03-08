@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react';
 import { useLocale } from '../i18n';
 import type { DeathCause } from '../types';
 import bgDark from '../img/bg_ending_bsod.png';
+import NoiseCanvas from './NoiseCanvas';
 import './DeathScreen.less';
 
 interface Props {
@@ -24,6 +25,7 @@ const DeathScreen = React.memo(
     return (
       <div className={`bs-death bs-death--${cause}`} ref={ref}>
         <img className="bs-death__bg" src={bgDark} alt="" draggable={false} />
+        <NoiseCanvas opacity={0.22} />
         <div className="bs-death__overlay" />
 
         <div className="bs-death__inner">

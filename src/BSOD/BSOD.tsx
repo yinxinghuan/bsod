@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useEffect, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { useBSOD } from './hooks/useBSOD';
 import type { GameState } from './types';
 import StatusBar from './components/StatusBar';
@@ -10,6 +10,7 @@ import EndingScreen from './components/EndingScreen';
 import DeathScreen from './components/DeathScreen';
 import ActionResultScreen from './components/ActionResultScreen';
 import SplashScreen from './components/SplashScreen';
+import NoiseCanvas from './components/NoiseCanvas';
 import bgRoom from './img/bg_room.png';
 import laisaIdle from './img/laisa_idle.png';
 import laisaHappy from './img/laisa_happy.png';
@@ -73,35 +74,6 @@ const BSOD = React.memo(
     const laisaSrc = LAISA_IMGS[laisaEmotion] ?? laisaIdle;
     const filterClass = PHASE_FILTER[phase] ?? 'bs--night';
 
-    // ── TV static noise canvas — must be declared before any early returns ──
-    const noiseRef = useRef<HTMLCanvasElement>(null);
-    useEffect(() => {
-      if (phase !== 'start') return;
-      const canvas = noiseRef.current;
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      const W = 160, H = 284;
-      canvas.width = W;
-      canvas.height = H;
-      let animId: number;
-      let tick = 0;
-      const draw = () => {
-        tick++;
-        if (tick % 2 === 0) {
-          const img = ctx.createImageData(W, H);
-          const d = img.data;
-          for (let i = 0; i < d.length; i += 4) {
-            const v = Math.floor(Math.random() * 200);
-            d[i] = v; d[i + 1] = v; d[i + 2] = v; d[i + 3] = 255;
-          }
-          ctx.putImageData(img, 0, 0);
-        }
-        animId = requestAnimationFrame(draw);
-      };
-      draw();
-      return () => cancelAnimationFrame(animId);
-    }, [phase, showSplash]);
 
     // ── Splash screen ─────────────────────────────────────────────────────
     if (showSplash) {
@@ -118,7 +90,7 @@ const BSOD = React.memo(
         <div className="bs" ref={ref}>
           <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
           <img className="bs__start-bg" src={bgRoom} alt="" draggable={false} />
-          <canvas ref={noiseRef} className="bs__start-noise" />
+          <NoiseCanvas opacity={0.72} className="bs__start-noise" />
           <div className="bs__start">
             <div className="bs__start-content">
               <h1 className="bs__start-title">BSOD</h1>

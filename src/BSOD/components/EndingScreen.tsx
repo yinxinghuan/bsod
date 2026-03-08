@@ -5,6 +5,7 @@ import bgOnline  from '../img/bg_ending_online.png';
 import bgOffline from '../img/bg_ending_offline.png';
 import bgRestart from '../img/bg_ending_restart.png';
 import bgBsodRoom from '../img/bg_ending_bsod.png';
+import NoiseCanvas from './NoiseCanvas';
 import './EndingScreen.less';
 
 interface Props {
@@ -33,6 +34,7 @@ const EndingScreen = React.memo(
       return (
         <div className="bs-ending bs-ending--bsod" ref={ref}>
           <img className="bs-ending__bg" src={bg} alt="" draggable={false} />
+          <NoiseCanvas opacity={0.18} />
           <div className="bs-ending__bsod-panel">
             <div className="bs-ending__bsod-face">:(</div>
             <p className="bs-ending__bsod-main">
@@ -63,6 +65,7 @@ const EndingScreen = React.memo(
     return (
       <div className={`bs-ending bs-ending--${endingType}`} ref={ref}>
         <img className="bs-ending__bg" src={bg} alt="" draggable={false} />
+        <NoiseCanvas opacity={0.18} />
         <div className="bs-ending__overlay" />
 
         <div className="bs-ending__content">
