@@ -17,6 +17,7 @@ import laisaSad from './img/laisa_sad.png';
 import laisaSurprised from './img/laisa_surprised.png';
 import laisaTired from './img/laisa_tired.png';
 import laisaFocused from './img/laisa_focused.png';
+import aigramLogo from './img/aigram.svg';
 import './BSOD.less';
 
 // Preload all heavy assets so first gameplay frame has no flicker
@@ -34,7 +35,6 @@ const LAISA_IMGS: Record<string, string> = {
   tired:     laisaTired,
   focused:   laisaFocused,
 };
-
 
 function getLaisaVisible(state: GameState): { visible: boolean; emotion: string } {
   const { phase, pendingEvent, lastAction } = state;
@@ -73,16 +73,7 @@ const BSOD = React.memo(
     const laisaSrc = LAISA_IMGS[laisaEmotion] ?? laisaIdle;
     const filterClass = PHASE_FILTER[phase] ?? 'bs--night';
 
-    // ── Splash screen ─────────────────────────────────────────────────────
-    if (showSplash) {
-      return (
-        <div className="bs" ref={ref}>
-          <SplashScreen onDone={() => setShowSplash(false)} />
-        </div>
-      );
-    }
-
-    // ── TV static noise canvas ─────────────────────────────────────────────
+    // ── TV static noise canvas — must be declared before any early returns ──
     const noiseRef = useRef<HTMLCanvasElement>(null);
     useEffect(() => {
       if (phase !== 'start') return;
@@ -90,14 +81,14 @@ const BSOD = React.memo(
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
-      const W = 160, H = 284; // low-res → chunky pixels when scaled up
+      const W = 160, H = 284;
       canvas.width = W;
       canvas.height = H;
       let animId: number;
       let tick = 0;
       const draw = () => {
         tick++;
-        if (tick % 2 === 0) { // ~30fps noise refresh
+        if (tick % 2 === 0) {
           const img = ctx.createImageData(W, H);
           const d = img.data;
           for (let i = 0; i < d.length; i += 4) {
@@ -112,10 +103,20 @@ const BSOD = React.memo(
       return () => cancelAnimationFrame(animId);
     }, [phase]);
 
+    // ── Splash screen ─────────────────────────────────────────────────────
+    if (showSplash) {
+      return (
+        <div className="bs" ref={ref}>
+          <SplashScreen onDone={() => setShowSplash(false)} />
+        </div>
+      );
+    }
+
     // ── Start screen ──────────────────────────────────────────────────────
     if (phase === 'start') {
       return (
         <div className="bs" ref={ref}>
+          <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
           <img className="bs__start-bg" src={bgRoom} alt="" draggable={false} />
           <canvas ref={noiseRef} className="bs__start-noise" />
           <div className="bs__start">
@@ -136,6 +137,7 @@ const BSOD = React.memo(
     if (phase === 'dead' && state.deathCause) {
       return (
         <div className="bs" ref={ref}>
+          <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
           <DeathScreen
             cause={state.deathCause}
             followers={followers}
@@ -149,6 +151,7 @@ const BSOD = React.memo(
     if (phase === 'ending' && state.endingType) {
       return (
         <div className="bs" ref={ref}>
+          <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
           <EndingScreen
             endingType={state.endingType}
             followers={followers}
@@ -163,6 +166,7 @@ const BSOD = React.memo(
     if (phase === 'dayEnd') {
       return (
         <div className="bs" ref={ref}>
+          <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
           <StatusBar
             energy={energy} mood={mood} focus={focus}
             followers={followers} day={day} phase={phase}
@@ -176,6 +180,8 @@ const BSOD = React.memo(
     // ── Main game screen ──────────────────────────────────────────────────
     return (
       <div className="bs" ref={ref}>
+        <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
+
         {/* Room background with time-of-day filter */}
         <div className={`bs__bg-wrap${phase === 'event' ? ' bs__bg-wrap--blur' : ''}`}>
           <img
