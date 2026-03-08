@@ -1,0 +1,214 @@
+.bs-dayend {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 10, 25, 0.82);
+  backdrop-filter: blur(10px);
+  padding: 24px;
+  animation: bs-dayend-in 0.4s ease forwards;
+
+  &__inner {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: #1e2028;
+    border: 2px solid #0a0c14;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 8px 0 #0a0c14;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid rgba(180, 190, 210, 0.08);
+  }
+
+  &__label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 22px;
+    color: #fff;
+    letter-spacing: 0.06em;
+    text-shadow: 2px 2px 0 #000;
+  }
+
+  &__tag {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: rgba(180, 190, 210, 0.4);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  &__line {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 15px;
+    color: rgba(200, 210, 230, 0.75);
+    line-height: 1.85;
+    margin: 0;
+    padding: 18px 20px 20px;
+    border-bottom: 1px solid rgba(180, 190, 210, 0.07);
+    position: relative;
+
+    &::before {
+      content: '"';
+      position: absolute;
+      top: 0px;
+      left: 14px;
+      font-size: 52px;
+      color: rgba(255, 255, 255, 0.05);
+      font-family: Georgia, serif;
+      line-height: 1;
+      pointer-events: none;
+    }
+  }
+
+  &__streamed {
+    font-size: 10px;
+    color: rgba(180, 190, 210, 0.45);
+    font-family: 'Press Start 2P', monospace;
+    padding: 12px 20px;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    border-bottom: 1px solid rgba(180, 190, 210, 0.07);
+
+    &::before {
+      content: '●';
+      color: #ef4444;
+      font-size: 9px;
+      animation: bs-dayend-blink 1.2s ease-in-out infinite;
+    }
+  }
+
+  // ── 3-stat icon row ────────────────────────────────────────────────────────
+  &__deltas {
+    display: flex;
+    gap: 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(180, 190, 210, 0.07);
+    padding: 24px 4px;
+  }
+
+  &__stat {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    & + & {
+      border-left: 1px solid rgba(180, 190, 210, 0.07);
+    }
+
+    &-icon {
+      width: 26px;
+      height: 26px;
+      image-rendering: pixelated;
+      flex-shrink: 0;
+    }
+
+    &-val {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 18px;
+      line-height: 1;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.9);
+
+      &--neg {
+        animation: bs-dayend-neg 0.85s ease-in-out infinite;
+      }
+    }
+  }
+
+  // ── Followers row ──────────────────────────────────────────────────────────
+  &__followers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 24px 20px;
+    border-bottom: 1px solid rgba(180, 190, 210, 0.07);
+  }
+
+  &__flw-icon {
+    width: 26px;
+    height: 26px;
+    image-rendering: pixelated;
+  }
+
+  &__flw-val {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 22px;
+    line-height: 1;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.9);
+
+    &--neg {
+      animation: bs-dayend-neg 0.85s ease-in-out infinite;
+    }
+  }
+
+  // ── Kairosoft amber button — continue ──────────────────────────────────────
+  &__continue {
+    all: unset;
+    display: block;
+    margin: 16px;
+    text-align: center;
+    padding: 14px 24px 22px;
+    background: #e8c050;
+    border: 3px solid #281408;
+    border-radius: 2px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    color: #281408;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    touch-action: none;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.06s;
+    box-shadow: 0 5px 0 #281408;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 10px;
+      pointer-events: none;
+      background:
+        linear-gradient(to bottom, rgba(255, 235, 160, 0.55) 0, rgba(255, 235, 160, 0.55) 2px, transparent 2px),
+        repeating-conic-gradient(#b89020 0% 25%, #e8c050 0% 50%) 0 0 / 4px 4px;
+    }
+
+    &:active {
+      transform: translateY(5px);
+      box-shadow: none;
+      &::after { height: 4px; }
+    }
+  }
+}
+
+@keyframes bs-dayend-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes bs-dayend-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+@keyframes bs-dayend-neg {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}

@@ -1,0 +1,240 @@
+// ── Container ─────────────────────────────────────────────────────────────────
+.bs-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px 14px;
+
+  &__btns {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    animation: bs-list-in 0.15s ease both;
+  }
+}
+
+// ── Kairosoft pixel button ─────────────────────────────────────────────────────
+// Structure: thick uniform dark-brown border → solid fill → dither strip at bottom
+// Depth = bottom dither (alternating fill + shadow color), NO inset highlights
+.bs-btn {
+  all: unset;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 12px 8px 22px; // extra bottom clears dither (8px) + highlight line (2px)
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: none;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.06s;
+
+  // Bottom edge: 2px highlight line + 8px dither strip = 10px total
+  // Structure: [highlight: lighter color] [dither: fill ↔ shadow]
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    pointer-events: none;
+  }
+
+  // ── GO LIVE ──────────────────────────────────────────────────────────────
+  &--live {
+    background: #c02818;
+    border: 3px solid #281408;
+    color: #fff;
+    text-shadow: 0 1px 0 #281408, 1px 0 0 #281408;
+
+    &::after {
+      // top 2px: pinkish highlight line; bottom 8px: red dither
+      background:
+        linear-gradient(to bottom, rgba(235, 155, 145, 0.38) 0, rgba(235, 155, 145, 0.38) 2px, transparent 2px),
+        repeating-conic-gradient(#7a1008 0% 25%, #c02818 0% 50%) 0 0 / 4px 4px;
+    }
+
+    &:active:not([disabled]) {
+      transform: translateY(4px);
+      &::after { height: 4px; }
+    }
+  }
+
+  &--live-off {
+    background: #c02818;    // same red — button keeps full color
+    border: 3px solid #281408;
+    color: #9e2818;          // barely darker than fill — low-contrast engraved look
+    text-shadow: none;       // no shadow — flat single color only
+    cursor: default;
+
+    &::after {
+      background:
+        linear-gradient(to bottom, rgba(235, 155, 145, 0.38) 0, rgba(235, 155, 145, 0.38) 2px, transparent 2px),
+        repeating-conic-gradient(#7a1008 0% 25%, #c02818 0% 50%) 0 0 / 4px 4px;
+    }
+
+    .bs-btn__dot {
+      animation: none;
+      background: #9e2818;
+      box-shadow: none;
+    }
+  }
+
+  // ── ACTIONS ──────────────────────────────────────────────────────────────
+  &--act {
+    background: #5a3c1c;
+    border: 3px solid #281408;
+    border-radius: 2px;
+    color: rgba(220, 175, 110, 0.9);
+
+    &::after {
+      background:
+        linear-gradient(to bottom, rgba(180, 140, 80, 0.3) 0, rgba(180, 140, 80, 0.3) 2px, transparent 2px),
+        repeating-conic-gradient(#3a2008 0% 25%, #5a3c1c 0% 50%) 0 0 / 4px 4px;
+    }
+
+    &:active {
+      transform: translateY(4px);
+      &::after { height: 4px; }
+    }
+  }
+
+  &--act-open {
+    background: #4a2c0c;
+    border: 3px solid #281408;
+    border-radius: 2px;
+    color: rgba(220, 175, 110, 0.9);
+    transform: translateY(4px);
+
+    &::after {
+      background:
+        linear-gradient(to bottom, rgba(180, 140, 80, 0.3) 0, rgba(180, 140, 80, 0.3) 2px, transparent 2px),
+        repeating-conic-gradient(#3a2008 0% 25%, #4a2c0c 0% 50%) 0 0 / 4px 4px;
+      height: 4px;
+    }
+  }
+
+  // Live indicator dot
+  &__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ef4444;
+    box-shadow: 0 0 8px #ef4444, 0 1px 0 #600;
+    flex-shrink: 0;
+    animation: bs-dot-blink 1.2s ease-in-out infinite;
+  }
+
+  // Expand/collapse arrow
+  &__arrow {
+    font-size: 16px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+}
+
+// ── Action card ───────────────────────────────────────────────────────────────
+.bs-card {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px 18px;
+  background: #e8c050;
+  border: 3px solid #281408;
+  border-radius: 2px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: none;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.06s;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 8px;
+    pointer-events: none;
+    background:
+      linear-gradient(to bottom, rgba(255, 235, 160, 0.55) 0, rgba(255, 235, 160, 0.55) 2px, transparent 2px),
+      repeating-conic-gradient(#b89020 0% 25%, #e8c050 0% 50%) 0 0 / 4px 4px;
+  }
+
+  &:active {
+    transform: translateY(3px);
+    &::after { height: 4px; }
+  }
+
+  &__name {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 13px;
+    color: #281408;
+    font-weight: 500;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__fx {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+}
+
+// ── Effect chip ───────────────────────────────────────────────────────────────
+.bs-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  padding: 2px 4px;
+  border-radius: 2px;
+  white-space: nowrap;
+
+  &--pos {
+    background: #c89020;
+    color: #fff;
+    border: 3px solid #281408;
+    text-shadow: 1px 1px 0 #5a3810;
+  }
+
+  &--neg {
+    background: #b02818;
+    color: #fff;
+    border: 3px solid #281408;
+    text-shadow: 1px 1px 0 #281408;
+  }
+
+  &__icon {
+    width: 10px;
+    height: 10px;
+    image-rendering: pixelated;
+  }
+}
+
+@keyframes bs-dot-blink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 7px #ef4444, 0 1px 0 #600; }
+  50%       { opacity: 0.2; box-shadow: none; }
+}
+
+@keyframes bs-list-in {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

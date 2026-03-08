@@ -1,0 +1,241 @@
+// ── Status bar panel — dark warm HUD ─────────────────────────────────────────
+.bs-status {
+  position: relative;
+  z-index: 60;
+  margin: 8px 10px 0;
+  padding: 10px 14px 0;
+  background: #1e2028;
+  border: 2px solid #0a0c14;
+  border-radius: 3px;
+  box-shadow: 0 5px 0 #0a0c14;
+  overflow: hidden;
+}
+
+// Row 1 ─────────────────────────────────────────────────────────────────────
+.bs-status__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.bs-status__day {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.bs-status__day-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: rgba(180, 190, 210, 0.45);
+  letter-spacing: 0.1em;
+}
+
+.bs-status__day-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 22px;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.bs-status__day-slash {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: rgba(180, 190, 210, 0.3);
+}
+
+.bs-status__flw {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.bs-status__flw-icon {
+  width: 14px;
+  height: 14px;
+  image-rendering: pixelated;
+  opacity: 0.85;
+}
+
+.bs-status__flw-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  color: #f472b6;
+  text-shadow: 1px 2px 0 #5a1030;
+}
+
+// Row 2 — stats sunken well ───────────────────────────────────────────────────
+.bs-status__stats {
+  display: flex;
+  gap: 0;
+  margin-bottom: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(180, 190, 210, 0.08);
+  border-radius: 2px;
+  padding: 7px 4px;
+}
+
+.bs-stat {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  & + & {
+    border-left: 1px solid rgba(180, 190, 210, 0.07);
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+  }
+
+  &__num {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 18px;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.9);
+
+    &--danger {
+      color: #f87171 !important;
+      text-shadow: 0 0 8px rgba(248, 113, 113, 0.7), 0 2px 0 #400;
+      animation: bs-pulse 0.75s ease-in-out infinite;
+    }
+  }
+}
+
+// Row 3 — pixel progress bar with tick marks ─────────────────────────────────
+.bs-timeline {
+  margin: 0 -14px;
+  padding: 10px 14px 6px;
+  background: #14161e;
+
+  // ── Inner track — 80% width centred ───────────────────────────────────────
+  &__track {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  // ── Progress bar ──────────────────────────────────────────────────────────
+  &__bar {
+    position: relative;
+    height: 10px;
+    border: 2px solid #060810;
+    border-radius: 1px;
+    overflow: visible;
+    outline: none;
+    margin-bottom: 12px;
+    // Normal zone (dark) + LIVE zone (dark red) split at 66%
+    background: linear-gradient(
+      to right,
+      #0c0e18 0%, #0c0e18 66%,
+      #1e0a0a 66%, #1e0a0a 100%
+    );
+  }
+
+  &__fill {
+    position: absolute;
+    left: 0; top: 0; height: 100%;
+    background: #3a7030;
+    box-shadow: inset 0 2px 0 rgba(100, 200, 80, 0.3);
+    transition: width 0.5s ease;
+  }
+
+  // Semi-transparent red overlay on the LIVE zone — sits above the fill
+  &__live-zone {
+    position: absolute;
+    left: 66%; right: 0;
+    top: 0; height: 100%;
+    background: rgba(200, 40, 20, 0.2);
+    z-index: 1;
+  }
+
+  // Current phase cursor — protrudes above and below the bar
+  &__cursor {
+    position: absolute;
+    top: -5px;
+    height: 20px;   // 10px bar + 5px above + 5px below
+    width: 5px;
+    transform: translateX(-50%);
+    background: #e8c860;
+    border: 1px solid #281408;
+    border-radius: 1px;
+    box-shadow: 0 0 6px rgba(232, 200, 96, 0.7);
+    z-index: 4;
+  }
+
+  // Tick marks — dark vertical notches dividing the bar
+  &__tick {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: #060810;
+    z-index: 2;
+
+    // The LIVE boundary tick is red-tinted
+    &--live {
+      background: rgba(220, 60, 40, 0.65);
+    }
+  }
+
+  // ── Labels below bar ──────────────────────────────────────────────────────
+  &__labels {
+    position: relative;
+    height: 32px;
+  }
+
+  &__lbl-item {
+    position: absolute;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+
+  }
+
+  &__live-tag {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: rgba(239, 68, 68, 0.3);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    white-space: nowrap;
+
+    &--on {
+      color: #ef4444;
+      text-shadow: 0 0 4px rgba(239, 68, 68, 0.5);
+      animation: bs-live-blink 1.3s ease-in-out infinite;
+    }
+
+    &--done { color: rgba(74, 222, 128, 0.7); }
+  }
+
+  &__lbl {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: rgba(180, 190, 210, 0.22);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    white-space: nowrap;
+
+    &--active { color: rgba(200, 210, 230, 0.8); }
+    &--past   { color: rgba(180, 190, 210, 0.14); }
+  }
+}
+
+@keyframes bs-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}
+
+@keyframes bs-live-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}

@@ -1,0 +1,369 @@
+// ── CSS Variables ─────────────────────────────────────────────────────────────
+:root {
+  --bs-bg:         #06090f;
+  --bs-energy:     #e06820;
+  --bs-mood:       #d04070;
+  --bs-focus:      #9838b8;
+  --bs-followers:  #d84060;
+  --bs-connection: #20a0d0;
+  --bs-danger:     #c02818;
+  --bs-text:       #281408;
+  --bs-muted:      rgba(40, 20, 8, 0.5);
+}
+
+// ── Root ──────────────────────────────────────────────────────────────────────
+.bs {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Noto Sans SC', sans-serif;
+  color: #281408;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  background: #06090f;
+}
+
+// ── Room Background ────────────────────────────────────────────────────────────
+.bs__bg-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  transition: filter 0.3s ease;
+
+  &--blur {
+    filter: blur(5px);
+    transform: scale(1.04); // prevent white blur edges
+  }
+}
+
+.bs__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% center;
+  pointer-events: none;
+  transition: filter 1.2s ease;
+
+  &.bs--night    { filter: none; }
+  &.bs--evening  { filter: brightness(0.88) sepia(0.28) hue-rotate(-12deg) saturate(1.2); }
+  &.bs--morning  { filter: brightness(1.08) sepia(0.18) saturate(0.88) hue-rotate(8deg); }
+  &.bs--afternoon{ filter: brightness(1.28) saturate(1.12) hue-rotate(4deg); }
+}
+
+// Dark vignette overlay
+.bs::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom,
+      rgba(0,0,0,0.35) 0%,
+      transparent 20%,
+      transparent 55%,
+      rgba(0,0,0,0.55) 100%
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+// ── Start Screen ──────────────────────────────────────────────────────────────
+.bs__start-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% center;
+  z-index: 0;
+  filter: grayscale(1) brightness(0.45);
+}
+
+.bs__start-noise {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  z-index: 1;
+  opacity: 0.72;
+  mix-blend-mode: screen;
+}
+
+.bs__start {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-bottom: 56px;
+  // dark gradient at bottom so text is readable over noise
+  background: linear-gradient(to bottom,
+    transparent 40%,
+    rgba(4, 6, 14, 0.7) 70%,
+    rgba(4, 6, 14, 0.88) 100%
+  );
+}
+
+.bs__start-content {
+  width: 100%;
+  padding: 0 28px;
+}
+
+.bs__start-title {
+  font-family: 'VT323', monospace;
+  font-size: 140px;
+  color: #e8eeff;
+  margin: 0;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  position: relative;
+  text-shadow:
+    0 0 18px rgba(80, 140, 255, 0.7),
+    0 0 50px rgba(40, 80, 220, 0.35);
+  animation: bs-title-glitch 4s infinite;
+
+  // Chromatic aberration — red ghost
+  &::before {
+    content: 'BSOD';
+    position: absolute;
+    inset: 0;
+    color: rgba(255, 60, 80, 0.55);
+    transform: translateX(-3px) translateY(1px);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    animation: bs-glitch-r 4s infinite;
+    pointer-events: none;
+  }
+
+  // Chromatic aberration — blue ghost
+  &::after {
+    content: 'BSOD';
+    position: absolute;
+    inset: 0;
+    color: rgba(60, 140, 255, 0.55);
+    transform: translateX(3px) translateY(-1px);
+    animation: bs-glitch-b 4s infinite;
+    pointer-events: none;
+  }
+}
+
+.bs__start-tagline {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: rgba(100, 160, 255, 0.55);
+  letter-spacing: 0.22em;
+  margin: 0 0 20px;
+}
+
+.bs__start-subtitle {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 16px;
+  color: rgba(140, 170, 230, 0.45);
+  letter-spacing: 0.08em;
+  margin: 0 0 32px;
+}
+
+// Blue Kairosoft button — start screen
+.bs__start-btn {
+  all: unset;
+  display: inline-block;
+  padding: 14px 28px 22px;
+  background: #1848c0;
+  border: 3px solid #060c30;
+  border-radius: 2px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  color: #fff;
+  letter-spacing: 0.06em;
+  text-shadow: 0 1px 0 #060c30, 1px 0 0 #060c30;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.06s;
+  box-shadow: 0 5px 0 #060c30;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 10px;
+    pointer-events: none;
+    background:
+      linear-gradient(to bottom, rgba(140, 180, 255, 0.38) 0, rgba(140, 180, 255, 0.38) 2px, transparent 2px),
+      repeating-conic-gradient(#0c2880 0% 25%, #1848c0 0% 50%) 0 0 / 4px 4px;
+  }
+
+  &:active {
+    transform: translateY(5px);
+    box-shadow: none;
+    &::after { height: 4px; }
+  }
+}
+
+// ── Character Sprite ───────────────────────────────────────────────────────────
+.bs__char-area {
+  position: absolute;
+  bottom: -180px;
+  right: -60px;
+  height: 95dvh;
+  width: auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  z-index: 3;
+  pointer-events: none;
+  animation: bs-char-enter 0.5s ease forwards;
+}
+
+.bs__char {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 32px rgba(0, 0, 0, 0.6));
+  transition: filter 0.4s ease;
+}
+
+// ── Bottom Panel ───────────────────────────────────────────────────────────────
+.bs__panel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  background: #1e2028;
+  border-top: 1px solid #0a0c14;
+  box-shadow: 0 -2px 0 #0a0c14;
+}
+
+// Main title — 3 burst clusters, thin clip slices, varied transforms
+@keyframes bs-title-glitch {
+  // ── Cluster A (15–17%) ──
+  0%, 14%, 100% { transform: none; clip-path: none; }
+  15%   { transform: translateX(-3px) skewX(-1.5deg);
+          clip-path: polygon(0 4%,  100% 4%,  100% 7%,  0 7%); }
+  15.3% { transform: translateX(2px);
+          clip-path: polygon(0 38%, 100% 38%, 100% 40%, 0 40%); }
+  15.6% { transform: translateX(-1px) skewX(1deg);
+          clip-path: polygon(0 62%, 100% 62%, 100% 65%, 0 65%); }
+  15.9% { transform: translateX(3px);
+          clip-path: polygon(0 82%, 100% 82%, 100% 84%, 0 84%); }
+  16.2% { transform: translateX(-2px);
+          clip-path: polygon(0 20%, 100% 20%, 100% 22%, 0 22%); }
+  16.5% { transform: none; clip-path: none; }
+  // ── Cluster B (48–50%) ──
+  47%, 51% { transform: none; clip-path: none; }
+  48%   { transform: translateX(4px) skewX(2deg);
+          clip-path: polygon(0 10%, 100% 10%, 100% 13%, 0 13%); }
+  48.4% { transform: translateX(-3px);
+          clip-path: polygon(0 55%, 100% 55%, 100% 57%, 0 57%); }
+  48.8% { transform: translateX(2px) skewX(-1deg);
+          clip-path: polygon(0 30%, 100% 30%, 100% 33%, 0 33%); }
+  49.2% { transform: translateX(-4px);
+          clip-path: polygon(0 74%, 100% 74%, 100% 77%, 0 77%); }
+  49.6% { transform: translateX(1px) skewX(0.5deg);
+          clip-path: polygon(0 0%,  100% 0%,  100% 4%,  0 4%); }
+  50%   { transform: none; clip-path: none; }
+  // ── Cluster C (82–85%) ──
+  81%, 86% { transform: none; clip-path: none; }
+  82%   { transform: translateX(-5px) skewX(-2deg);
+          clip-path: polygon(0 48%, 100% 48%, 100% 51%, 0 51%); }
+  82.5% { transform: translateX(3px);
+          clip-path: polygon(0 8%,  100% 8%,  100% 10%, 0 10%); }
+  83%   { transform: translateX(-2px) skewX(1.5deg);
+          clip-path: polygon(0 68%, 100% 68%, 100% 72%, 0 72%); }
+  83.5% { transform: translateX(4px);
+          clip-path: polygon(0 24%, 100% 24%, 100% 26%, 0 26%); }
+  84%   { transform: translateX(-1px);
+          clip-path: polygon(0 90%, 100% 90%, 100% 93%, 0 93%); }
+  84.5% { transform: none; clip-path: none; }
+}
+
+// Red ghost — matches burst timings, different thin slices
+@keyframes bs-glitch-r {
+  0%, 14%, 100% { transform: translateX(-3px) translateY(1px); clip-path: none; }
+  15%   { transform: translateX(-6px) translateY(2px);
+          clip-path: polygon(0 30%, 100% 30%, 100% 33%, 0 33%); }
+  15.5% { transform: translateX(-4px); clip-path: none; }
+  15.9% { transform: translateX(-7px);
+          clip-path: polygon(0 70%, 100% 70%, 100% 73%, 0 73%); }
+  16.5% { transform: translateX(-3px) translateY(1px); clip-path: none; }
+  47%, 51% { transform: translateX(-3px) translateY(1px); clip-path: none; }
+  48%   { transform: translateX(-6px) translateY(3px);
+          clip-path: polygon(0 45%, 100% 45%, 100% 48%, 0 48%); }
+  48.6% { transform: translateX(-4px);
+          clip-path: polygon(0 12%, 100% 12%, 100% 15%, 0 15%); }
+  49.2% { transform: translateX(-7px) translateY(-1px); clip-path: none; }
+  49.8% { transform: translateX(-5px);
+          clip-path: polygon(0 80%, 100% 80%, 100% 83%, 0 83%); }
+  50%   { transform: translateX(-3px) translateY(1px); clip-path: none; }
+  81%, 86% { transform: translateX(-3px) translateY(1px); clip-path: none; }
+  82%   { transform: translateX(-7px) translateY(2px);
+          clip-path: polygon(0 5%,  100% 5%,  100% 8%,  0 8%); }
+  82.7% { transform: translateX(-4px);
+          clip-path: polygon(0 60%, 100% 60%, 100% 64%, 0 64%); }
+  83.4% { transform: translateX(-6px) translateY(-1px);
+          clip-path: polygon(0 35%, 100% 35%, 100% 37%, 0 37%); }
+  84%   { transform: translateX(-3px); clip-path: none; }
+  84.5% { transform: translateX(-3px) translateY(1px); clip-path: none; }
+}
+
+// Blue ghost — offset timing from red for visual complexity
+@keyframes bs-glitch-b {
+  0%, 14%, 100% { transform: translateX(3px) translateY(-1px); clip-path: none; }
+  15.2% { transform: translateX(6px) translateY(-2px);
+           clip-path: polygon(0 55%, 100% 55%, 100% 58%, 0 58%); }
+  15.7% { transform: translateX(4px); clip-path: none; }
+  16.1% { transform: translateX(7px);
+           clip-path: polygon(0 18%, 100% 18%, 100% 21%, 0 21%); }
+  16.5% { transform: translateX(3px) translateY(-1px); clip-path: none; }
+  47%, 51% { transform: translateX(3px) translateY(-1px); clip-path: none; }
+  48.2% { transform: translateX(7px) translateY(-3px);
+           clip-path: polygon(0 65%, 100% 65%, 100% 68%, 0 68%); }
+  48.8% { transform: translateX(5px);
+           clip-path: polygon(0 28%, 100% 28%, 100% 31%, 0 31%); }
+  49.4% { transform: translateX(6px) translateY(1px); clip-path: none; }
+  49.9% { transform: translateX(4px);
+           clip-path: polygon(0 88%, 100% 88%, 100% 91%, 0 91%); }
+  50%   { transform: translateX(3px) translateY(-1px); clip-path: none; }
+  81%, 86% { transform: translateX(3px) translateY(-1px); clip-path: none; }
+  82.2% { transform: translateX(8px) translateY(-2px);
+           clip-path: polygon(0 40%, 100% 40%, 100% 43%, 0 43%); }
+  82.9% { transform: translateX(5px);
+           clip-path: polygon(0 75%, 100% 75%, 100% 78%, 0 78%); }
+  83.6% { transform: translateX(7px) translateY(1px);
+           clip-path: polygon(0 15%, 100% 15%, 100% 18%, 0 18%); }
+  84.2% { transform: translateX(4px); clip-path: none; }
+  84.5% { transform: translateX(3px) translateY(-1px); clip-path: none; }
+}
+
+@keyframes bs-char-enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── UI saturation ─────────────────────────────────────────────────────────────
+// Tune a single number to adjust UI vividness (background & character unaffected)
+.bs-status,
+.bs__panel,
+.bs-event,
+.bs-stream,
+.bs-dayend,
+.bs-death,
+.ar {
+  filter: saturate(0.65);
+}
+
+// ── Global scrollbar ──────────────────────────────────────────────────────────
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(40, 20, 8, 0.3) transparent;
+}

@@ -1,0 +1,15 @@
+node_modules
+dist
+.DS_Store
+*.local
+.claude
+test_output/
+# Unused test backgrounds (CSS filters handle time-of-day on bg_room.png)
+src/BSOD/img/bg_morning.png
+src/BSOD/img/bg_afternoon.png
+src/BSOD/img/bg_evening.png
+src/BSOD/img/bg_night.png
+src/BSOD/img/bg_surveillance.png
+src/BSOD/img/bg_livestream.png
+src/BSOD/img/laisa_normal.png
+src/BSOD/img/laisa_pixel_*.png

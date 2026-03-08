@@ -1,0 +1,226 @@
+// ── Wrapper ────────────────────────────────────────────────────────────────────
+.ar {
+  position: absolute;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  cursor: pointer;
+  background: #06090f;
+
+  &--in { opacity: 1; }
+}
+
+.ar__tap-hint {
+  position: absolute;
+  bottom: 24px;
+  left: 0; right: 0;
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.1em;
+  font-family: 'Share Tech Mono', monospace;
+  animation: ar-blink 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes ar-blink {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.8; }
+}
+
+// ── Surveillance container ─────────────────────────────────────────────────────
+.ar__sv {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px 60px;
+  gap: 24px;
+}
+
+// ── CRT monitor frame ──────────────────────────────────────────────────────────
+.ar__crt {
+  position: relative;
+  width: 100%;
+  // 4:3 aspect ratio for the CRT screen area
+  aspect-ratio: 4 / 3;
+  max-width: 320px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 4px #111,
+    0 0 0 7px #080808,
+    0 0 18px rgba(0, 200, 50, 0.08),
+    0 6px 28px rgba(0, 0, 0, 0.85);
+  background: #000;
+
+  // Curved-screen mask — softens corners like real CRT glass
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,0.9),
+                inset 0 0 30px rgba(0,0,0,0.4);
+    pointer-events: none;
+    z-index: 6;
+  }
+}
+
+// Footage image — B&W + green phosphor tint via CSS filter
+.ar__crt-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  z-index: 0;
+  filter: grayscale(1) brightness(0.5) sepia(0.4) hue-rotate(75deg) saturate(1.4) contrast(1.05);
+}
+
+// CRT vignette — darkens edges
+.ar__crt-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.85) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+// Scanlines
+.ar__crt-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.35) 2px,
+    rgba(0, 0, 0, 0.35) 3px
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+// Noise
+.ar__crt-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 4;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: ar-noise 0.1s steps(1) infinite;
+}
+
+@keyframes ar-noise {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-1px, 1px); }
+  50%  { transform: translate(1px, -1px); }
+  75%  { transform: translate(-2px, 1px); }
+  100% { transform: translate(1px, -2px); }
+}
+
+// HUD overlay — camera ID + REC indicator
+.ar__crt-hud {
+  position: absolute;
+  top: 7px;
+  left: 9px;
+  right: 9px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.ar__crt-cam {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: rgba(0, 255, 65, 0.7);
+  letter-spacing: 0.08em;
+}
+
+.ar__crt-rec {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: #ff3333;
+  letter-spacing: 0.08em;
+  animation: ar-blink 1s ease-in-out infinite;
+}
+
+// Timestamp — bottom left of screen
+.ar__crt-ts {
+  position: absolute;
+  bottom: 7px;
+  left: 9px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  color: rgba(0, 255, 65, 0.5);
+  z-index: 5;
+  pointer-events: none;
+  letter-spacing: 0.04em;
+}
+
+// ── Info panel below CRT ───────────────────────────────────────────────────────
+.ar__info {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ar__title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 22px;
+  color: #e2e8f0;
+  margin: 0;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+}
+
+.ar__desc {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px;
+  color: rgba(148, 163, 184, 0.6);
+  line-height: 1.7;
+  margin: 0;
+}
+
+// ── Effect chips with icons ────────────────────────────────────────────────────
+.ar__effects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.ar__effect {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ar__effect-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  pointer-events: none;
+  image-rendering: pixelated;
+  filter: brightness(1.1);
+}
+
+.ar__effect-val {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
