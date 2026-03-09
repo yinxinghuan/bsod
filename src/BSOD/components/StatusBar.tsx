@@ -31,7 +31,7 @@ const PHASE_FILL: Record<string, number> = {
   morning: 0, afternoon: 33, evening: 66, night: 100, stream: 66,
 };
 
-const STAT_DUR_MS = 320; // duration per stat countdown
+const STAT_DUR_MS = 650; // duration per stat countdown
 
 const StatusBar = React.memo(
   forwardRef<HTMLDivElement, Props>(function StatusBar(
