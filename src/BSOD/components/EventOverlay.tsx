@@ -20,19 +20,19 @@ const STAT_ICONS: { key: keyof StatEffect; icon: string }[] = [
   { key: 'followers', icon: iconFollowers },
 ];
 
-const FEEDBACK_DELAY = 1100; // ms before calling onChoice
-
 const EventOverlay = React.memo(
   forwardRef<HTMLDivElement, Props>(function EventOverlay({ event, onChoice, onDismiss }, ref) {
-    const [feedback, setFeedback] = useState<StatEffect | null>(null);
+    const [feedback, setFeedback] = useState<{ effect: StatEffect; index: number } | null>(null);
     const chosenRef = useRef(false);
 
     const handleChoice = (index: number) => {
       if (chosenRef.current) return;
       chosenRef.current = true;
-      const effect = event.choices![index].effect;
-      setFeedback(effect);
-      setTimeout(() => onChoice(index), FEEDBACK_DELAY);
+      setFeedback({ effect: event.choices![index].effect, index });
+    };
+
+    const handleFeedbackDismiss = () => {
+      if (feedback) onChoice(feedback.index);
     };
 
     return (
@@ -57,17 +57,20 @@ const EventOverlay = React.memo(
 
           {/* Stat delta feedback — shown after a choice is made */}
           {feedback ? (
-            <div className="bs-event__feedback">
-              {STAT_ICONS.map(({ key, icon }) => {
-                const v = feedback[key] as number | undefined;
-                if (!v) return null;
-                return (
-                  <div key={key} className={`bs-event__feedback-pill bs-event__feedback-pill--${v > 0 ? 'pos' : 'neg'}`}>
-                    <img src={icon} alt={key} draggable={false} />
-                    <span>{v > 0 ? '+' : ''}{v}</span>
-                  </div>
-                );
-              })}
+            <div className="bs-event__feedback" onPointerDown={handleFeedbackDismiss}>
+              <div className="bs-event__feedback-pills">
+                {STAT_ICONS.map(({ key, icon }) => {
+                  const v = feedback.effect[key] as number | undefined;
+                  if (!v) return null;
+                  return (
+                    <div key={key} className={`bs-event__feedback-pill bs-event__feedback-pill--${v > 0 ? 'pos' : 'neg'}`}>
+                      <img src={icon} alt={key} draggable={false} />
+                      <span>{v > 0 ? '+' : ''}{v}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="bs-event__feedback-hint">{getText('点击继续', 'Tap to continue')}</div>
             </div>
           ) : event.choices && event.choices.length > 0 ? (
             <div className="bs-event__choices">

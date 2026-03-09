@@ -88,10 +88,25 @@
   // ── Stat delta feedback ──────────────────────────────────────────────────
   &__feedback {
     display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 14px 0 8px;
+    cursor: pointer;
+    animation: bs-event-feedback-in 0.25s ease both;
+  }
+
+  &__feedback-pills {
+    display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    padding: 14px 0 18px;
-    animation: bs-event-feedback-in 0.25s ease both;
+  }
+
+  &__feedback-hint {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: rgba(180, 190, 210, 0.35);
+    letter-spacing: 0.1em;
+    animation: bs-event-hint-blink 1.2s ease infinite;
   }
 
   &__feedback-pill {
@@ -226,6 +241,11 @@
 @keyframes bs-event-feedback-in {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bs-event-hint-blink {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.7; }
 }
 
 @keyframes bs-event-visitor-in {
