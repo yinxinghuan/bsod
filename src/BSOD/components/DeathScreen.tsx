@@ -27,16 +27,15 @@ const CAUSE_STAT_ICON: Record<string, string> = {
   energy: iconEnergy, mood: iconMood, followers: iconFollowers, focus: iconFocus,
 };
 
-const CAUSE_STAT_LABEL: Record<string, [string, string]> = {
-  energy:    ['精力', 'Energy'],
-  mood:      ['心情', 'Mood'],
-  followers: ['粉丝', 'Followers'],
-  focus:     ['专注', 'Focus'],
+const CAUSE_COLOR: Record<string, string> = {
+  energy:    'var(--bs-energy)',
+  mood:      'var(--bs-mood)',
+  followers: 'var(--bs-followers)',
+  focus:     'var(--bs-focus)',
 };
 
 const DeathScreen = React.memo(
   forwardRef<HTMLDivElement, Props>(function DeathScreen({ cause, statValue, followers, onRestart }, ref) {
-    const [zh, en] = CAUSE_STAT_LABEL[cause];
     return (
       <div className={`bs-death bs-death--${cause}`} ref={ref}>
         <img className="bs-death__bg" src={bgDark} alt="" draggable={false} />
@@ -46,13 +45,12 @@ const DeathScreen = React.memo(
         <div className="bs-death__inner">
           <div className="bs-death__icon" data-text={CAUSE_ICON[cause]}>{CAUSE_ICON[cause]}</div>
 
+          <h2 className="bs-death__title">{t(`deathTitle_${cause}`)}</h2>
+
           <div className="bs-death__stat-cause">
             <img className="bs-death__stat-icon" src={CAUSE_STAT_ICON[cause]} alt="" draggable={false} />
-            <span className="bs-death__stat-name">{getText(zh, en)}</span>
-            <span className="bs-death__stat-val">{statValue}</span>
+            <span className="bs-death__stat-val" style={{ color: CAUSE_COLOR[cause] }}>{statValue}</span>
           </div>
-
-          <h2 className="bs-death__title">{t(`deathTitle_${cause}`)}</h2>
           <p className="bs-death__desc">{t(`deathDesc_${cause}`)}</p>
           <p className="bs-death__followers">
             {getText('最终粉丝', 'Final followers')}{' '}<strong>{followers.toLocaleString()}</strong>
