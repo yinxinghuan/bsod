@@ -120,6 +120,61 @@
     font-family: 'Noto Sans SC', sans-serif;
   }
 
+  // ── Volatile event flash ───────────────────────────────────────────────────
+  &__volatile {
+    position: absolute;
+    left: 50%;
+    top: 38%;
+    transform: translateX(-50%) translateY(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    pointer-events: none;
+    animation: bs-stream-volatile-pop 2.6s ease forwards;
+    text-align: center;
+    filter: drop-shadow(0 0 20px currentColor);
+
+    &--viral {
+      color: #fbbf24;
+      .bs-stream__volatile-label { text-shadow: 0 0 30px rgba(251, 191, 36, 0.8); }
+    }
+    &--boost {
+      color: #38bdf8;
+      .bs-stream__volatile-label { text-shadow: 0 0 20px rgba(56, 189, 248, 0.7); }
+    }
+    &--controversy {
+      color: #f87171;
+      .bs-stream__volatile-label { text-shadow: 0 0 30px rgba(248, 113, 113, 0.8); }
+    }
+    &--flop {
+      color: #94a3b8;
+    }
+    &--normal {
+      color: #86efac;
+    }
+  }
+
+  &__volatile-emoji {
+    font-size: 48px;
+    line-height: 1;
+  }
+
+  &__volatile-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 18px;
+    letter-spacing: 0.08em;
+  }
+
+  &__volatile-delta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+
   // ── Featured event card ────────────────────────────────────────────────────
   &__card {
     position: relative;
@@ -221,4 +276,12 @@
 @keyframes bs-stream-msg-in {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bs-stream-volatile-pop {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(-50%) scale(0.5); }
+  12%  { opacity: 1; transform: translateX(-50%) translateY(-50%) scale(1.15); }
+  20%  { opacity: 1; transform: translateX(-50%) translateY(-50%) scale(1.0); }
+  75%  { opacity: 1; transform: translateX(-50%) translateY(-50%) scale(1.0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-65%) scale(0.9); }
 }

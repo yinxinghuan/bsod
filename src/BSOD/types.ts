@@ -92,6 +92,9 @@ export interface StreamChoice {
 /** How quickly the player responded — affects follower bonus */
 export type ResponseSpeed = 'fast' | 'normal' | 'slow' | 'timeout';
 
+/** What kind of volatility event fired on a follower change */
+export type VolatileType = 'viral' | 'boost' | 'normal' | 'flop' | 'controversy';
+
 export interface DayLog {
   energyDelta: number;
   moodDelta: number;
@@ -117,6 +120,7 @@ export interface GameState {
   streamQueue: StreamEvent[];      // events for current stream session
   streamIndex: number;
   streamFollowersGained: number;
+  streamLastEvent: { delta: number; type: VolatileType; key: number } | null;
   dayLogStart: GameStats;          // stats snapshot at day start (for delta)
   streamedToday: boolean;
   deathCause: DeathCause | null;

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import type {
   GameState, Phase, ActionPhase, StatEffect,
-  DeathCause, EndingType, GameAction, StoryChoice, ResponseSpeed,
+  DeathCause, EndingType, GameAction, StoryChoice, ResponseSpeed, VolatileType,
 } from '../types';
 import { STORY_EVENTS, pickStreamEvents } from '../data/events';
 import { getActionsForPhase } from '../data/actions';
@@ -31,17 +31,17 @@ function clamp(v: number, min = 0, max = 100): number {
 // Adds viral / crash volatility to raw follower deltas.
 // Gains:  4% viral (5-10x) · 10% boost (1.8-2.8x) · 12% flop (0.3-0.6x) · 74% normal
 // Losses: 7% controversy (3-5x) · 93% normal
-export function volatileFollowers(base: number): number {
-  if (base === 0) return 0;
+export function volatileFollowers(base: number): { value: number; type: VolatileType } {
+  if (base === 0) return { value: 0, type: 'normal' };
   const r = Math.random();
   if (base > 0) {
-    if (r < 0.04) return Math.round(base * (5 + Math.random() * 5));   // viral 5–10x
-    if (r < 0.14) return Math.round(base * (1.8 + Math.random()));      // boost 1.8–2.8x
-    if (r < 0.26) return Math.round(base * (0.3 + Math.random() * 0.3)); // flop 0.3–0.6x
-    return base;
+    if (r < 0.04) return { value: Math.round(base * (5 + Math.random() * 5)),    type: 'viral' };
+    if (r < 0.14) return { value: Math.round(base * (1.8 + Math.random())),       type: 'boost' };
+    if (r < 0.26) return { value: Math.round(base * (0.3 + Math.random() * 0.3)), type: 'flop' };
+    return { value: base, type: 'normal' };
   } else {
-    if (r < 0.07) return Math.round(base * (3 + Math.random() * 2));   // controversy 3–5x
-    return base;
+    if (r < 0.07) return { value: Math.round(base * (3 + Math.random() * 2)),    type: 'controversy' };
+    return { value: base, type: 'normal' };
   }
 }
 
@@ -92,6 +92,7 @@ function initialState(): GameState {
     streamQueue: [],
     streamIndex: 0,
     streamFollowersGained: 0,
+    streamLastEvent: null,
     dayLogStart: { ...INITIAL_STATS },
     streamedToday: false,
     deathCause: null,
@@ -170,7 +171,7 @@ export function useBSOD() {
       // Apply follower volatility now so ActionResultScreen shows the real number
       const volatileAction: GameAction =
         action.effect.followers
-          ? { ...action, effect: { ...action.effect, followers: volatileFollowers(action.effect.followers) } }
+          ? { ...action, effect: { ...action.effect, followers: volatileFollowers(action.effect.followers).value } }
           : action;
       return {
         ...s,
@@ -197,6 +198,7 @@ export function useBSOD() {
           streamQueue: queue,
           streamIndex: 0,
           streamFollowersGained: 0,
+          streamLastEvent: null,
           streamedToday: true,
         };
       }
@@ -218,10 +220,13 @@ export function useBSOD() {
       if (!choice) return s;
 
       // Apply follower volatility to stream choices
-      const volatileEffect: typeof choice.effect =
-        choice.effect.followers
-          ? { ...choice.effect, followers: volatileFollowers(choice.effect.followers) }
-          : choice.effect;
+      let volatileType: VolatileType = 'normal';
+      const volatileEffect: typeof choice.effect = (() => {
+        if (!choice.effect.followers) return choice.effect;
+        const { value, type } = volatileFollowers(choice.effect.followers);
+        volatileType = type;
+        return { ...choice.effect, followers: value };
+      })();
 
       // Apply base effect
       let next = applyEffect(s, volatileEffect);
@@ -246,7 +251,10 @@ export function useBSOD() {
       if (death) return { ...next, phase: 'dead', deathCause: death };
 
       const gained = next.followers - s.followers;
-      next = { ...next, streamFollowersGained: s.streamFollowersGained + Math.max(0, gained) };
+      const lastEvent = volatileEffect.followers
+        ? { delta: volatileEffect.followers, type: volatileType, key: (s.streamLastEvent?.key ?? 0) + 1 }
+        : s.streamLastEvent;
+      next = { ...next, streamFollowersGained: s.streamFollowersGained + Math.max(0, gained), streamLastEvent: lastEvent };
 
       const nextIndex = s.streamIndex + 1;
       if (nextIndex >= s.streamQueue.length) {
