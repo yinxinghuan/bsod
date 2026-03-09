@@ -5,6 +5,10 @@ import bgOnline  from '../img/bg_ending_online.png';
 import bgOffline from '../img/bg_ending_offline.png';
 import bgRestart from '../img/bg_ending_restart.png';
 import bgBsodRoom from '../img/bg_ending_bsod.png';
+import laisaHappy     from '../img/laisa_happy.png';
+import laisaIdle      from '../img/laisa_idle.png';
+import laisaFocused   from '../img/laisa_focused.png';
+import laisaSad       from '../img/laisa_sad.png';
 import NoiseCanvas from './NoiseCanvas';
 import './EndingScreen.less';
 
@@ -22,17 +26,27 @@ const ENDING_BG: Record<string, string> = {
   bsod:    bgBsodRoom,
 };
 
+const ENDING_LAISA: Record<EndingType, string> = {
+  online:  laisaHappy,
+  offline: laisaIdle,
+  restart: laisaFocused,
+  bsod:    laisaSad,
+};
+
 const EndingScreen = React.memo(
   forwardRef<HTMLDivElement, Props>(function EndingScreen(
     { endingType, followers, connection, onRestart }, ref
   ) {
     const bg = ENDING_BG[endingType];
 
+    const laisaSrc = ENDING_LAISA[endingType];
+
     // ── BSOD ending: Windows BSOD aesthetic over the chaos room ──────────────
     if (endingType === 'bsod') {
       return (
         <div className="bs-ending bs-ending--bsod" ref={ref}>
           <img className="bs-ending__bg" src={bg} alt="" draggable={false} />
+          <img className="bs-ending__laisa" src={laisaSrc} alt="" draggable={false} />
           <NoiseCanvas opacity={0.18} />
           <div className="bs-ending__bsod-panel">
             <div className="bs-ending__bsod-face">:(</div>
@@ -66,6 +80,7 @@ const EndingScreen = React.memo(
         <img className="bs-ending__bg" src={bg} alt="" draggable={false} />
         <NoiseCanvas opacity={0.18} />
         <div className="bs-ending__overlay" />
+        <img className="bs-ending__laisa" src={laisaSrc} alt="" draggable={false} />
 
         <div className="bs-ending__content">
           <div className="bs-ending__tag">{getText('第 13 天 · 结局', 'Day 13 · Ending')}</div>
