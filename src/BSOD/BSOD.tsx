@@ -19,7 +19,6 @@ import laisaSad from './img/laisa_sad.png';
 import laisaSurprised from './img/laisa_surprised.png';
 import laisaTired from './img/laisa_tired.png';
 import laisaFocused from './img/laisa_focused.png';
-import aigramLogo from './img/aigram.svg';
 import {
   resumeAudio, playClick, playConfirm, playPanelOpen,
   playGameStart, playStreamStart, playEvent, playStatUp, playStatDown,
@@ -162,7 +161,6 @@ const BSOD = React.memo(
     if (phase === 'start') {
       return (
         <div className="bs" ref={ref}>
-          <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
           <img className="bs__start-bg" src={bgRoom} alt="" draggable={false} />
           <NoiseCanvas opacity={0.72} className="bs__start-noise" />
           <div className="bs__start">
@@ -183,7 +181,6 @@ const BSOD = React.memo(
     if (phase === 'dead' && state.deathCause) {
       return (
         <div className="bs" ref={ref}>
-          <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
           <DeathScreen
             cause={state.deathCause}
             statValue={
@@ -202,7 +199,6 @@ const BSOD = React.memo(
     if (phase === 'ending' && state.endingType) {
       return (
         <div className="bs" ref={ref}>
-          <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
           <EndingScreen
             endingType={state.endingType}
             followers={followers}
@@ -217,7 +213,6 @@ const BSOD = React.memo(
     if (phase === 'dayEnd') {
       return (
         <div className="bs" ref={ref}>
-          <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
           {showHelp && <HelpPanel onClose={() => setShowHelp(false)} />}
           <StatusBar
             energy={energy} mood={mood} focus={focus}
@@ -233,7 +228,6 @@ const BSOD = React.memo(
     // ── Main game screen ──────────────────────────────────────────────────
     return (
       <div className="bs" ref={ref}>
-        <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
         {showHelp && <HelpPanel onClose={() => setShowHelp(false)} />}
 
         {/* Room background with time-of-day filter */}
