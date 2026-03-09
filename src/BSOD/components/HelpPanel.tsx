@@ -22,6 +22,7 @@ const HelpPanel = React.memo(
         {/* Panel */}
         <div className="bs-help__panel">
           <div className="bs-help__header">
+            <span className="bs-help__title">HOW TO PLAY</span>
             <button className="bs-help__close" onPointerDown={onClose}>✕</button>
           </div>
 
