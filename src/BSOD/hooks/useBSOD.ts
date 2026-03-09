@@ -18,7 +18,7 @@ const INITIAL_STATS = {
 };
 
 // Passive drain each day at morning start
-const DAILY_DRAIN = { energy: -12, mood: -8, focus: -5, followers: -40 };
+const DAILY_DRAIN = { energy: -12, mood: -15, focus: -5, followers: -40 };
 
 const PHASE_ORDER: ActionPhase[] = ['morning', 'afternoon', 'evening', 'night'];
 
@@ -230,8 +230,17 @@ export function useBSOD() {
         return { ...choice.effect, followers: value };
       })();
 
+      // Mood multiplier on follower gains — high mood amplifies, low mood hurts
+      const moodFactor = s.mood >= 75 ? 1.3
+        : s.mood >= 50 ? 1.0
+        : s.mood >= 25 ? 0.65
+        : 0.35;
+      const moodedEffect = volatileEffect.followers
+        ? { ...volatileEffect, followers: Math.round(volatileEffect.followers * moodFactor) }
+        : volatileEffect;
+
       // Apply base effect
-      let next = applyEffect(s, volatileEffect);
+      let next = applyEffect(s, moodedEffect);
 
       // Speed bonus/penalty applied to followers only
       const speedBonus: Record<ResponseSpeed, number> = {
@@ -241,8 +250,8 @@ export function useBSOD() {
         timeout: -1.0,  // -100% followers gain + mood penalty
       };
       const bonus = speedBonus[speed];
-      if (bonus !== 0 && volatileEffect.followers) {
-        const extra = Math.round(volatileEffect.followers * Math.abs(bonus));
+      if (bonus !== 0 && moodedEffect.followers) {
+        const extra = Math.round(moodedEffect.followers * Math.abs(bonus));
         next = applyEffect(next, {
           followers: bonus > 0 ? extra : -extra,
           mood: speed === 'timeout' ? -5 : 0,
@@ -253,8 +262,8 @@ export function useBSOD() {
       if (death) return { ...next, phase: 'dead', deathCause: death };
 
       const gained = next.followers - s.followers;
-      const lastEvent = volatileEffect.followers
-        ? { delta: volatileEffect.followers, type: volatileType, key: (s.streamLastEvent?.key ?? 0) + 1 }
+      const lastEvent = moodedEffect.followers
+        ? { delta: moodedEffect.followers, type: volatileType, key: (s.streamLastEvent?.key ?? 0) + 1 }
         : s.streamLastEvent;
       next = { ...next, streamFollowersGained: s.streamFollowersGained + Math.max(0, gained), streamLastEvent: lastEvent };
 
