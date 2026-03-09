@@ -146,7 +146,7 @@ export const ACTIONS: GameAction[] = [
     labelEn: 'Skip stream, rest tonight',
     descZh: '你知道会掉粉，但今天真的不在状态。',
     descEn: 'You know you\'ll lose followers. But you\'re just not feeling it.',
-    effect: { energy: 12, mood: -30, followers: -140 },
+    effect: { energy: 12, mood: -30, followers: -300 },
     style: 'surveillance',
     svFootage: 'relax',
     emotion: 'sad',

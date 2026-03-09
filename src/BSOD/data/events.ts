@@ -491,7 +491,7 @@ export const STREAM_EVENTS: StreamEvent[] = [
       {
         labelZh: '我就是要玩完这个',
         labelEn: 'I\'m finishing this one, that\'s final',
-        effect: { followers: -80, focus: 15, mood: 10 },
+        effect: { followers: -160, focus: 15, mood: 10 },
         emotion: 'normal',
       },
       {
@@ -554,13 +554,13 @@ export const STREAM_EVENTS: StreamEvent[] = [
       {
         labelZh: '冷静修，打字跟大家说在修',
         labelEn: 'Fix it calmly, type in chat what\'s happening',
-        effect: { followers: -40, mood: 5, focus: 10 },
+        effect: { followers: -80, mood: 5, focus: 10 },
         emotion: 'normal',
       },
       {
         labelZh: '慌了，说下播修好再来',
         labelEn: 'Panic — sign off to fix it',
-        effect: { followers: -160, mood: -15 },
+        effect: { followers: -320, mood: -15 },
         emotion: 'sad',
       },
       {
@@ -604,7 +604,7 @@ export const STREAM_EVENTS: StreamEvent[] = [
       {
         labelZh: '不太想，我还是喜欢一个人',
         labelEn: 'Not really my thing, I prefer solo',
-        effect: { followers: -60, focus: 8 },
+        effect: { followers: -120, focus: 8 },
         emotion: 'normal',
       },
     ],
@@ -682,19 +682,19 @@ export const STREAM_EVENTS: StreamEvent[] = [
       {
         labelZh: '开启慢速模式，冷静说一声不欢迎骚扰',
         labelEn: 'Enable slow mode, calmly say harassment isn\'t welcome',
-        effect: { followers: -100, mood: -8, focus: 10 },
+        effect: { followers: -200, mood: -8, focus: 10 },
         emotion: 'normal',
       },
       {
         labelZh: '直接暂停直播，等风头过去',
         labelEn: 'Pause the stream and wait it out',
-        effect: { followers: -240, mood: -20 },
+        effect: { followers: -480, mood: -20 },
         emotion: 'sad',
       },
       {
         labelZh: '无视他们，真粉丝自然会留',
         labelEn: 'Ignore them — real fans will stay',
-        effect: { followers: -60, focus: 12, connection: 1 },
+        effect: { followers: -120, focus: 12, connection: 1 },
         emotion: 'normal',
       },
     ],
@@ -764,13 +764,13 @@ export const STREAM_EVENTS: StreamEvent[] = [
       {
         labelZh: '立刻降低码率，解释情况',
         labelEn: 'Drop bitrate immediately and explain what\'s happening',
-        effect: { followers: -60, mood: 5 },
+        effect: { followers: -120, mood: 5 },
         emotion: 'normal',
       },
       {
         labelZh: '坚持继续，假装没事',
         labelEn: 'Push through, pretend nothing\'s wrong',
-        effect: { followers: -180, mood: -10, focus: -5 },
+        effect: { followers: -360, mood: -10, focus: -5 },
         emotion: 'sad',
       },
       {
@@ -820,7 +820,7 @@ export const STREAM_EVENTS: StreamEvent[] = [
       {
         labelZh: '紧张起来，发挥失常',
         labelEn: 'Get nervous and lose your groove',
-        effect: { followers: -80, mood: -15, focus: -10 },
+        effect: { followers: -160, mood: -15, focus: -10 },
         emotion: 'sad',
       },
     ],
@@ -864,7 +864,7 @@ export const STREAM_EVENTS: StreamEvent[] = [
       {
         labelZh: '被刺到了，心情直线下降',
         labelEn: 'It stings. Your mood crashes.',
-        effect: { followers: -40, mood: -25 },
+        effect: { followers: -80, mood: -25 },
         emotion: 'sad',
       },
     ],
@@ -914,7 +914,7 @@ export const STREAM_EVENTS: StreamEvent[] = [
       {
         labelZh: '直接禁言双方，我不管这些',
         labelEn: 'Mute both of them — not my problem',
-        effect: { followers: -80, mood: -8 },
+        effect: { followers: -160, mood: -8 },
         emotion: 'sad',
       },
     ],
@@ -939,7 +939,7 @@ export const STREAM_EVENTS: StreamEvent[] = [
       {
         labelZh: '直接拒绝，心里有点堵',
         labelEn: 'Flat no. It leaves you feeling off.',
-        effect: { followers: -60, mood: -10 },
+        effect: { followers: -120, mood: -10 },
         emotion: 'sad',
       },
     ],
@@ -1002,7 +1002,7 @@ export const STREAM_EVENTS: StreamEvent[] = [
       {
         labelZh: '不知道怎么处理，沉默了',
         labelEn: 'Freeze. You don\'t know what to say.',
-        effect: { mood: -15, followers: -40 },
+        effect: { mood: -15, followers: -80 },
         emotion: 'sad',
       },
     ],
@@ -1027,7 +1027,7 @@ export const STREAM_EVENTS: StreamEvent[] = [
       {
         labelZh: '心里塌了一下，失去了状态',
         labelEn: 'Something drops inside you. You lose your rhythm.',
-        effect: { followers: -120, mood: -20, focus: -12 },
+        effect: { followers: -240, mood: -20, focus: -12 },
         emotion: 'sad',
       },
     ],
