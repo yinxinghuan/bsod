@@ -14,6 +14,14 @@
     display: flex;
     flex-direction: column;
     gap: 7px;
+    max-height: 42dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    // Hide scrollbar visually but keep it functional
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
     animation: bs-list-in 0.15s ease both;
   }
 }
