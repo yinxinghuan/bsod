@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import type {
-  GameState, Phase, ActionPhase, StatEffect,
+  GameState, Phase, ActionPhase, StatEffect, GameStats,
   DeathCause, EndingType, GameAction, StoryChoice, ResponseSpeed, VolatileType,
 } from '../types';
 import { STORY_EVENTS, pickStreamEvents } from '../data/events';
@@ -71,6 +71,10 @@ function preStat(s: GameState, cause: DeathCause): number {
   return s.followers;
 }
 
+function snap(s: GameState): GameStats {
+  return { energy: s.energy, mood: s.mood, focus: s.focus, followers: s.followers };
+}
+
 function checkDeath(state: GameState): DeathCause | null {
   if (state.energy <= 0) return 'energy';
   if (state.mood <= 0) return 'mood';
@@ -111,6 +115,8 @@ function initialState(): GameState {
     dayLogStart: { ...INITIAL_STATS },
     streamedToday: false,
     showDrainNotice: false,
+    statAnimFrom: null,
+    streamStartStats: null,
     deathCause: null,
     deathContext: null,
     endingType: null,
@@ -118,11 +124,12 @@ function initialState(): GameState {
 }
 
 function enterPhase(state: GameState, phase: ActionPhase): GameState {
-  let next = { ...state, phase: phase as Phase, prevPhase: phase };
+  // Clear any previous stat animation when entering a new phase
+  let next = { ...state, phase: phase as Phase, prevPhase: phase, statAnimFrom: null };
 
   // Daily drain at morning start — skip Day 1 (game just started)
   if (phase === 'morning' && next.day > 1) {
-    const preDrain = { energy: next.energy, mood: next.mood, focus: next.focus, followers: next.followers };
+    const preDrain = snap(next);
     next = {
       ...next,
       energy: clamp(next.energy + DAILY_DRAIN.energy),
@@ -142,6 +149,7 @@ function enterPhase(state: GameState, phase: ActionPhase): GameState {
       labelZh: '每日消耗', labelEn: 'Daily drain',
       delta: d, displayValue: preDrain[death] + d,
     }}; }
+    (next as GameState).statAnimFrom = preDrain;
     next = { ...next, showDrainNotice: true };
   }
 
@@ -154,6 +162,7 @@ function enterPhase(state: GameState, phase: ActionPhase): GameState {
       prevPhase: phase,
       pendingEvent: event,
       flags: [...next.flags, `ev_${event.id}`],
+      statAnimFrom: null, // don't animate during event overlay
     };
   }
 
@@ -172,6 +181,7 @@ export function useBSOD() {
   const chooseEventOption = useCallback((choice: StoryChoice) => {
     setState(s => {
       if (s.phase !== 'event' || !s.pendingEvent) return s;
+      const before = snap(s);
       let next = applyEffect(s, choice.effect);
       const death = checkDeath(next);
       if (death) { const d = deathDelta(choice.effect, death); return { ...next, phase: 'dead', deathCause: death, deathContext: {
@@ -179,7 +189,12 @@ export function useBSOD() {
         delta: d, displayValue: preStat(s, death) + d,
       }}; }
       // Return to the phase this event triggered in
-      return enterPhase({ ...next, pendingEvent: null }, s.prevPhase);
+      const result = enterPhase({ ...next, pendingEvent: null }, s.prevPhase);
+      // Only show stat animation if we land on an action phase (not another event)
+      if ((PHASE_ORDER as string[]).includes(result.phase)) {
+        return { ...result, statAnimFrom: before };
+      }
+      return result;
     });
   }, []);
 
@@ -213,6 +228,7 @@ export function useBSOD() {
       if (s.phase !== 'actionResult' || !s.lastAction) return s;
       const action = s.lastAction;
       const currentPhase = s.prevPhase;
+      const before = snap(s);
 
       if (action.isStream) {
         const queue = pickStreamEvents(3);
@@ -226,6 +242,7 @@ export function useBSOD() {
           streamFollowersGained: 0,
           streamLastEvent: null,
           streamedToday: true,
+          streamStartStats: before, // capture pre-stream for end-of-stream animation
         };
       }
 
@@ -236,7 +253,11 @@ export function useBSOD() {
         delta: d, displayValue: preStat(s, death) + d,
       }}; }
 
-      return advancePhase(next, currentPhase);
+      const result = advancePhase(next, currentPhase);
+      if ((PHASE_ORDER as string[]).includes(result.phase)) {
+        return { ...result, statAnimFrom: before };
+      }
+      return result;
     });
   }, []);
 
@@ -309,7 +330,11 @@ export function useBSOD() {
   const confirmStreamEnd = useCallback(() => {
     setState(s => {
       if (s.phase !== 'stream' || !s.streamPendingEnd) return s;
-      return advancePhase({ ...s, streamPendingEnd: false }, s.prevPhase);
+      const result = advancePhase({ ...s, streamPendingEnd: false }, s.prevPhase);
+      if ((PHASE_ORDER as string[]).includes(result.phase) && s.streamStartStats) {
+        return { ...result, statAnimFrom: s.streamStartStats };
+      }
+      return result;
     });
   }, []);
 
@@ -324,8 +349,8 @@ export function useBSOD() {
     });
   }, []);
 
-  const dismissDrainNotice = useCallback(() => {
-    setState(s => ({ ...s, showDrainNotice: false }));
+  const clearStatAnim = useCallback(() => {
+    setState(s => ({ ...s, statAnimFrom: null, showDrainNotice: false }));
   }, []);
 
   const restart = useCallback(() => {
@@ -343,7 +368,7 @@ export function useBSOD() {
       chooseStreamOption,
       confirmStreamEnd,
       confirmDayEnd,
-      dismissDrainNotice,
+      clearStatAnim,
       restart,
     },
     // Derived helpers

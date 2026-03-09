@@ -238,8 +238,8 @@ const BSOD = React.memo(
           followers={followers} day={day} phase={phase}
           streamedToday={streamedToday}
           onHelpOpen={() => { playPanelOpen(); setShowHelp(true); }}
-          drainFrom={state.showDrainNotice ? state.dayLogStart : undefined}
-          onDrainAnimEnd={actions.dismissDrainNotice}
+          statAnimFrom={state.statAnimFrom ?? undefined}
+          onStatAnimEnd={actions.clearStatAnim}
         />
 
         {/* Laisa character sprite — only during events / big stat changes */}

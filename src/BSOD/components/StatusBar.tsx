@@ -14,10 +14,10 @@ interface Props {
   phase: string;
   streamedToday: boolean;
   onHelpOpen: () => void;
-  /** Pre-drain snapshot — when provided, animate each stat from these values down to current */
-  drainFrom?: { energy: number; mood: number; focus: number; followers: number };
-  /** Called after all 4 drain animations complete */
-  onDrainAnimEnd?: () => void;
+  /** Pre-change snapshot — when provided, animate changed stats from these values to current */
+  statAnimFrom?: { energy: number; mood: number; focus: number; followers: number };
+  /** Called after all stat animations complete */
+  onStatAnimEnd?: () => void;
 }
 
 const DAY_PHASES = ['morning', 'afternoon', 'evening', 'night'] as const;
@@ -36,7 +36,7 @@ const STAT_DUR_MS = 650; // duration per stat countdown
 const StatusBar = React.memo(
   forwardRef<HTMLDivElement, Props>(function StatusBar(
     { energy, mood, focus, followers, day, phase, streamedToday, onHelpOpen,
-      drainFrom, onDrainAnimEnd }, ref
+      statAnimFrom, onStatAnimEnd }, ref
   ) {
     const activePhase: DayPhase | null =
       (DAY_PHASES as readonly string[]).includes(phase) ? phase as DayPhase
@@ -46,26 +46,32 @@ const StatusBar = React.memo(
 
     // Animated display values — start at current, overridden during drain animation
     const [anim, setAnim] = useState({ energy, mood, focus, followers });
-    const onDrainAnimEndRef = useRef(onDrainAnimEnd);
-    onDrainAnimEndRef.current = onDrainAnimEnd;
+    const onStatAnimEndRef = useRef(onStatAnimEnd);
+    onStatAnimEndRef.current = onStatAnimEnd;
 
     // Sync anim values with real values when not animating
     useEffect(() => {
-      if (!drainFrom) {
+      if (!statAnimFrom) {
         setAnim({ energy, mood, focus, followers });
       }
-    }, [energy, mood, focus, followers, drainFrom]);
+    }, [energy, mood, focus, followers, statAnimFrom]);
 
-    // Run sequential countdown animation when drainFrom is set
+    // Run sequential countdown animation for each changed stat
     useEffect(() => {
-      if (!drainFrom) return;
+      if (!statAnimFrom) return;
 
       type StatKey = 'energy' | 'mood' | 'focus' | 'followers';
-      const STATS: StatKey[] = ['energy', 'mood', 'focus', 'followers'];
+      const ALL_STATS: StatKey[] = ['energy', 'mood', 'focus', 'followers'];
       const targets: Record<StatKey, number> = { energy, mood, focus, followers };
 
-      // Start from pre-drain values
-      setAnim({ ...drainFrom });
+      // Only animate stats that actually changed
+      const changed = ALL_STATS.filter(k => statAnimFrom[k] !== targets[k]);
+      if (changed.length === 0) {
+        onStatAnimEndRef.current?.();
+        return;
+      }
+
+      setAnim({ ...statAnimFrom });
 
       let statIdx = 0;
       let elapsed = 0;
@@ -77,8 +83,8 @@ const StatusBar = React.memo(
         lastTime = now;
         elapsed += dt;
 
-        const key = STATS[statIdx];
-        const from = drainFrom![key];
+        const key = changed[statIdx];
+        const from = statAnimFrom![key];
         const to = targets[key];
         const t = Math.min(elapsed / STAT_DUR_MS, 1);
         const val = Math.round(from + (to - from) * t);
@@ -88,8 +94,8 @@ const StatusBar = React.memo(
         if (t >= 1) {
           elapsed = 0;
           statIdx++;
-          if (statIdx >= STATS.length) {
-            onDrainAnimEndRef.current?.();
+          if (statIdx >= changed.length) {
+            onStatAnimEndRef.current?.();
             return;
           }
         }
@@ -99,7 +105,7 @@ const StatusBar = React.memo(
       rafId = requestAnimationFrame(step);
       return () => cancelAnimationFrame(rafId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [drainFrom]);
+    }, [statAnimFrom]);
 
     return (
       <div className="bs-status" ref={ref} onPointerDown={onHelpOpen}>
@@ -114,7 +120,7 @@ const StatusBar = React.memo(
           <div className="bs-status__right">
             <div className="bs-status__flw">
               <img className="bs-status__flw-icon" src={iconFollowers} alt="" draggable={false} />
-              <span className={`bs-status__flw-num${drainFrom && anim.followers !== followers ? ' bs-status__flw-num--counting' : ''}`}>
+              <span className={`bs-status__flw-num${statAnimFrom && anim.followers !== followers ? ' bs-status__flw-num--counting' : ''}`}>
                 {anim.followers.toLocaleString()}
               </span>
             </div>
