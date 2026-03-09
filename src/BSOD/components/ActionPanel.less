@@ -8,18 +8,46 @@
   &__btns {
     display: flex;
     gap: 8px;
+    flex-shrink: 0;
+  }
+
+  &__list-wrap {
+    position: relative;
+    overflow: hidden;
+
+    // Fade-out + scroll hint arrow at bottom
+    &::after {
+      content: '▼';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 48px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 4px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: rgba(220, 175, 110, 0.45);
+      background: linear-gradient(to bottom, transparent, #1e2028 80%);
+      pointer-events: none;
+    }
+
+    &--no-scroll::after {
+      display: none;
+    }
   }
 
   &__list {
     display: flex;
     flex-direction: column;
     gap: 7px;
-    max-height: min(42dvh, 300px);
+    max-height: min(52dvh, 420px);
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    // Hide scrollbar visually but keep it functional
     scrollbar-width: none;
     &::-webkit-scrollbar { display: none; }
     animation: bs-list-in 0.15s ease both;
