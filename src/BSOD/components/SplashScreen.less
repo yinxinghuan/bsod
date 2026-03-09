@@ -6,9 +6,15 @@
   align-items: center;
   justify-content: center;
   background: #000;
-  -webkit-tap-highlight-color: transparent;
+  pointer-events: none;
   user-select: none;
   touch-action: none;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+
+  &--fading {
+    opacity: 0;
+  }
 
   &__img {
     width: min(72%, 300px);
@@ -18,13 +24,30 @@
     display: block;
     pointer-events: none;
     box-shadow: 0 8px 48px rgba(0, 0, 0, 0.7);
-    animation: bs-splash-show 3s ease forwards;
-  }
-}
+    opacity: 0;
+    transition: opacity 0.4s ease;
 
-@keyframes bs-splash-show {
-  0%      { opacity: 0; }
-  16.67%  { opacity: 1; }
-  83.33%  { opacity: 1; }
-  100%    { opacity: 0; }
+    &--visible {
+      opacity: 1;
+    }
+  }
+
+  &__bar-track {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  &__bar-fill {
+    height: 100%;
+    background: rgba(220, 175, 110, 0.6);
+    border-radius: 2px;
+    transition: width 0.35s ease;
+  }
 }

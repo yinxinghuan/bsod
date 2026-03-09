@@ -26,11 +26,6 @@ import {
 } from './utils/sounds';
 import './BSOD.less';
 
-// Preload all heavy assets so first gameplay frame has no flicker
-const PRELOAD_ASSETS = [
-  bgRoom, laisaIdle, laisaHappy, laisaSad, laisaSurprised, laisaTired, laisaFocused,
-];
-PRELOAD_ASSETS.forEach(src => { const img = new Image(); img.src = src; });
 
 const LAISA_IMGS: Record<string, string> = {
   normal:    laisaIdle,
