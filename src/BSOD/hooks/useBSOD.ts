@@ -85,9 +85,9 @@ function checkDeath(state: GameState): DeathCause | null {
 
 function calcEnding(state: GameState): EndingType {
   const { followers, connection } = state;
-  if (followers > 10000 && connection >= 6) return 'online';
+  if (followers > 10000 && connection >= 8) return 'online';
   if (followers > 10000) return 'offline';
-  if (connection >= 6) return 'restart';
+  if (connection >= 8) return 'restart';
   return 'bsod';
 }
 
