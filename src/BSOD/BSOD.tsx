@@ -186,6 +186,11 @@ const BSOD = React.memo(
           <img className="bs__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
           <DeathScreen
             cause={state.deathCause}
+            statValue={
+              state.deathCause === 'energy' ? energy :
+              state.deathCause === 'mood'   ? mood   :
+              state.deathCause === 'focus'  ? focus  : followers
+            }
             followers={followers}
             onRestart={sfx.restart}
           />

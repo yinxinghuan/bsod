@@ -73,6 +73,39 @@
     }
   }
 
+  &__stat-cause {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: rgba(192, 40, 24, 0.15);
+    border: 1px solid rgba(192, 40, 24, 0.35);
+    border-radius: 3px;
+  }
+
+  &__stat-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  &__stat-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: rgba(200, 160, 140, 0.7);
+    letter-spacing: 0.08em;
+    flex: 1;
+  }
+
+  &__stat-val {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px;
+    color: #c02818;
+    text-shadow: 1px 1px 0 #5a0808;
+    letter-spacing: 0.04em;
+  }
+
   &__title {
     font-family: 'Press Start 2P', monospace;
     font-size: 18px;
