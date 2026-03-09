@@ -138,6 +138,7 @@ export interface GameState {
   dayLogStart: GameStats;          // stats snapshot at day start (for delta)
   streamedToday: boolean;
   showDrainNotice: boolean;
+  drainAppliedDay: number;         // last day drain was applied (guards against double-drain on event return)
   /** Pre-change stat snapshot — triggers StatusBar countdown animation */
   statAnimFrom: GameStats | null;
   /** Stats at stream session start — used to animate totals when stream ends */

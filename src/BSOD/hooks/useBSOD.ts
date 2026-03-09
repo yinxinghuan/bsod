@@ -115,6 +115,7 @@ function initialState(): GameState {
     dayLogStart: { ...INITIAL_STATS },
     streamedToday: false,
     showDrainNotice: false,
+    drainAppliedDay: 0,
     statAnimFrom: null,
     streamStartStats: null,
     deathCause: null,
@@ -127,8 +128,8 @@ function enterPhase(state: GameState, phase: ActionPhase): GameState {
   // Clear any previous stat animation when entering a new phase
   let next = { ...state, phase: phase as Phase, prevPhase: phase, statAnimFrom: null };
 
-  // Daily drain at morning start — skip Day 1 (game just started)
-  if (phase === 'morning' && next.day > 1) {
+  // Daily drain at morning start — guard against double-drain when returning from a morning event
+  if (phase === 'morning' && next.drainAppliedDay !== next.day) {
     const preDrain = snap(next);
     next = {
       ...next,
@@ -136,6 +137,7 @@ function enterPhase(state: GameState, phase: ActionPhase): GameState {
       mood: clamp(next.mood + DAILY_DRAIN.mood),
       focus: clamp(next.focus + DAILY_DRAIN.focus),
       followers: Math.max(0, next.followers + DAILY_DRAIN.followers),
+      drainAppliedDay: next.day,
       streamedToday: false,
       dayLogStart: {
         energy: next.energy,
