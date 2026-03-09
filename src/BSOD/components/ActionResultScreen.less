@@ -194,6 +194,57 @@
   margin: 0;
 }
 
+// ── Volatile event banner ──────────────────────────────────────────────────────
+.ar__volatile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 4px;
+  border-left: 3px solid currentColor;
+  background: rgba(0, 0, 0, 0.35);
+  margin-top: 4px;
+  animation: ar-volatile-in 0.4s ease forwards;
+
+  &--viral       { color: #fbbf24; }
+  &--boost       { color: #38bdf8; }
+  &--controversy { color: #f87171; }
+  &--flop        { color: #94a3b8; }
+}
+
+.ar__volatile-kaomoji {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  line-height: 1;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.ar__volatile-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ar__volatile-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 12px currentColor;
+}
+
+.ar__volatile-desc {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px;
+  color: rgba(220, 230, 245, 0.75);
+  line-height: 1.4;
+}
+
+@keyframes ar-volatile-in {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
 // ── Effect chips with icons ────────────────────────────────────────────────────
 .ar__effects {
   display: flex;

@@ -212,10 +212,12 @@ export function useBSOD() {
       const currentPhase = s.phase as ActionPhase;
       if (!PHASE_ORDER.includes(currentPhase)) return s;
       // Apply follower volatility now so ActionResultScreen shows the real number
-      const volatileAction: GameAction =
-        action.effect.followers
-          ? { ...action, effect: { ...action.effect, followers: volatileFollowers(action.effect.followers).value } }
-          : action;
+      const volatileAction: GameAction = action.effect.followers
+        ? (() => {
+            const { value, type } = volatileFollowers(action.effect.followers);
+            return { ...action, effect: { ...action.effect, followers: value }, volatileType: type };
+          })()
+        : action;
       return {
         ...s,
         phase: 'actionResult' as Phase,

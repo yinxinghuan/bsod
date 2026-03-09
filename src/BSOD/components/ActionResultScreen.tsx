@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useState } from 'react';
-import type { GameAction, SvFootage } from '../types';
+import type { GameAction, SvFootage, VolatileType } from '../types';
 import { useLocale } from '../i18n';
 
 // ── Surveillance footage imports ───────────────────────────────────────────────
@@ -104,11 +104,24 @@ function SurveillanceView({
       <div className="ar__info">
         <h2 className="ar__title">{getText(action.labelZh, action.labelEn)}</h2>
         <p className="ar__desc">{getText(action.descZh, action.descEn)}</p>
-        <EffectReadout action={action} getText={getText} />
+        <EffectReadout action={action} getText={getText!} />
       </div>
     </div>
   );
 }
+
+// ── Volatile event config ──────────────────────────────────────────────────────
+
+const VOLATILE_BANNER: Record<string, { kaomoji: string; label: string; colorClass: string; descZh: string; descEn: string }> = {
+  viral:       { kaomoji: '(*≧▽≦)', label: 'VIRAL',       colorClass: 'viral',
+                 descZh: '粉丝暴涨！远超预期',          descEn: 'Followers surged! Way beyond expected' },
+  boost:       { kaomoji: '(＾▽＾)',  label: 'BOOST',       colorClass: 'boost',
+                 descZh: '热度上升，粉丝增加',          descEn: 'Trending up, extra followers gained' },
+  controversy: { kaomoji: '(╯°□°）╯', label: 'CONTROVERSY', colorClass: 'controversy',
+                 descZh: '引发争议！粉丝大量流失',      descEn: 'Controversy erupted! Followers dropped hard' },
+  flop:        { kaomoji: '(´・ω・`)', label: 'FLOP',        colorClass: 'flop',
+                 descZh: '反应平平，效果大打折扣',      descEn: 'Fell flat. Much less than expected' },
+};
 
 // ── Effect readout ─────────────────────────────────────────────────────────────
 
@@ -120,17 +133,31 @@ const STAT_ICONS: Record<string, string> = {
   connection: iconConnection,
 };
 
-function EffectReadout({ action }: { action: GameAction; getText?: (zh: string, en: string) => string }) {
+function EffectReadout({ action, getText }: { action: GameAction; getText: (zh: string, en: string) => string }) {
   const { effect } = action;
+  const banner = action.volatileType && action.volatileType !== 'normal'
+    ? VOLATILE_BANNER[action.volatileType as string]
+    : null;
   const rows: { key: string; val: number; color: string }[] = [];
   if (effect.energy)     rows.push({ key: 'energy',     val: effect.energy,     color: 'var(--bs-energy)' });
   if (effect.mood)       rows.push({ key: 'mood',       val: effect.mood,       color: 'var(--bs-mood)' });
   if (effect.focus)      rows.push({ key: 'focus',      val: effect.focus,      color: 'var(--bs-focus)' });
   if (effect.followers)  rows.push({ key: 'followers',  val: effect.followers,  color: 'var(--bs-followers)' });
   if (effect.connection) rows.push({ key: 'connection', val: effect.connection, color: 'var(--bs-connection)' });
-  if (!rows.length) return null;
+  if (!rows.length && !banner) return null;
 
   return (
+    <>
+    {banner && (
+      <div className={`ar__volatile ar__volatile--${banner.colorClass}`}>
+        <span className="ar__volatile-kaomoji">{banner.kaomoji}</span>
+        <div className="ar__volatile-body">
+          <span className="ar__volatile-label">{banner.label}</span>
+          <span className="ar__volatile-desc">{getText(banner.descZh, banner.descEn)}</span>
+        </div>
+      </div>
+    )}
+    {rows.length > 0 && (
     <div className="ar__effects">
       {rows.map(r => (
         <div
@@ -150,8 +177,13 @@ function EffectReadout({ action }: { action: GameAction; getText?: (zh: string, 
         </div>
       ))}
     </div>
+    )}
+    </>
   );
 }
+
+// Fix unused type import warning
+export type { VolatileType };
 
 ActionResultScreen.displayName = 'ActionResultScreen';
 export default ActionResultScreen;

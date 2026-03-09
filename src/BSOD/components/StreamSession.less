@@ -130,49 +130,58 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     pointer-events: none;
-    animation: bs-stream-volatile-pop 2.6s ease forwards;
+    animation: bs-stream-volatile-pop 2.8s ease forwards;
     text-align: center;
     filter: drop-shadow(0 0 20px currentColor);
 
-    &--viral {
-      color: #fbbf24;
-      .bs-stream__volatile-label { text-shadow: 0 0 30px rgba(251, 191, 36, 0.8); }
-    }
-    &--boost {
-      color: #38bdf8;
-      .bs-stream__volatile-label { text-shadow: 0 0 20px rgba(56, 189, 248, 0.7); }
-    }
-    &--controversy {
-      color: #f87171;
-      .bs-stream__volatile-label { text-shadow: 0 0 30px rgba(248, 113, 113, 0.8); }
-    }
-    &--flop {
-      color: #94a3b8;
-    }
-    &--normal {
-      color: #86efac;
-    }
+    &--viral       { color: #fbbf24; }
+    &--boost       { color: #38bdf8; }
+    &--controversy { color: #f87171; }
+    &--flop        { color: #94a3b8; }
+    &--normal      { color: #86efac; }
   }
 
-  &__volatile-emoji {
-    font-size: 48px;
+  &__volatile-backdrop {
+    position: absolute;
+    inset: -20px -28px;
+    background: rgba(0, 0, 0, 0.55);
+    border-radius: 10px;
+    backdrop-filter: blur(4px);
+    z-index: -1;
+  }
+
+  &__volatile-kaomoji {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px;
     line-height: 1;
+    letter-spacing: 0.04em;
   }
 
   &__volatile-label {
     font-family: 'Press Start 2P', monospace;
-    font-size: 18px;
-    letter-spacing: 0.08em;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 24px currentColor;
   }
 
   &__volatile-delta {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 36px;
+    font-size: 40px;
     font-weight: 700;
     letter-spacing: 0.04em;
     line-height: 1;
+  }
+
+  &__volatile-desc {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.4;
+    margin-top: 2px;
+    max-width: 200px;
+    filter: none; // don't inherit the color glow
   }
 
   // ── Featured event card ────────────────────────────────────────────────────

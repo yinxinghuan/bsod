@@ -1,10 +1,6 @@
 import React, { forwardRef, useRef, useState } from 'react';
 import type { StatEffect, StoryEvent } from '../types';
 import { getText } from '../i18n';
-import iconEnergy    from '../img/icon_energy.png';
-import iconMood      from '../img/icon_mood.png';
-import iconFocus     from '../img/icon_focus.png';
-import iconFollowers from '../img/icon_followers.png';
 import './EventOverlay.less';
 
 interface Props {
@@ -13,11 +9,11 @@ interface Props {
   onDismiss: () => void;
 }
 
-const STAT_ICONS: { key: keyof StatEffect; icon: string }[] = [
-  { key: 'energy',    icon: iconEnergy },
-  { key: 'mood',      icon: iconMood },
-  { key: 'focus',     icon: iconFocus },
-  { key: 'followers', icon: iconFollowers },
+const STAT_KAOMOJI: { key: keyof StatEffect; kaomoji: string }[] = [
+  { key: 'energy',    kaomoji: 'z(>_<)z' },
+  { key: 'mood',      kaomoji: '(T_T)'   },
+  { key: 'focus',     kaomoji: '(@_@)'   },
+  { key: 'followers', kaomoji: '(X_X)'   },
 ];
 
 const EventOverlay = React.memo(
@@ -59,12 +55,12 @@ const EventOverlay = React.memo(
           {feedback ? (
             <div className="bs-event__feedback">
               <div className="bs-event__feedback-pills">
-                {STAT_ICONS.map(({ key, icon }) => {
+                {STAT_KAOMOJI.map(({ key, kaomoji }) => {
                   const v = feedback.effect[key] as number | undefined;
                   if (!v) return null;
                   return (
                     <div key={key} className={`bs-event__feedback-pill bs-event__feedback-pill--${v > 0 ? 'pos' : 'neg'}`}>
-                      <img src={icon} alt={key} draggable={false} />
+                      <span className="bs-event__feedback-kaomoji">{kaomoji}</span>
                       <span>{v > 0 ? '+' : ''}{v}</span>
                     </div>
                   );

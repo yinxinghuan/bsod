@@ -58,6 +58,8 @@ export interface GameAction {
   isStream?: true;
   /** action not available if this returns false */
   condition?: (state: GameStats & { flags: string[] }) => boolean;
+  /** volatile outcome type — set at runtime after volatileFollowers() is applied */
+  volatileType?: VolatileType;
 }
 
 export interface GameStats {

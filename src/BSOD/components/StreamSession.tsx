@@ -38,11 +38,18 @@ const FAST_THRESHOLD  = 3000;
 const SLOW_THRESHOLD  = 6000;
 
 // ── Volatile event display config ─────────────────────────────────────────────
-const VOLATILE_CONFIG: Record<VolatileType, { label: string; emoji: string; colorClass: string } | null> = {
-  viral:       { label: 'VIRAL',       emoji: '🔥', colorClass: 'viral' },
-  boost:       { label: 'BOOST',       emoji: '⚡', colorClass: 'boost' },
-  controversy: { label: 'CRASH',       emoji: '💥', colorClass: 'controversy' },
-  flop:        { label: 'FLOP',        emoji: '📉', colorClass: 'flop' },
+const VOLATILE_CONFIG: Record<VolatileType, {
+  label: string; kaomoji: string; colorClass: string;
+  descZh: string; descEn: string;
+} | null> = {
+  viral:       { label: 'VIRAL',       kaomoji: '(*≧▽≦)', colorClass: 'viral',
+                 descZh: '直播爆了！粉丝暴涨', descEn: 'Gone viral! Massive surge' },
+  boost:       { label: 'BOOST',       kaomoji: '(＾▽＾)',  colorClass: 'boost',
+                 descZh: '热度上升！粉丝增加', descEn: 'Trending up! Followers boosted' },
+  controversy: { label: 'CONTROVERSY', kaomoji: '(╯°□°）╯', colorClass: 'controversy',
+                 descZh: '引发争议！粉丝大量流失', descEn: 'Went controversial! Followers leaving' },
+  flop:        { label: 'FLOP',        kaomoji: '(´・ω・`)', colorClass: 'flop',
+                 descZh: '反应平平，效果打折', descEn: 'Fell flat. Reduced gain' },
   normal:      null,
 };
 
@@ -160,10 +167,14 @@ const StreamSession = React.memo(
             key={flash.key}
             className={`bs-stream__volatile bs-stream__volatile--${flashConfig.colorClass}`}
           >
-            <span className="bs-stream__volatile-emoji">{flashConfig.emoji}</span>
+            <div className="bs-stream__volatile-backdrop" />
+            <span className="bs-stream__volatile-kaomoji">{flashConfig.kaomoji}</span>
             <span className="bs-stream__volatile-label">{flashConfig.label}</span>
             <span className="bs-stream__volatile-delta">
               {flash.delta > 0 ? '+' : ''}{flash.delta}
+            </span>
+            <span className="bs-stream__volatile-desc">
+              {getText(flashConfig.descZh, flashConfig.descEn)}
             </span>
           </div>
         )}
