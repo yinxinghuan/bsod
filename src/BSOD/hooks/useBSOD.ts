@@ -57,6 +57,13 @@ function applyEffect(state: GameState, effect: StatEffect): GameState {
   };
 }
 
+function deathDelta(effect: StatEffect, cause: DeathCause): number {
+  if (cause === 'energy')    return effect.energy    ?? 0;
+  if (cause === 'mood')      return effect.mood      ?? 0;
+  if (cause === 'focus')     return effect.focus     ?? 0;
+  return effect.followers ?? 0;
+}
+
 function checkDeath(state: GameState): DeathCause | null {
   if (state.energy <= 0) return 'energy';
   if (state.mood <= 0) return 'mood';
@@ -97,6 +104,7 @@ function initialState(): GameState {
     dayLogStart: { ...INITIAL_STATS },
     streamedToday: false,
     deathCause: null,
+    deathContext: null,
     endingType: null,
   };
 }
@@ -121,7 +129,10 @@ function enterPhase(state: GameState, phase: ActionPhase): GameState {
       },
     };
     const death = checkDeath(next);
-    if (death) return { ...next, phase: 'dead', deathCause: death };
+    if (death) return { ...next, phase: 'dead', deathCause: death, deathContext: {
+      labelZh: '每日消耗', labelEn: 'Daily drain',
+      delta: deathDelta(DAILY_DRAIN, death),
+    }};
   }
 
   // Check for story event
@@ -153,7 +164,10 @@ export function useBSOD() {
       if (s.phase !== 'event' || !s.pendingEvent) return s;
       let next = applyEffect(s, choice.effect);
       const death = checkDeath(next);
-      if (death) return { ...next, phase: 'dead', deathCause: death };
+      if (death) return { ...next, phase: 'dead', deathCause: death, deathContext: {
+        labelZh: choice.labelZh, labelEn: choice.labelEn,
+        delta: deathDelta(choice.effect, death),
+      }};
       // Return to the phase this event triggered in
       return enterPhase({ ...next, pendingEvent: null }, s.prevPhase);
     });
@@ -207,7 +221,10 @@ export function useBSOD() {
 
       let next = applyEffect({ ...s, lastAction: null }, action.effect);
       const death = checkDeath(next);
-      if (death) return { ...next, phase: 'dead', deathCause: death };
+      if (death) return { ...next, phase: 'dead', deathCause: death, deathContext: {
+        labelZh: action.labelZh, labelEn: action.labelEn,
+        delta: deathDelta(action.effect, death),
+      }};
 
       return advancePhase(next, currentPhase);
     });
@@ -259,7 +276,10 @@ export function useBSOD() {
       }
 
       const death = checkDeath(next);
-      if (death) return { ...next, phase: 'dead', deathCause: death };
+      if (death) return { ...next, phase: 'dead', deathCause: death, deathContext: {
+        labelZh: choice.labelZh, labelEn: choice.labelEn,
+        delta: deathDelta(moodedEffect, death),
+      }};
 
       const gained = next.followers - s.followers;
       const lastEvent = moodedEffect.followers

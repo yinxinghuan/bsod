@@ -19,6 +19,13 @@ export type ActionPhase = 'morning' | 'afternoon' | 'evening' | 'night';
 
 export type DeathCause = 'energy' | 'mood' | 'followers' | 'focus';
 
+export interface DeathContext {
+  labelZh: string;
+  labelEn: string;
+  /** The delta of the death-causing stat from the fatal action (negative for deductions) */
+  delta: number;
+}
+
 export type EndingType = 'online' | 'offline' | 'restart' | 'bsod';
 
 export type LaisaEmotion = 'normal' | 'happy' | 'sad' | 'surprised' | 'tired' | 'focused';
@@ -129,5 +136,6 @@ export interface GameState {
   dayLogStart: GameStats;          // stats snapshot at day start (for delta)
   streamedToday: boolean;
   deathCause: DeathCause | null;
+  deathContext: DeathContext | null;
   endingType: EndingType | null;
 }

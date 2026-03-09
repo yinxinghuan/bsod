@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import type { DeathCause } from '../types';
+import type { DeathCause, DeathContext } from '../types';
 import { t, getText } from '../i18n';
 import bgDark from '../img/bg_ending_bsod.png';
 import iconEnergy from '../img/icon_energy.png';
@@ -12,6 +12,7 @@ import './DeathScreen.less';
 interface Props {
   cause: DeathCause;
   statValue: number;
+  deathContext: DeathContext | null;
   followers: number;
   onRestart: () => void;
 }
@@ -35,7 +36,7 @@ const CAUSE_COLOR: Record<string, string> = {
 };
 
 const DeathScreen = React.memo(
-  forwardRef<HTMLDivElement, Props>(function DeathScreen({ cause, statValue, followers, onRestart }, ref) {
+  forwardRef<HTMLDivElement, Props>(function DeathScreen({ cause, statValue, deathContext, followers, onRestart }, ref) {
     return (
       <div className={`bs-death bs-death--${cause}`} ref={ref}>
         <img className="bs-death__bg" src={bgDark} alt="" draggable={false} />
@@ -51,6 +52,19 @@ const DeathScreen = React.memo(
             <img className="bs-death__stat-icon" src={CAUSE_STAT_ICON[cause]} alt="" draggable={false} />
             <span className="bs-death__stat-val" style={{ color: CAUSE_COLOR[cause] }}>{statValue}</span>
           </div>
+
+          {deathContext && (
+            <div className="bs-death__ctx">
+              <span className="bs-death__ctx-label">
+                {getText(deathContext.labelZh, deathContext.labelEn)}
+              </span>
+              <span className="bs-death__ctx-delta" style={{ color: CAUSE_COLOR[cause] }}>
+                <img className="bs-death__stat-icon" src={CAUSE_STAT_ICON[cause]} alt="" draggable={false} />
+                {deathContext.delta > 0 ? '+' : ''}{deathContext.delta}
+              </span>
+            </div>
+          )}
+
           <p className="bs-death__desc">{t(`deathDesc_${cause}`)}</p>
           <p className="bs-death__followers">
             {getText('最终粉丝', 'Final followers')}{' '}<strong>{followers.toLocaleString()}</strong>
