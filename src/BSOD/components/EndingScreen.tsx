@@ -46,7 +46,6 @@ const EndingScreen = React.memo(
       return (
         <div className="bs-ending bs-ending--bsod" ref={ref}>
           <img className="bs-ending__bg" src={bg} alt="" draggable={false} />
-          <img className="bs-ending__laisa" src={laisaSrc} alt="" draggable={false} />
           <NoiseCanvas opacity={0.18} />
           <div className="bs-ending__bsod-panel">
             <div className="bs-ending__bsod-face">:(</div>
@@ -70,6 +69,7 @@ const EndingScreen = React.memo(
               PLAY AGAIN
             </button>
           </div>
+          <img className="bs-ending__laisa" src={laisaSrc} alt="" draggable={false} />
         </div>
       );
     }

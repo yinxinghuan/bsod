@@ -34,23 +34,26 @@
   // ── Laisa sprite ───────────────────────────────────────────────────────────
   &__laisa {
     position: absolute;
-    bottom: -160px;
-    right: -50px;
-    height: 90dvh;
+    bottom: -100px;
+    right: -20px;
+    height: 108dvh;
     width: auto;
     object-fit: contain;
     pointer-events: none;
-    z-index: 1;
-    filter: drop-shadow(0 4px 32px rgba(0, 0, 0, 0.5));
-    mask-image: linear-gradient(to bottom, black 40%, transparent 82%);
-    -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 82%);
+    z-index: 3;
+    filter: grayscale(1) brightness(0.85);
+    mix-blend-mode: screen;
+    mask-image: linear-gradient(to bottom, black 42%, transparent 84%);
+    -webkit-mask-image: linear-gradient(to bottom, black 42%, transparent 84%);
     animation: bs-ending-laisa-in 0.7s ease forwards;
   }
 
   &--bsod &__laisa {
-    filter: grayscale(1) brightness(0.35) drop-shadow(0 4px 24px rgba(0, 0, 0, 0.8));
-    mask-image: linear-gradient(to bottom, black 30%, transparent 65%);
-    -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 65%);
+    filter: grayscale(1) brightness(0.55);
+    mix-blend-mode: screen;
+    mask-image: linear-gradient(to bottom, black 32%, transparent 68%);
+    -webkit-mask-image: linear-gradient(to bottom, black 32%, transparent 68%);
+    z-index: 3;
   }
 
   // ── Content block — sits at the bottom ────────────────────────────────────
