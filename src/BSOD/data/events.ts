@@ -1039,9 +1039,230 @@ export const STREAM_EVENTS: StreamEvent[] = [
       },
     ],
   },
+  {
+    id: 's_small_collab_dm',
+    textZh: '一个只有几十个粉丝的小主播私信你：「能一起联动吗？我很喜欢你的风格」',
+    textEn: 'A tiny streamer with 30 followers DMs you: "Could we collab? I really love your style"',
+    choices: [
+      {
+        labelZh: '答应了，约好下次一起玩',
+        labelEn: 'Say yes — agree to play together next time',
+        effect: { mood: 18, connection: 2, followers: 60 },
+        emotion: 'happy',
+      },
+      {
+        labelZh: '礼貌拒绝，现在太忙了',
+        labelEn: 'Politely decline — too much going on right now',
+        effect: { mood: -5, focus: 8 },
+        emotion: 'normal',
+      },
+      {
+        labelZh: '没回，直播结束后忘了',
+        labelEn: 'Don\'t reply. Forget about it after stream.',
+        effect: { mood: -10, connection: -1 },
+        emotion: 'sad',
+      },
+    ],
+  },
+  {
+    id: 's_international_wave',
+    textZh: '弹幕里突然出现很多看不懂的语言——好像有人转发了你的片段到海外论坛',
+    textEn: 'Chat fills with languages you can\'t read — someone apparently shared your clip on an overseas forum',
+    choices: [
+      {
+        labelZh: '用英文打招呼，努力欢迎大家',
+        labelEn: 'Type a greeting in English, welcome everyone',
+        effect: { followers: 240, mood: 15 },
+        emotion: 'happy',
+      },
+      {
+        labelZh: '继续正常直播，反正内容说话',
+        labelEn: 'Keep streaming normally — content speaks for itself',
+        effect: { followers: 120, focus: 8 },
+        emotion: 'normal',
+      },
+    ],
+  },
+  {
+    id: 's_raid_out',
+    textZh: '直播快结束了，你想把剩下的观众送给另一个正在直播的小主播。',
+    textEn: 'Stream is wrapping up. You want to raid another small streamer with your remaining audience.',
+    choices: [
+      {
+        labelZh: '发起突袭！带着大家一起去',
+        labelEn: 'Launch the raid! Bring everyone along',
+        effect: { mood: 20, followers: -80, connection: 2 },
+        emotion: 'happy',
+      },
+      {
+        labelZh: '算了，直接下播',
+        labelEn: 'Skip it, just end the stream',
+        effect: { followers: 0 },
+        emotion: 'normal',
+      },
+    ],
+  },
+  {
+    id: 's_irl_slip',
+    textZh: '你不小心说漏了一句生活里的真实情况——弹幕立刻安静了一秒，然后炸了。',
+    textEn: 'You accidentally let something real slip about your life. Chat goes silent for a beat — then explodes.',
+    choices: [
+      {
+        labelZh: '顺势分享，这也是你的一部分',
+        labelEn: 'Lean into it — this is part of who you are',
+        effect: { connection: 2, mood: 12, followers: 200 },
+        emotion: 'normal',
+      },
+      {
+        labelZh: '快速带过，"啊没什么——"',
+        labelEn: 'Quickly deflect: "Ah, it\'s nothing—"',
+        effect: { mood: -8, followers: 80 },
+        emotion: 'normal',
+      },
+      {
+        labelZh: '尴尬了，状态明显变差',
+        labelEn: 'Visibly flustered. Your composure cracks.',
+        effect: { mood: -20, followers: -100, focus: -10 },
+        emotion: 'sad',
+      },
+    ],
+  },
+  {
+    id: 's_game_crashed',
+    textZh: '游戏崩溃了。三十分钟的进度没有保存。',
+    textEn: 'The game crashed. Thirty minutes of progress — gone.',
+    choices: [
+      {
+        labelZh: '爆笑，这就是直播的魅力',
+        labelEn: 'Burst out laughing — this is what streaming is about',
+        effect: { mood: 10, followers: 160 },
+        emotion: 'happy',
+      },
+      {
+        labelZh: '沉默两秒，重新开',
+        labelEn: 'Silent for two seconds. Restart.',
+        effect: { mood: -8, focus: 10 },
+        emotion: 'normal',
+      },
+      {
+        labelZh: '有点真情流露地崩了',
+        labelEn: 'You actually kind of break. Just a little.',
+        effect: { mood: -20, followers: 100, connection: 1 },
+        emotion: 'sad',
+      },
+    ],
+  },
+
+  // ── New special events ───────────────────────────────────────────────────────
+  {
+    id: 's_mass_follow',
+    tag: { zh: '🌊 粉丝涌入', en: '🌊 FOLLOW FLOOD', color: '#38bdf8' },
+    textZh: '粉丝数字一直在跳——有人在某个大群里推荐了你，正在集体关注……',
+    textEn: 'Your follower count keeps jumping — someone recommended you in a huge group chat and they\'re all following...',
+    choices: [
+      {
+        labelZh: '激动地问大家从哪里来的',
+        labelEn: 'Excitedly ask where everyone\'s coming from',
+        effect: { followers: 380, mood: 20 },
+        emotion: 'surprised',
+      },
+      {
+        labelZh: '平静地感谢，继续直播',
+        labelEn: 'Thank everyone calmly and keep going',
+        effect: { followers: 240, focus: 8 },
+        emotion: 'normal',
+      },
+    ],
+  },
+  {
+    id: 's_clip_editor_dm',
+    tag: { zh: '✂️ 剪辑约合作', en: '✂️ EDITOR COLLAB', color: '#a78bfa' },
+    textZh: '一个专做二创剪辑的up主私信你：「能用你的素材做精彩集锦吗？」',
+    textEn: 'A highlights editor DMs you: "Can I use your footage to make a compilation video?"',
+    choices: [
+      {
+        labelZh: '答应，期待看到成品',
+        labelEn: 'Agree — excited to see the result',
+        effect: { followers: 200, mood: 15 },
+        emotion: 'happy',
+      },
+      {
+        labelZh: '问对方是做什么风格的再说',
+        labelEn: 'Ask about their style before deciding',
+        effect: { followers: 80, focus: 5 },
+        emotion: 'normal',
+      },
+      {
+        labelZh: '谢绝，不太放心素材怎么用',
+        labelEn: 'Decline — not sure how the material will be used',
+        effect: { mood: 5, focus: 10 },
+        emotion: 'normal',
+      },
+    ],
+  },
+  {
+    id: 's_sponsor_dm',
+    tag: { zh: '💼 商务合作', en: '💼 SPONSOR OFFER', color: '#fbbf24' },
+    textZh: '一个品牌发来合作邀请——不算大品牌，但是第一次有人愿意付钱了。',
+    textEn: 'A brand sends a collaboration offer — not a big name, but it\'s the first time anyone\'s offered to pay.',
+    choices: [
+      {
+        labelZh: '接了！激动地在直播间提了一句',
+        labelEn: 'Accept it! Mention it excitedly on stream',
+        effect: { followers: 160, mood: 25 },
+        emotion: 'happy',
+      },
+      {
+        labelZh: '仔细看合同，下播后再决定',
+        labelEn: 'Read the contract carefully, decide after stream',
+        effect: { followers: 40, focus: 8 },
+        emotion: 'normal',
+      },
+      {
+        labelZh: '拒绝，不想让直播变味',
+        labelEn: 'Decline — don\'t want to change what the stream feels like',
+        effect: { mood: 10, connection: 1, followers: 80 },
+        emotion: 'normal',
+      },
+    ],
+  },
+  {
+    id: 's_platform_strike',
+    tag: { zh: '⚠ 版权警告', en: '⚠ COPYRIGHT STRIKE', color: '#f87171' },
+    textZh: '平台发来警告：你背景音乐触发了版权检测，直播间有被封的风险。',
+    textEn: 'Platform warning: your background music triggered copyright detection — stream is at risk of being muted or taken down.',
+    choices: [
+      {
+        labelZh: '立刻关掉音乐，解释一下情况',
+        labelEn: 'Immediately cut the music and explain to chat',
+        effect: { followers: -80, mood: -5, focus: 10 },
+        emotion: 'normal',
+      },
+      {
+        labelZh: '赌一把，先不管，继续播',
+        labelEn: 'Gamble — ignore it for now and keep going',
+        effect: { followers: -280, mood: -15 },
+        emotion: 'sad',
+      },
+      {
+        labelZh: '换成无版权音乐，顺势聊聊这件事',
+        labelEn: 'Switch to royalty-free music, chat about it openly',
+        effect: { followers: 60, mood: 5, connection: 1 },
+        emotion: 'normal',
+      },
+    ],
+  },
 ];
 
-export function pickStreamEvents(count = 4): StreamEvent[] {
-  const shuffled = [...STREAM_EVENTS].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
+const SPECIAL_STREAM_EVENTS = STREAM_EVENTS.filter(e => e.tag != null);
+const NORMAL_STREAM_EVENTS  = STREAM_EVENTS.filter(e => e.tag == null);
+
+export function pickStreamEvents(count = 5): StreamEvent[] {
+  // Always include at least 1 special (tagged) event
+  const specialShuffled = [...SPECIAL_STREAM_EVENTS].sort(() => Math.random() - 0.5);
+  const normalShuffled  = [...NORMAL_STREAM_EVENTS].sort(() => Math.random() - 0.5);
+  const specials = specialShuffled.slice(0, 2);                  // pick 2 specials
+  const normals  = normalShuffled.slice(0, count - specials.length); // fill the rest
+  const combined = [...specials, ...normals].sort(() => Math.random() - 0.5);
+  return combined;
 }

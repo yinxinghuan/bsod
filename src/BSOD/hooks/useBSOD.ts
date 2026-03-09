@@ -235,7 +235,7 @@ export function useBSOD() {
       const before = snap(s);
 
       if (action.isStream) {
-        const queue = pickStreamEvents(3);
+        const queue = pickStreamEvents();
         let next = applyEffect(s, action.effect);
         return {
           ...next,
