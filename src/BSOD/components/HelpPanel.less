@@ -41,6 +41,13 @@
     z-index: 1;
   }
 
+  &__title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: rgba(180, 190, 210, 0.85);
+    letter-spacing: 0.1em;
+  }
+
   &__close {
     all: unset;
     font-size: 20px;
@@ -69,11 +76,9 @@
   }
 
   &__stat {
-    display: grid;
-    grid-template-columns: 38px 1fr;
-    grid-template-rows: auto auto;
-    column-gap: 14px;
-    row-gap: 4px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
     padding: 12px 0;
 
     & + & {
@@ -82,18 +87,23 @@
   }
 
   &__stat-icon {
-    grid-row: 1 / 3;
     width: 38px;
     height: 38px;
+    flex-shrink: 0;
     image-rendering: pixelated;
-    align-self: center;
+  }
+
+  &__stat-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center;
   }
 
   &__stat-name {
     font-family: 'Press Start 2P', monospace;
     font-size: 13px;
     line-height: 1.3;
-    align-self: end;
   }
 
   &__stat-desc {
@@ -101,7 +111,6 @@
     font-size: 15px;
     color: rgba(180, 190, 210, 0.55);
     line-height: 1.5;
-    align-self: start;
   }
 
   // ── Timeline ─────────────────────────────────────────────────────────────────
