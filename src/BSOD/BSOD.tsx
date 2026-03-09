@@ -278,6 +278,8 @@ const BSOD = React.memo(
             totalEvents={state.streamQueue.length}
             onChoose={sfx.chooseStreamOption}
             lastFollowerEvent={state.streamLastEvent}
+            pendingEnd={state.streamPendingEnd}
+            onStreamEnd={actions.confirmStreamEnd}
           />
         )}
 

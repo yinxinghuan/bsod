@@ -10,6 +10,8 @@ interface Props {
   totalEvents: number;
   onChoose: (index: number, speed: ResponseSpeed) => void;
   lastFollowerEvent?: { delta: number; type: VolatileType; key: number } | null;
+  pendingEnd?: boolean;
+  onStreamEnd?: () => void;
 }
 
 // ── Chat comment pool ──────────────────────────────────────────────────────────
@@ -37,7 +39,7 @@ const VOLATILE_CONFIG: Record<VolatileType, { label: string; emoji: string; colo
 
 const StreamSession = React.memo(
   forwardRef<HTMLDivElement, Props>(function StreamSession(
-    { event, eventIndex, totalEvents, onChoose, lastFollowerEvent }, ref
+    { event, eventIndex, totalEvents, onChoose, lastFollowerEvent, pendingEnd, onStreamEnd }, ref
   ) {
     const [comments, setComments] = useState<{ id: number; text: string }[]>([]);
     const [elapsed, setElapsed] = useState(0);
@@ -184,19 +186,25 @@ const StreamSession = React.memo(
             </span>
           </div>
 
-          {/* Choice buttons */}
-          <div className="bs-stream__choices">
-            {event.choices.map((c, i) => (
-              <button
-                key={i}
-                className="bs-stream__choice"
-                onPointerDown={() => handleChoose(i)}
-                disabled={timedOut}
-              >
-                {getText(c.labelZh, c.labelEn)}
-              </button>
-            ))}
-          </div>
+          {/* Choice buttons / end stream button */}
+          {pendingEnd ? (
+            <button className="bs-stream__end-btn" onPointerDown={onStreamEnd}>
+              {getText('结束直播', 'End Stream')}
+            </button>
+          ) : (
+            <div className="bs-stream__choices">
+              {event.choices.map((c, i) => (
+                <button
+                  key={i}
+                  className="bs-stream__choice"
+                  onPointerDown={() => handleChoose(i)}
+                  disabled={timedOut}
+                >
+                  {getText(c.labelZh, c.labelEn)}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     );
