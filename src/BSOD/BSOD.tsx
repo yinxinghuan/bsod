@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useState, useEffect, useRef } from 'react';
 import { useBSOD } from './hooks/useBSOD';
 import type { GameState } from './types';
 import StatusBar from './components/StatusBar';
@@ -20,6 +20,11 @@ import laisaSurprised from './img/laisa_surprised.png';
 import laisaTired from './img/laisa_tired.png';
 import laisaFocused from './img/laisa_focused.png';
 import aigramLogo from './img/aigram.svg';
+import {
+  resumeAudio, playClick, playConfirm, playPanelOpen,
+  playGameStart, playStreamStart, playEvent, playStatUp, playStatDown,
+  playDayEnd, playGameOver, playVictory,
+} from './utils/sounds';
 import './BSOD.less';
 
 // Preload all heavy assets so first gameplay frame has no flicker
@@ -72,6 +77,73 @@ const BSOD = React.memo(
     const [showSplash, setShowSplash] = useState(true);
     const [showHelp, setShowHelp] = useState(false);
 
+    // ── Phase-change sound effects ────────────────────────────────────────────
+    const prevPhase = useRef(phase);
+    useEffect(() => {
+      const prev = prevPhase.current;
+      prevPhase.current = phase;
+      if (prev === phase) return;
+      if (phase === 'stream')    playStreamStart();
+      if (phase === 'event')     playEvent();
+      if (phase === 'dayEnd')    playDayEnd();
+      if (phase === 'dead')      playGameOver();
+      if (phase === 'ending') {
+        if (state.endingType === 'online' || state.endingType === 'restart') playVictory();
+        else playGameOver();
+      }
+    }, [phase, state.endingType]);
+
+    // Stat-change feedback (big swings only)
+    const prevStats = useRef({ energy, mood, focus });
+    useEffect(() => {
+      const prev = prevStats.current;
+      prevStats.current = { energy, mood, focus };
+      const delta = (energy - prev.energy) + (mood - prev.mood) + (focus - prev.focus);
+      if (delta >= 8) playStatUp();
+      else if (delta <= -8) playStatDown();
+    }, [energy, mood, focus]);
+
+    // ── Sound-wrapped actions ─────────────────────────────────────────────────
+    const sfx = {
+      startGame: () => {
+        resumeAudio();
+        playGameStart();
+        actions.startGame();
+      },
+      restart: () => {
+        resumeAudio();
+        playGameStart();
+        actions.restart();
+      },
+      chooseAction: (action: Parameters<typeof actions.chooseAction>[0]) => {
+        playConfirm();
+        const before = { energy, mood, focus };
+        actions.chooseAction(action);
+        // stat feedback fires after state updates — effect handled in prev render delta
+        void before;
+      },
+      chooseEventOption: (choice: Parameters<typeof actions.chooseEventOption>[0]) => {
+        playConfirm();
+        actions.chooseEventOption(choice);
+      },
+      chooseStreamOption: (...args: Parameters<typeof actions.chooseStreamOption>) => {
+        playConfirm();
+        actions.chooseStreamOption(...args);
+      },
+      dismissActionResult: () => {
+        playClick();
+        actions.dismissActionResult();
+      },
+      dismissEvent: () => {
+        playClick();
+        actions.dismissEvent();
+      },
+      confirmDayEnd: () => {
+        playClick();
+        actions.confirmDayEnd();
+      },
+    };
+
     const { visible: laisaVisible, emotion: laisaEmotion } = getLaisaVisible(state);
     const laisaSrc = LAISA_IMGS[laisaEmotion] ?? laisaIdle;
     const filterClass = PHASE_FILTER[phase] ?? 'bs--night';
@@ -98,7 +170,7 @@ const BSOD = React.memo(
               <h1 className="bs__start-title">BSOD</h1>
               <p className="bs__start-tagline">BLUE SCREEN OF DOOM</p>
               <p className="bs__start-subtitle">A 13-day streaming survival</p>
-              <button className="bs__start-btn" onPointerDown={actions.startGame}>
+              <button className="bs__start-btn" onPointerDown={sfx.startGame}>
                 START GAME
               </button>
             </div>
@@ -115,7 +187,7 @@ const BSOD = React.memo(
           <DeathScreen
             cause={state.deathCause}
             followers={followers}
-            onRestart={actions.restart}
+            onRestart={sfx.restart}
           />
         </div>
       );
@@ -130,7 +202,7 @@ const BSOD = React.memo(
             endingType={state.endingType}
             followers={followers}
             connection={state.connection}
-            onRestart={actions.restart}
+            onRestart={sfx.restart}
           />
         </div>
       );
@@ -146,9 +218,9 @@ const BSOD = React.memo(
             energy={energy} mood={mood} focus={focus}
             followers={followers} day={day} phase={phase}
             streamedToday={state.streamedToday}
-            onHelpOpen={() => setShowHelp(true)}
+            onHelpOpen={() => { playPanelOpen(); setShowHelp(true); }}
           />
-          <DayEndScreen state={state} onContinue={actions.confirmDayEnd} />
+          <DayEndScreen state={state} onContinue={sfx.confirmDayEnd} />
         </div>
       );
     }
@@ -174,7 +246,7 @@ const BSOD = React.memo(
           energy={energy} mood={mood} focus={focus}
           followers={followers} day={day} phase={phase}
           streamedToday={streamedToday}
-          onHelpOpen={() => setShowHelp(true)}
+          onHelpOpen={() => { playPanelOpen(); setShowHelp(true); }}
         />
 
         {/* Laisa character sprite — only during events / big stat changes */}
@@ -194,7 +266,7 @@ const BSOD = React.memo(
           <ActionPanel
             phase={phase}
             actions={currentPhaseActions}
-            onChoose={actions.chooseAction}
+            onChoose={sfx.chooseAction}
           />
         </div>
 
@@ -204,7 +276,7 @@ const BSOD = React.memo(
             event={state.streamQueue[state.streamIndex]}
             eventIndex={state.streamIndex}
             totalEvents={state.streamQueue.length}
-            onChoose={actions.chooseStreamOption}
+            onChoose={sfx.chooseStreamOption}
           />
         )}
 
@@ -212,7 +284,7 @@ const BSOD = React.memo(
         {phase === 'actionResult' && state.lastAction && (
           <ActionResultScreen
             action={state.lastAction}
-            onDismiss={actions.dismissActionResult}
+            onDismiss={sfx.dismissActionResult}
           />
         )}
 
@@ -220,8 +292,8 @@ const BSOD = React.memo(
         {phase === 'event' && state.pendingEvent && (
           <EventOverlay
             event={state.pendingEvent}
-            onChoice={idx => actions.chooseEventOption(state.pendingEvent!.choices![idx])}
-            onDismiss={actions.dismissEvent}
+            onChoice={idx => sfx.chooseEventOption(state.pendingEvent!.choices![idx])}
+            onDismiss={sfx.dismissEvent}
           />
         )}
       </div>
