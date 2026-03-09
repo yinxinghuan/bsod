@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { useLocale } from '../i18n';
 import type { GameAction } from '../types';
 import iconEnergy from '../img/icon_energy.png';
@@ -18,8 +18,21 @@ const ActionPanel = React.memo(
   forwardRef<HTMLDivElement, Props>(function ActionPanel({ phase, actions, onChoose }, ref) {
     const { getText } = useLocale();
     const [expanded, setExpanded] = useState(false);
+    const [noScroll, setNoScroll] = useState(true);
+    const listRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => { setExpanded(false); }, [phase]);
+
+    useEffect(() => {
+      if (!expanded) return;
+      const el = listRef.current;
+      if (!el) return;
+      const check = () => setNoScroll(el.scrollHeight <= el.clientHeight);
+      check();
+      const ro = new ResizeObserver(check);
+      ro.observe(el);
+      return () => ro.disconnect();
+    }, [expanded]);
 
     const streamAction = actions.find(a => a.isStream);
     const regularActions = actions.filter(a => !a.isStream);
@@ -54,17 +67,19 @@ const ActionPanel = React.memo(
         </div>
 
         {expanded && (
-          <div className="bs-actions__list">
-            {regularActions.map(action => (
-              <button key={action.id} className="bs-card" onPointerDown={() => handleChoose(action)}>
-                <span className="bs-card__name">
-                  {getText(action.labelZh, action.labelEn)}
-                </span>
-                <div className="bs-card__fx">
-                  {renderFx(action.effect)}
-                </div>
-              </button>
-            ))}
+          <div className={`bs-actions__list-wrap${noScroll ? ' bs-actions__list-wrap--no-scroll' : ''}`}>
+            <div className="bs-actions__list" ref={listRef}>
+              {regularActions.map(action => (
+                <button key={action.id} className="bs-card" onPointerDown={() => handleChoose(action)}>
+                  <span className="bs-card__name">
+                    {getText(action.labelZh, action.labelEn)}
+                  </span>
+                  <div className="bs-card__fx">
+                    {renderFx(action.effect)}
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
         )}
       </div>
