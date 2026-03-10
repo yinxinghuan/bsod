@@ -14,7 +14,7 @@ const INITIAL_STATS = {
   energy: 65,
   mood: 58,
   focus: 52,
-  followers: 100, // prologue stream establishes the real starting base
+  followers: 300, // prologue stream establishes the real starting base
 };
 
 // Passive drain each day at morning start
