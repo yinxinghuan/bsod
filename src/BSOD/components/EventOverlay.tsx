@@ -37,8 +37,8 @@ const EventOverlay = React.memo(
     };
 
     return (
-      <div className="bs-event" ref={ref}>
-        <div className="bs-event__card" onPointerDown={feedback ? handleFeedbackDismiss : undefined}>
+      <div className="bs-event" ref={ref} onPointerDown={feedback ? handleFeedbackDismiss : undefined}>
+        <div className="bs-event__card">
           {/* Visitor header — avatar + name */}
           {event.visitorImg && (
             <div className="bs-event__visitor-header">
@@ -78,7 +78,7 @@ const EventOverlay = React.memo(
               <div className="bs-event__feedback-hint">{getText('点击继续', 'Tap to continue')}</div>
             </div>
           ) : event.choices && event.choices.length > 0 ? (
-            <div className="bs-event__choices">
+            <div className="bs-event__choices" onPointerDown={e => e.stopPropagation()}>
               {event.choices.map((c, i) => (
                 <button
                   key={i}

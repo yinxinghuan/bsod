@@ -289,9 +289,10 @@ const BSOD = React.memo(
         {/* Daily drain notice */}
         {state.showDrainNotice && <DailyDrainNotice />}
 
-        {/* Story event overlay */}
+        {/* Story event overlay — key forces remount on each new event, resetting local state */}
         {phase === 'event' && state.pendingEvent && (
           <EventOverlay
+            key={state.pendingEvent.id}
             event={state.pendingEvent}
             onChoice={idx => sfx.chooseEventOption(state.pendingEvent!.choices![idx])}
             onDismiss={sfx.dismissEvent}
