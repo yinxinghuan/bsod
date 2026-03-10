@@ -39,16 +39,9 @@ const ISAYA_IMGS: Record<string, string> = {
 };
 
 function getIsayaVisible(state: GameState): { visible: boolean; emotion: string } {
-  const { phase, pendingEvent, lastAction } = state;
+  const { phase, pendingEvent } = state;
   if (phase === 'event' && pendingEvent) {
     return { visible: true, emotion: pendingEvent.isayaEmotion ?? 'normal' };
-  }
-  if (phase === 'actionResult' && lastAction) {
-    const { energy = 0, mood = 0, focus = 0 } = lastAction.effect;
-    const total = energy + mood + focus;
-    if (Math.abs(total) >= 6) {
-      return { visible: true, emotion: total > 0 ? 'happy' : 'sad' };
-    }
   }
   return { visible: false, emotion: 'normal' };
 }
