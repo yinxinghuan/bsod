@@ -5,12 +5,12 @@ import bgOnline  from '../img/bg_ending_online.png';
 import bgOffline from '../img/bg_ending_offline.png';
 import bgRestart from '../img/bg_ending_restart.png';
 import bgBsodRoom from '../img/bg_ending_bsod.png';
-import laisaHappy     from '../img/laisa_happy.png';
-import laisaIdle      from '../img/laisa_idle.png';
-import laisaFocused   from '../img/laisa_focused.png';
-import laisaSad       from '../img/laisa_sad.png';
-import laisaTired     from '../img/laisa_tired.png';
-import laisaSurprised from '../img/laisa_surprised.png';
+import isayaHappy     from '../img/laisa_happy.png';
+import isayaIdle      from '../img/laisa_idle.png';
+import isayaFocused   from '../img/laisa_focused.png';
+import isayaSad       from '../img/laisa_sad.png';
+import isayaTired     from '../img/laisa_tired.png';
+import isayaSurprised from '../img/laisa_surprised.png';
 import NoiseCanvas from './NoiseCanvas';
 import './EndingScreen.less';
 
@@ -31,14 +31,14 @@ const ENDING_BG: Record<EndingType, string> = {
   hollow_viral: bgOffline,
 };
 
-const ENDING_LAISA: Record<EndingType, string> = {
-  online:       laisaHappy,
-  offline:      laisaIdle,
-  restart:      laisaFocused,
-  bsod:         laisaSad,
-  burnout:      laisaTired,
-  cult_hero:    laisaSurprised,
-  hollow_viral: laisaSad,
+const ENDING_ISAYA: Record<EndingType, string> = {
+  online:       isayaHappy,
+  offline:      isayaIdle,
+  restart:      isayaFocused,
+  bsod:         isayaSad,
+  burnout:      isayaTired,
+  cult_hero:    isayaSurprised,
+  hollow_viral: isayaSad,
 };
 
 const EndingScreen = React.memo(
@@ -47,7 +47,7 @@ const EndingScreen = React.memo(
   ) {
     const bg = ENDING_BG[endingType];
 
-    const laisaSrc = ENDING_LAISA[endingType];
+    const isayaSrc = ENDING_ISAYA[endingType];
 
     // ── BSOD ending: Windows BSOD aesthetic over the chaos room ──────────────
     if (endingType === 'bsod') {
@@ -77,7 +77,7 @@ const EndingScreen = React.memo(
               PLAY AGAIN
             </button>
           </div>
-          <img className="bs-ending__laisa" src={laisaSrc} alt="" draggable={false} />
+          <img className="bs-ending__laisa" src={isayaSrc} alt="" draggable={false} />
         </div>
       );
     }
@@ -88,7 +88,7 @@ const EndingScreen = React.memo(
         <img className="bs-ending__bg" src={bg} alt="" draggable={false} />
         <NoiseCanvas opacity={0.18} />
         <div className="bs-ending__overlay" />
-        <img className="bs-ending__laisa" src={laisaSrc} alt="" draggable={false} />
+        <img className="bs-ending__laisa" src={isayaSrc} alt="" draggable={false} />
 
         <div className="bs-ending__content">
           <div className="bs-ending__tag">{getText('第 13 天 · 结局', 'Day 13 · Ending')}</div>

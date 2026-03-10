@@ -30,7 +30,7 @@ export interface DeathContext {
 
 export type EndingType = 'online' | 'offline' | 'restart' | 'bsod' | 'burnout' | 'cult_hero' | 'hollow_viral';
 
-export type LaisaEmotion = 'normal' | 'happy' | 'sad' | 'surprised' | 'tired' | 'focused';
+export type IsayaEmotion = 'normal' | 'happy' | 'sad' | 'surprised' | 'tired' | 'focused';
 
 export interface StatEffect {
   energy?: number;
@@ -49,7 +49,7 @@ export interface GameAction {
   descZh: string;
   descEn: string;
   effect: StatEffect;
-  emotion?: LaisaEmotion;
+  emotion?: IsayaEmotion;
   /** visual style for action result screen */
   style: ActionStyle;
   /** which surveillance footage clip to show */
@@ -75,7 +75,7 @@ export interface StoryEvent {
   phase: ActionPhase;
   textZh: string;
   textEn: string;
-  laisaEmotion?: LaisaEmotion;
+  isayaEmotion?: IsayaEmotion;
   choices?: StoryChoice[];
   /** Visitor character sprite shown on the left during this event */
   visitorImg?: string;
@@ -87,7 +87,7 @@ export interface StoryChoice {
   labelZh: string;
   labelEn: string;
   effect: StatEffect;
-  emotion?: LaisaEmotion;
+  emotion?: IsayaEmotion;
 }
 
 export interface StreamEvent {
@@ -103,7 +103,7 @@ export interface StreamChoice {
   labelZh: string;
   labelEn: string;
   effect: StatEffect;
-  emotion?: LaisaEmotion;
+  emotion?: IsayaEmotion;
 }
 
 /** How quickly the player responded — affects follower bonus */

@@ -18,7 +18,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'morning',
     textZh: '第一天。父母昨天还在问你什么时候找一份"正经工作"。\n\n你打开电脑，看着空空的直播间。开播按钮就在那里。',
     textEn: 'Day one. Your parents asked yesterday when you\'d get a "real job".\n\nYou open your laptop and look at the empty streaming room. The start button is right there.',
-    laisaEmotion: 'normal',
+    isayaEmotion: 'normal',
     choices: [
       {
         labelZh: '不管了，就是要做',
@@ -40,7 +40,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'evening',
     textZh: '昨天直播结束，一条弹幕说："主播真的超努力的！"\n\n就这么一条，让你回想了好久。',
     textEn: 'After yesterday\'s stream, one viewer said: "Streamer, you\'re really trying hard!"\n\nJust that one comment. You\'ve been thinking about it since.',
-    laisaEmotion: 'happy',
+    isayaEmotion: 'happy',
     choices: [
       {
         labelZh: '把它截图存下来',
@@ -62,7 +62,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'afternoon',
     textZh: '手机震了一下。是初中同学：\n"最近在干嘛？听说你在做主播？真的假的哈哈"',
     textEn: 'Your phone buzzes. An old classmate:\n"Hey what are you up to? I heard you\'re a streamer lol is that real?"',
-    laisaEmotion: 'surprised',
+    isayaEmotion: 'surprised',
     choices: [
       {
         labelZh: '认真回复，说是的',
@@ -90,7 +90,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'morning',
     textZh: '黑猫跳上桌，挡住了屏幕。\n\n你把它移开，它又回来了。',
     textEn: 'The black cat jumps onto your desk and blocks the screen.\n\nYou move it. It comes back.',
-    laisaEmotion: 'happy',
+    isayaEmotion: 'happy',
     choices: [
       {
         labelZh: '那就陪它玩一会儿',
@@ -110,9 +110,9 @@ export const STORY_EVENTS: StoryEvent[] = [
     id: 'day5_evening',
     day: 5,
     phase: 'evening',
-    textZh: '弹幕突然开始刷：\n"破千了！！" "恭喜Laisa！" "1000人在线"\n\n你看着那个数字，愣了三秒。',
-    textEn: 'The chat explodes:\n"1000 viewers!!" "Congrats Laisa!" "We hit 1000 online"\n\nYou stare at that number for three seconds.',
-    laisaEmotion: 'surprised',
+    textZh: '弹幕突然开始刷：\n"破千了！！" "恭喜Isaya！" "1000人在线"\n\n你看着那个数字，愣了三秒。',
+    textEn: 'The chat explodes:\n"1000 viewers!!" "Congrats Isaya!" "We hit 1000 online"\n\nYou stare at that number for three seconds.',
+    isayaEmotion: 'surprised',
     choices: [
       {
         labelZh: '大声庆祝，谢谢大家',
@@ -134,7 +134,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'night',
     textZh: '你发现自己上一次看窗外是什么时候？\n\n想了想，大概是三天前。直播间的灯光比窗外的天更亮了。',
     textEn: 'When did you last look out the window?\n\nYou think about it. Three days ago, maybe. The stream lights are brighter than the sky outside.',
-    laisaEmotion: 'sad',
+    isayaEmotion: 'sad',
     // No choices — reflective moment
   },
   {
@@ -143,7 +143,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'morning',
     textZh: '第七天。你翻出当初决定做主播时记的笔记。\n\n"我想让更多人觉得，有人和他们一起。"\n\n这句话写得很拙，但是当时你是认真的。',
     textEn: 'Day seven. You find the notes you wrote when you decided to start streaming.\n\n"I want more people to feel like someone\'s with them."\n\nBadly worded, but you meant it.',
-    laisaEmotion: 'normal',
+    isayaEmotion: 'normal',
     choices: [
       {
         labelZh: '还是觉得这件事重要',
@@ -165,7 +165,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'afternoon',
     textZh: '直播间里有个叫"夜班小护士"的常驻观众，今天没来。\n\n你注意到了，但没说什么。',
     textEn: 'A regular viewer named "NightShiftNurse" wasn\'t there today.\n\nYou noticed. You didn\'t say anything.',
-    laisaEmotion: 'sad',
+    isayaEmotion: 'sad',
     choices: [
       {
         labelZh: '去私信问问她还好吗',
@@ -187,7 +187,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'evening',
     textZh: '你试了一个新游戏。出乎意料地难，当场卡关、骂出声——弹幕全都在笑。\n\n然后你也开始笑了。',
     textEn: 'You tried a new game. Unexpectedly hard. You got stuck and swore out loud — the chat all laughed.\n\nThen you started laughing too.',
-    laisaEmotion: 'happy',
+    isayaEmotion: 'happy',
     choices: [
       {
         labelZh: '继续这个游戏，就玩卡关',
@@ -207,9 +207,9 @@ export const STORY_EVENTS: StoryEvent[] = [
     id: 'day10_evening',
     day: 10,
     phase: 'evening',
-    textZh: '一条超级弹幕浮出来：\n\n"Laisa，你的直播陪我撑过了最难的那段时间。谢谢你。"\n\n你盯着那句话，忘记打游戏了。',
-    textEn: 'A super chat floats up:\n\n"Laisa, your stream kept me going through the hardest time in my life. Thank you."\n\nYou stare at it and forget to play.',
-    laisaEmotion: 'surprised',
+    textZh: '一条超级弹幕浮出来：\n\n"Isaya，你的直播陪我撑过了最难的那段时间。谢谢你。"\n\n你盯着那句话，忘记打游戏了。',
+    textEn: 'A super chat floats up:\n\n"Isaya, your stream kept me going through the hardest time in my life. Thank you."\n\nYou stare at it and forget to play.',
+    isayaEmotion: 'surprised',
     choices: [
       {
         labelZh: '认真回应，说说你自己的故事',
@@ -231,7 +231,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'morning',
     textZh: '妈妈打来电话。\n\n你犹豫了三秒，接了。\n"最近吃饭了吗？" "……还好。"',
     textEn: 'Mom calls.\n\nYou hesitate three seconds, then pick up.\n"Are you eating?" "...yeah, I guess."',
-    laisaEmotion: 'normal',
+    isayaEmotion: 'normal',
     choices: [
       {
         labelZh: '和她多聊一会儿',
@@ -253,7 +253,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'night',
     textZh: '你算了一下：上一次见到朋友，是三周前。\n\n不是因为吵架，也不是因为忙。只是……没想起来。',
     textEn: 'You count backwards: last time you saw a friend in person was three weeks ago.\n\nNot a fight. Not too busy. Just... you didn\'t think of it.',
-    laisaEmotion: 'sad',
+    isayaEmotion: 'sad',
     choices: [
       {
         labelZh: '现在就发消息约周末见面',
@@ -276,7 +276,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'afternoon',
     textEn: 'ghostpixel shows up unannounced. He says he just happened to be in the area. He probably wasn\'t.\n\n"I can help test your audio setup if you want. Or I can just sit here and not say anything. Either is fine."',
     textZh: 'ghostpixel 出现在门口。他说自己只是路过。大概不是。\n\n"你要的话我可以帮你测一下音频。或者我就坐着不说话。都行。"',
-    laisaEmotion: 'surprised',
+    isayaEmotion: 'surprised',
     visitorImg: ghostpixel_normal,
     visitorName: 'ghostpixel',
     choices: [
@@ -300,7 +300,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'afternoon',
     textEn: 'Algram shows up with his guitar. He heard you\'ve been streaming and wanted to see your setup.\n\n"Can I play something while you get ready? Like... background music? Or would that be annoying."',
     textZh: 'Algram 背着吉他来了。他听说你在做直播，想来看看你的设备。\n\n"我能弹点什么吗，你准备的时候听？就当背景音乐？或者你嫌烦的话也行。"',
-    laisaEmotion: 'happy',
+    isayaEmotion: 'happy',
     visitorImg: algram_happy,
     visitorName: 'Algram',
     choices: [
@@ -324,7 +324,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'evening',
     textEn: 'Isabel appears at the door holding a container of food.\n\n"I made too much. You\'re going to eat this whether you like it or not."\n\nShe looks around your room and doesn\'t say anything about the mess.',
     textZh: 'Isabel 站在门口，手里提着一个饭盒。\n\n"我做多了。不管你喜不喜欢你都得吃。"\n\n她扫了一眼你的房间，对那堆乱没有说什么。',
-    laisaEmotion: 'surprised',
+    isayaEmotion: 'surprised',
     visitorImg: isabel_normal,
     visitorName: 'Isabel',
     choices: [
@@ -348,7 +348,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'morning',
     textEn: 'JM·F comes by. He says he wanted to see how things were going.\n\nHe looks at your monitor, your mic position, your cable management, and sighs once — not unkindly.\n\n"You know there are ways to reduce the latency."',
     textZh: 'JM·F 来了。说想来看看情况。\n\n他扫了一眼你的显示器、麦克风位置、走线，叹了一口气——不是那种嫌弃，但意思差不多。\n\n"你知道有办法降低延迟的。"',
-    laisaEmotion: 'surprised',
+    isayaEmotion: 'surprised',
     visitorImg: jmf_normal,
     visitorName: 'JM·F',
     choices: [
@@ -378,7 +378,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'afternoon',
     textEn: 'Jenny shows up with two coffees. She says she was in the area doing research.\n\n"I\'ve been watching some of your streams. Can I ask — what do you think about when you\'re live? Like, actually."',
     textZh: 'Jenny 带着两杯咖啡出现了。说在附近查资料。\n\n"我看了你几场直播。能问一下——你开播的时候脑子里在想什么？认真问。"',
-    laisaEmotion: 'surprised',
+    isayaEmotion: 'surprised',
     visitorImg: jenny_normal,
     visitorName: 'Jenny',
     choices: [
@@ -402,7 +402,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'afternoon',
     textEn: 'Algram and ghostpixel show up at the same time. They claim it wasn\'t planned.\n\n"One more day," Algram says.\nghostpixel nods.\n\nNeither of them says anything else. They don\'t need to.',
     textZh: 'Algram 和 ghostpixel 同时出现在门口。他们说不是约好的。\n\n"还有一天，" Algram 说。\nghostpixel 点点头。\n\n两人都没再说什么。不需要。',
-    laisaEmotion: 'happy',
+    isayaEmotion: 'happy',
     visitorImg: algram_normal,
     visitorName: 'Algram & ghostpixel',
     choices: [
@@ -428,7 +428,7 @@ export const STORY_EVENTS: StoryEvent[] = [
     phase: 'morning',
     textZh: '最后一天。\n\n你打开窗帘，今天阳光很好。\n直播间里已经有人在等了。',
     textEn: 'Last day.\n\nYou open the curtains. Good sunlight today.\nSome people are already in the stream room waiting.',
-    laisaEmotion: 'normal',
+    isayaEmotion: 'normal',
     choices: [
       {
         labelZh: '好。今天好好来。',
@@ -454,8 +454,8 @@ export const STREAM_EVENTS: StreamEvent[] = [
   // ── Chat reactions ──────────────────────────────────────────────────────────
   {
     id: 's_died10',
-    textZh: '弹幕：「Laisa 你这关已经死了十次了哈哈哈哈」',
-    textEn: 'Chat: "Laisa you\'ve died 10 times on this section lmaooo"',
+    textZh: '弹幕：「Isaya 你这关已经死了十次了哈哈哈哈」',
+    textEn: 'Chat: "Isaya you\'ve died 10 times on this section lmaooo"',
     choices: [
       {
         labelZh: '笑着说：我知道我知道',

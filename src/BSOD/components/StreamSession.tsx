@@ -144,7 +144,7 @@ const StreamSession = React.memo(
         {/* Top bar */}
         <div className="bs-stream__topbar">
           <span className="bs-stream__live-badge">LIVE</span>
-          <span className="bs-stream__title">Laisa の配信部屋</span>
+          <span className="bs-stream__title">Isaya の配信部屋</span>
           <span className="bs-stream__viewers">👁 {viewersRef.current}</span>
           <span className="bs-stream__progress">{eventIndex + 1}/{totalEvents}</span>
         </div>

@@ -14,12 +14,12 @@ import NoiseCanvas from './components/NoiseCanvas';
 import HelpPanel from './components/HelpPanel';
 import DailyDrainNotice from './components/DailyDrainNotice';
 import bgRoom from './img/bg_room.png';
-import laisaIdle from './img/laisa_idle.png';
-import laisaHappy from './img/laisa_happy.png';
-import laisaSad from './img/laisa_sad.png';
-import laisaSurprised from './img/laisa_surprised.png';
-import laisaTired from './img/laisa_tired.png';
-import laisaFocused from './img/laisa_focused.png';
+import isayaIdle from './img/laisa_idle.png';
+import isayaHappy from './img/laisa_happy.png';
+import isayaSad from './img/laisa_sad.png';
+import isayaSurprised from './img/laisa_surprised.png';
+import isayaTired from './img/laisa_tired.png';
+import isayaFocused from './img/laisa_focused.png';
 import {
   resumeAudio, playClick, playConfirm, playPanelOpen,
   playGameStart, playStreamStart, playEvent, playStatUp, playStatDown,
@@ -28,20 +28,20 @@ import {
 import './BSOD.less';
 
 
-const LAISA_IMGS: Record<string, string> = {
-  normal:    laisaIdle,
-  idle:      laisaIdle,
-  happy:     laisaHappy,
-  sad:       laisaSad,
-  surprised: laisaSurprised,
-  tired:     laisaTired,
-  focused:   laisaFocused,
+const ISAYA_IMGS: Record<string, string> = {
+  normal:    isayaIdle,
+  idle:      isayaIdle,
+  happy:     isayaHappy,
+  sad:       isayaSad,
+  surprised: isayaSurprised,
+  tired:     isayaTired,
+  focused:   isayaFocused,
 };
 
-function getLaisaVisible(state: GameState): { visible: boolean; emotion: string } {
+function getIsayaVisible(state: GameState): { visible: boolean; emotion: string } {
   const { phase, pendingEvent, lastAction } = state;
   if (phase === 'event' && pendingEvent) {
-    return { visible: true, emotion: pendingEvent.laisaEmotion ?? 'normal' };
+    return { visible: true, emotion: pendingEvent.isayaEmotion ?? 'normal' };
   }
   if (phase === 'actionResult' && lastAction) {
     const { energy = 0, mood = 0, focus = 0 } = lastAction.effect;
@@ -139,8 +139,8 @@ const BSOD = React.memo(
       },
     };
 
-    const { visible: laisaVisible, emotion: laisaEmotion } = getLaisaVisible(state);
-    const laisaSrc = LAISA_IMGS[laisaEmotion] ?? laisaIdle;
+    const { visible: isayaVisible, emotion: isayaEmotion } = getIsayaVisible(state);
+    const isayaSrc = ISAYA_IMGS[isayaEmotion] ?? isayaIdle;
     const filterClass = PHASE_FILTER[phase] ?? 'bs--night';
 
 
@@ -243,12 +243,12 @@ const BSOD = React.memo(
         />
 
         {/* Laisa character sprite — only during events / big stat changes */}
-        {laisaVisible && (
+        {isayaVisible && (
           <div className="bs__char-area">
             <img
               className="bs__char"
-              src={laisaSrc}
-              alt="Laisa"
+              src={isayaSrc}
+              alt="Isaya"
               draggable={false}
             />
           </div>
