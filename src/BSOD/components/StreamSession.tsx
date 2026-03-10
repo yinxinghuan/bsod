@@ -4,6 +4,8 @@ import { getText } from '../i18n';
 import bgStream from '../img/bg_stream.png';
 import './StreamSession.less';
 
+const EVENT_IMGS = import.meta.glob('../img/stream_events/*.png', { eager: true, import: 'default' }) as Record<string, string>;
+
 interface Props {
   event: StreamEvent;
   eventIndex: number;
@@ -188,6 +190,14 @@ const StreamSession = React.memo(
 
         {/* Featured event card */}
         <div className={`bs-stream__card${event.tag ? ' bs-stream__card--special' : ''}`}>
+          {EVENT_IMGS[`../img/stream_events/${event.id}.png`] && (
+            <img
+              className="bs-stream__card-img"
+              src={EVENT_IMGS[`../img/stream_events/${event.id}.png`]}
+              alt=""
+              draggable={false}
+            />
+          )}
           {event.tag ? (
             <div className="bs-stream__card-tag bs-stream__card-tag--special"
                  style={{ color: event.tag.color, borderColor: event.tag.color }}>
