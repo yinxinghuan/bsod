@@ -63,6 +63,7 @@ const StreamSession = React.memo(
     const [timedOut, setTimedOut] = useState(false);
     const [flash, setFlash] = useState<{ delta: number; type: VolatileType; key: number } | null>(null);
     const [resultText, setResultText] = useState<string | null>(null);
+    const [chosenIndex, setChosenIndex] = useState<number | null>(null);
     const startRef = useRef(Date.now());
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const commentIdRef = useRef(0);
@@ -70,6 +71,7 @@ const StreamSession = React.memo(
     const chosenRef = useRef(false);
     const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const resultTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const lastResultRef = useRef<string | null>(null);
 
     // Show volatile flash when a result comes in
     useEffect(() => {
@@ -85,6 +87,7 @@ const StreamSession = React.memo(
       setElapsed(0);
       setTimedOut(false);
       setResultText(null);
+      setChosenIndex(null);
       if (resultTimerRef.current) clearTimeout(resultTimerRef.current);
       startRef.current = Date.now();
 
@@ -125,6 +128,7 @@ const StreamSession = React.memo(
     const handleChoose = (index: number) => {
       if (chosenRef.current) return;
       chosenRef.current = true;
+      setChosenIndex(index);
       if (timerRef.current) clearInterval(timerRef.current);
       const e = Date.now() - startRef.current;
       const speed: ResponseSpeed = e < FAST_THRESHOLD ? 'fast' : e < SLOW_THRESHOLD ? 'normal' : 'slow';
@@ -132,10 +136,11 @@ const StreamSession = React.memo(
       const rText = getText(c.resultZh ?? '', c.resultEn ?? '');
       if (rText) {
         setResultText(rText);
+        lastResultRef.current = rText;
         resultTimerRef.current = setTimeout(() => {
           setResultText(null);
           onChoose(index, speed);
-        }, 1800);
+        }, 2000);
       } else {
         onChoose(index, speed);
       }
@@ -217,11 +222,11 @@ const StreamSession = React.memo(
             </div>
           )}
           <p className="bs-stream__card-text">
-            {resultText ?? getText(event.textZh, event.textEn)}
+            {resultText ?? (pendingEnd && lastResultRef.current) ?? getText(event.textZh, event.textEn)}
           </p>
 
           {/* Timer bar */}
-          {!resultText && (
+          {!resultText && !pendingEnd && (
             <div className="bs-stream__timer-wrap">
               <div
                 className="bs-stream__timer-bar"
@@ -233,28 +238,26 @@ const StreamSession = React.memo(
             </div>
           )}
 
-          {/* Choice buttons / end stream button */}
-          {resultText ? (
-            <div className="bs-stream__result-hint">
-              {getText('观众正在反应…', 'Chat is reacting…')}
-            </div>
-          ) : pendingEnd ? (
+          {/* Choice buttons — stay visible after choosing with highlight */}
+          <div className="bs-stream__choices">
+            {event.choices.map((c, i) => (
+              <button
+                key={i}
+                className={`bs-stream__choice${
+                  chosenIndex === i ? ' bs-stream__choice--chosen' : ''
+                }${chosenIndex !== null && chosenIndex !== i ? ' bs-stream__choice--dimmed' : ''}`}
+                onPointerDown={() => handleChoose(i)}
+                disabled={timedOut || chosenIndex !== null}
+              >
+                {getText(c.labelZh, c.labelEn)}
+              </button>
+            ))}
+          </div>
+
+          {pendingEnd && (
             <button className="bs-stream__end-btn" onPointerDown={onStreamEnd}>
               {getText('结束直播', 'End Stream')}
             </button>
-          ) : (
-            <div className="bs-stream__choices">
-              {event.choices.map((c, i) => (
-                <button
-                  key={i}
-                  className="bs-stream__choice"
-                  onPointerDown={() => handleChoose(i)}
-                  disabled={timedOut}
-                >
-                  {getText(c.labelZh, c.labelEn)}
-                </button>
-              ))}
-            </div>
           )}
         </div>
       </div>
