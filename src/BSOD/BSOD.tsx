@@ -29,6 +29,7 @@ import {
   playGameStart, playStreamStart, playEvent, playStatUp, playStatDown,
   playDayEnd, playGameOver, playVictory,
 } from './utils/sounds';
+import { startAmbient, setAmbientScene, stopAmbient } from './utils/ambient';
 import './BSOD.less';
 
 
@@ -84,11 +85,14 @@ const BSOD = React.memo(
       const prev = prevPhase.current;
       prevPhase.current = phase;
       if (prev === phase) return;
+      // Ambient scene follows phase
+      setAmbientScene(phase);
       if (phase === 'stream')    playStreamStart();
       if (phase === 'event')     playEvent();
       if (phase === 'dayEnd')    playDayEnd();
-      if (phase === 'dead')      playGameOver();
+      if (phase === 'dead')      { playGameOver(); stopAmbient(); }
       if (phase === 'ending') {
+        stopAmbient();
         if (state.endingType === 'online' || state.endingType === 'restart') playVictory();
         else playGameOver();
       }
@@ -109,11 +113,14 @@ const BSOD = React.memo(
       startGame: () => {
         resumeAudio();
         playGameStart();
+        startAmbient('morning');
         actions.startGame();
       },
       restart: () => {
         resumeAudio();
         playGameStart();
+        stopAmbient();
+        startAmbient('morning');
         actions.restart();
       },
       chooseAction: (action: Parameters<typeof actions.chooseAction>[0]) => {

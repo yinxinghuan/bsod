@@ -94,6 +94,12 @@ export const playStatDown = (): void => {
   tone(300, 0.1, { type: 'sawtooth', gain: 0.08, freqEnd: 180 });
 };
 
+/** Slot-machine counting tick — plays per digit change during stat animation */
+export const playCountTick = (up: boolean): void => {
+  const freq = up ? 800 + Math.random() * 200 : 400 + Math.random() * 100;
+  tone(freq, 0.025, { type: 'square', gain: 0.04, freqEnd: freq * (up ? 1.1 : 0.9) });
+};
+
 /** Day end — short summary jingle */
 export const playDayEnd = (): void => {
   [[440, 0], [550, 0.1], [660, 0.2], [880, 0.32]].forEach(([freq, delay]) => {
