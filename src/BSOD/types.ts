@@ -106,6 +106,8 @@ export interface StreamEvent {
 export interface StreamChoice {
   labelZh: string;
   labelEn: string;
+  resultZh?: string;
+  resultEn?: string;
   effect: StatEffect;
   emotion?: IsayaEmotion;
 }

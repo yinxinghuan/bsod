@@ -62,12 +62,14 @@ const StreamSession = React.memo(
     const [elapsed, setElapsed] = useState(0);
     const [timedOut, setTimedOut] = useState(false);
     const [flash, setFlash] = useState<{ delta: number; type: VolatileType; key: number } | null>(null);
+    const [resultText, setResultText] = useState<string | null>(null);
     const startRef = useRef(Date.now());
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const commentIdRef = useRef(0);
     const viewersRef = useRef(Math.floor(Math.random() * 120 + 60));
     const chosenRef = useRef(false);
     const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const resultTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Show volatile flash when a result comes in
     useEffect(() => {
@@ -82,6 +84,8 @@ const StreamSession = React.memo(
       chosenRef.current = false;
       setElapsed(0);
       setTimedOut(false);
+      setResultText(null);
+      if (resultTimerRef.current) clearTimeout(resultTimerRef.current);
       startRef.current = Date.now();
 
       // Countdown tick
@@ -101,7 +105,10 @@ const StreamSession = React.memo(
         }
       }, 80);
 
-      return () => { if (timerRef.current) clearInterval(timerRef.current); };
+      return () => {
+        if (timerRef.current) clearInterval(timerRef.current);
+        if (resultTimerRef.current) clearTimeout(resultTimerRef.current);
+      };
     }, [eventIndex]);
 
     // Scrolling chat
@@ -121,7 +128,17 @@ const StreamSession = React.memo(
       if (timerRef.current) clearInterval(timerRef.current);
       const e = Date.now() - startRef.current;
       const speed: ResponseSpeed = e < FAST_THRESHOLD ? 'fast' : e < SLOW_THRESHOLD ? 'normal' : 'slow';
-      onChoose(index, speed);
+      const c = event.choices[index];
+      const rText = getText(c.resultZh ?? '', c.resultEn ?? '');
+      if (rText) {
+        setResultText(rText);
+        resultTimerRef.current = setTimeout(() => {
+          setResultText(null);
+          onChoose(index, speed);
+        }, 1800);
+      } else {
+        onChoose(index, speed);
+      }
     };
 
     const remaining = Math.max(0, TIMER_TOTAL - elapsed);
@@ -200,22 +217,28 @@ const StreamSession = React.memo(
             </div>
           )}
           <p className="bs-stream__card-text">
-            {getText(event.textZh, event.textEn)}
+            {resultText ?? getText(event.textZh, event.textEn)}
           </p>
 
           {/* Timer bar */}
-          <div className="bs-stream__timer-wrap">
-            <div
-              className="bs-stream__timer-bar"
-              style={{ width: `${progress * 100}%`, background: timerColor }}
-            />
-            <span className="bs-stream__timer-hint" style={{ color: timerColor }}>
-              {timedOut ? getText('超时…', 'Timed out…') : speedHint}
-            </span>
-          </div>
+          {!resultText && (
+            <div className="bs-stream__timer-wrap">
+              <div
+                className="bs-stream__timer-bar"
+                style={{ width: `${progress * 100}%`, background: timerColor }}
+              />
+              <span className="bs-stream__timer-hint" style={{ color: timerColor }}>
+                {timedOut ? getText('超时…', 'Timed out…') : speedHint}
+              </span>
+            </div>
+          )}
 
           {/* Choice buttons / end stream button */}
-          {pendingEnd ? (
+          {resultText ? (
+            <div className="bs-stream__result-hint">
+              {getText('观众正在反应…', 'Chat is reacting…')}
+            </div>
+          ) : pendingEnd ? (
             <button className="bs-stream__end-btn" onPointerDown={onStreamEnd}>
               {getText('结束直播', 'End Stream')}
             </button>
