@@ -227,7 +227,7 @@ const StreamSession = React.memo(
             </div>
           )}
           <p className="bs-stream__card-text">
-            {resultText ?? (pendingEnd && lastResultRef.current) ?? getText(event.textZh, event.textEn)}
+            {resultText ?? (pendingEnd ? lastResultRef.current : null) ?? getText(event.textZh, event.textEn)}
           </p>
 
           {/* Timer bar */}
