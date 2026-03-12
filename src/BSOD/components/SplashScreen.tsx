@@ -1,16 +1,49 @@
 import React, { forwardRef, useEffect, useState } from 'react';
 import posterSrc from '../img/poster.png';
+// Backgrounds
 import bgRoom from '../img/bg_room.png';
-import isayaIdle from '../img/laisa_idle.png';
-import isayaHappy from '../img/laisa_happy.png';
-import isayaSad from '../img/laisa_sad.png';
-import isayaSurprised from '../img/laisa_surprised.png';
-import isayaTired from '../img/laisa_tired.png';
-import isayaFocused from '../img/laisa_focused.png';
+import bgStream from '../img/bg_stream.png';
+// Laisa sprites — all emotional states
+import laisaIdle from '../img/laisa_idle.png';
+import laisaHappy from '../img/laisa_happy.png';
+import laisaSad from '../img/laisa_sad.png';
+import laisaSurprised from '../img/laisa_surprised.png';
+import laisaTired from '../img/laisa_tired.png';
+import laisaFocused from '../img/laisa_focused.png';
+import laisaWorn from '../img/laisa_worn.png';
+import laisaRundown from '../img/laisa_rundown.png';
+import laisaManic from '../img/laisa_manic.png';
+import laisaWreck from '../img/laisa_wreck.png';
+// Status bar icons
+import iconEnergy from '../img/icon_energy.png';
+import iconMood from '../img/icon_mood.png';
+import iconFocus from '../img/icon_focus.png';
+import iconFollowers from '../img/icon_followers.png';
+import iconConnection from '../img/icon_connection.png';
+// Surveillance / action images
+import svDesk from '../img/sv_desk.png';
+import svRest from '../img/sv_rest.png';
+import svEat from '../img/sv_eat.png';
+import svPhone from '../img/sv_phone.png';
+import svWalk from '../img/sv_walk.png';
+import svSetup from '../img/sv_setup.png';
+import svRelax from '../img/sv_relax.png';
+import svVideo from '../img/sv_video.png';
+import svGame from '../img/sv_game.png';
 import './SplashScreen.less';
 
 // Critical gameplay assets to preload while poster is showing
-const PRELOAD = [bgRoom, isayaIdle, isayaHappy, isayaSad, isayaSurprised, isayaTired, isayaFocused];
+const PRELOAD = [
+  // Backgrounds
+  bgRoom, bgStream,
+  // Laisa sprites
+  laisaIdle, laisaHappy, laisaSad, laisaSurprised, laisaTired, laisaFocused,
+  laisaWorn, laisaRundown, laisaManic, laisaWreck,
+  // UI icons
+  iconEnergy, iconMood, iconFocus, iconFollowers, iconConnection,
+  // Surveillance images
+  svDesk, svRest, svEat, svPhone, svWalk, svSetup, svRelax, svVideo, svGame,
+];
 const MIN_MS = 2200;       // minimum splash display time
 const MAX_ASSET_MS = 10000; // safety timeout for slow connections
 
@@ -30,8 +63,10 @@ const SplashScreen = React.memo(
       return () => clearTimeout(t);
     }, []);
 
-    // Preload critical assets, track progress
+    // Preload critical assets AFTER poster is visible (poster gets network priority)
     useEffect(() => {
+      if (!posterReady) return;
+
       let loaded = 0;
       const total = PRELOAD.length;
 
@@ -49,7 +84,7 @@ const SplashScreen = React.memo(
 
       const maxT = setTimeout(() => setAssetsDone(true), MAX_ASSET_MS);
       return () => clearTimeout(maxT);
-    }, []);
+    }, [posterReady]);
 
     // Begin fade-out when both gates pass
     useEffect(() => {
