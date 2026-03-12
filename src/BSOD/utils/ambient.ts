@@ -38,13 +38,13 @@ function createNoiseBuffer(ctx: AudioContext, seconds = 2): AudioBuffer {
 
 // Scene parameters: rain volume, pad volume, filter cutoff, pad base frequency
 const SCENE: Record<string, { rain: number; pad: number; freq: number; padHz: number }> = {
-  morning:   { rain: 0.04, pad: 0.005, freq: 900,  padHz: 65 },
-  afternoon: { rain: 0.05, pad: 0.006, freq: 700,  padHz: 62 },
-  evening:   { rain: 0.07, pad: 0.008, freq: 550,  padHz: 58 },
-  night:     { rain: 0.09, pad: 0.009, freq: 400,  padHz: 55 },
-  stream:    { rain: 0.07, pad: 0.008, freq: 550,  padHz: 58 },
-  event:     { rain: 0.06, pad: 0.007, freq: 500,  padHz: 56 },
-  dayEnd:    { rain: 0.05, pad: 0.006, freq: 600,  padHz: 60 },
+  morning:   { rain: 0.015, pad: 0.002, freq: 900,  padHz: 65 },
+  afternoon: { rain: 0.020, pad: 0.003, freq: 700,  padHz: 62 },
+  evening:   { rain: 0.030, pad: 0.004, freq: 550,  padHz: 58 },
+  night:     { rain: 0.035, pad: 0.004, freq: 400,  padHz: 55 },
+  stream:    { rain: 0.030, pad: 0.004, freq: 550,  padHz: 58 },
+  event:     { rain: 0.025, pad: 0.003, freq: 500,  padHz: 56 },
+  dayEnd:    { rain: 0.020, pad: 0.003, freq: 600,  padHz: 60 },
 };
 
 const FADE = 1.5; // seconds for crossfade
