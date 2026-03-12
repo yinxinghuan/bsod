@@ -2,7 +2,7 @@
 """
 Generate BSOD assets in anime illustration style (no pixel art):
   - Room backgrounds x4 time-of-day variants
-  - Laisa character sprites x4 poses
+  - Isaya character sprites x4 poses
 
 Based on room_ultra_B composition: cluttered streamer studio apartment,
 flat side view, wide horizontal, anime VN background style.
@@ -94,7 +94,7 @@ ROOM_ASSETS = [
     },
 ]
 
-LAISA_BASE = (
+ISAYA_BASE = (
     "anime character sprite, young woman, long straight blue hair, "
     "large black over-ear headphones with small cat ear attachments, "
     "black oversized hoodie, dark shorts, pale skin, soft blue eyes, "
@@ -106,37 +106,37 @@ LAISA_BASE = (
 
 SPRITE_ASSETS = [
     {
-        "name": "laisa_idle",
-        "out": "laisa_idle.png",
+        "name": "isaya_idle",
+        "out": "isaya_idle.png",
         "w": 512, "h": 768,
-        "prompt": LAISA_BASE + (
+        "prompt": ISAYA_BASE + (
             ", neutral relaxed expression, looking slightly downward, "
             "arms relaxed at sides, calm idle pose"
         ),
     },
     {
-        "name": "laisa_happy",
-        "out": "laisa_happy.png",
+        "name": "isaya_happy",
+        "out": "isaya_happy.png",
         "w": 512, "h": 768,
-        "prompt": LAISA_BASE + (
+        "prompt": ISAYA_BASE + (
             ", bright warm smile, slight head tilt to the side, "
             "one hand raised in small wave, rosy cheeks, cheerful energy"
         ),
     },
     {
-        "name": "laisa_sad",
-        "out": "laisa_sad.png",
+        "name": "isaya_sad",
+        "out": "isaya_sad.png",
         "w": 512, "h": 768,
-        "prompt": LAISA_BASE + (
+        "prompt": ISAYA_BASE + (
             ", sad tired expression, looking down, shoulders slightly slumped, "
             "slight frown, melancholy quiet mood"
         ),
     },
     {
-        "name": "laisa_focused",
-        "out": "laisa_focused.png",
+        "name": "isaya_focused",
+        "out": "isaya_focused.png",
         "w": 512, "h": 768,
-        "prompt": LAISA_BASE + (
+        "prompt": ISAYA_BASE + (
             ", sharp focused expression, leaning slightly forward, "
             "eyes narrowed in concentration, gaming mode, determined look"
         ),

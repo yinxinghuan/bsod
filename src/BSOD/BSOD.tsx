@@ -14,16 +14,16 @@ import NoiseCanvas from './components/NoiseCanvas';
 import HelpPanel from './components/HelpPanel';
 import DailyDrainNotice from './components/DailyDrainNotice';
 import bgRoom from './img/bg_room.png';
-import isayaIdle from './img/laisa_idle.png';
-import isayaHappy from './img/laisa_happy.png';
-import isayaSad from './img/laisa_sad.png';
-import isayaSurprised from './img/laisa_surprised.png';
-import isayaTired from './img/laisa_tired.png';
-import isayaFocused from './img/laisa_focused.png';
-import isayaWorn from './img/laisa_worn.png';
-import isayaRundown from './img/laisa_rundown.png';
-import isayaWreck from './img/laisa_wreck.png';
-import isayaManic from './img/laisa_manic.png';
+import isayaIdle from './img/isaya_idle.png';
+import isayaHappy from './img/isaya_happy.png';
+import isayaSad from './img/isaya_sad.png';
+import isayaSurprised from './img/isaya_surprised.png';
+import isayaTired from './img/isaya_tired.png';
+import isayaFocused from './img/isaya_focused.png';
+import isayaWorn from './img/isaya_worn.png';
+import isayaRundown from './img/isaya_rundown.png';
+import isayaWreck from './img/isaya_wreck.png';
+import isayaManic from './img/isaya_manic.png';
 import {
   resumeAudio, playClick, playConfirm, playPanelOpen,
   playGameStart, playStreamStart, playEvent, playStatUp, playStatDown,
@@ -259,7 +259,7 @@ const BSOD = React.memo(
           />
         )}
 
-        {/* Laisa character sprite — during events or condition state after daily drain */}
+        {/* Isaya character sprite — during events or condition state after daily drain */}
         {isayaShowing && (
           <div className={`bs__char-area${phase === 'event' ? ' bs__char-area--event' : ''}`}>
             <img

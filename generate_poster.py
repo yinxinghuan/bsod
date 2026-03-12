@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate BSOD game poster via online AI API (img2img with Laisa ref).
+Generate BSOD game poster via online AI API (img2img with Isaya ref).
 
 Usage: ~/miniconda3/bin/python3 generate_poster.py
 """
@@ -33,7 +33,7 @@ R2_SECRET_KEY  = "e7926e4175b7a0914496b9c999afd914cd1e4af7db8f83e0cf2bfad9773fa2
 R2_BUCKET      = "aigram"
 
 SCRIPT_DIR  = os.path.dirname(os.path.abspath(__file__))
-REF_PATH    = os.path.join(SCRIPT_DIR, "laisa_idle_square.png")
+REF_PATH    = os.path.join(SCRIPT_DIR, "isaya_idle_square.png")
 OUTPUT_PATH = os.path.join(SCRIPT_DIR, "src/BSOD/img/poster.png")
 
 PROMPT = (

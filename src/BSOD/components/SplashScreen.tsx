@@ -3,17 +3,17 @@ import posterSrc from '../img/poster.png';
 // Backgrounds
 import bgRoom from '../img/bg_room.png';
 import bgStream from '../img/bg_stream.png';
-// Laisa sprites — all emotional states
-import laisaIdle from '../img/laisa_idle.png';
-import laisaHappy from '../img/laisa_happy.png';
-import laisaSad from '../img/laisa_sad.png';
-import laisaSurprised from '../img/laisa_surprised.png';
-import laisaTired from '../img/laisa_tired.png';
-import laisaFocused from '../img/laisa_focused.png';
-import laisaWorn from '../img/laisa_worn.png';
-import laisaRundown from '../img/laisa_rundown.png';
-import laisaManic from '../img/laisa_manic.png';
-import laisaWreck from '../img/laisa_wreck.png';
+// Isaya sprites — all emotional states
+import isayaIdle from '../img/isaya_idle.png';
+import isayaHappy from '../img/isaya_happy.png';
+import isayaSad from '../img/isaya_sad.png';
+import isayaSurprised from '../img/isaya_surprised.png';
+import isayaTired from '../img/isaya_tired.png';
+import isayaFocused from '../img/isaya_focused.png';
+import isayaWorn from '../img/isaya_worn.png';
+import isayaRundown from '../img/isaya_rundown.png';
+import isayaManic from '../img/isaya_manic.png';
+import isayaWreck from '../img/isaya_wreck.png';
 // Status bar icons
 import iconEnergy from '../img/icon_energy.png';
 import iconMood from '../img/icon_mood.png';
@@ -36,9 +36,9 @@ import './SplashScreen.less';
 const PRELOAD = [
   // Backgrounds
   bgRoom, bgStream,
-  // Laisa sprites
-  laisaIdle, laisaHappy, laisaSad, laisaSurprised, laisaTired, laisaFocused,
-  laisaWorn, laisaRundown, laisaManic, laisaWreck,
+  // Isaya sprites
+  isayaIdle, isayaHappy, isayaSad, isayaSurprised, isayaTired, isayaFocused,
+  isayaWorn, isayaRundown, isayaManic, isayaWreck,
   // UI icons
   iconEnergy, iconMood, iconFocus, iconFollowers, iconConnection,
   // Surveillance images

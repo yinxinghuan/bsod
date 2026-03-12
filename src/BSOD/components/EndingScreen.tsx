@@ -5,12 +5,12 @@ import bgOnline  from '../img/bg_ending_online.png';
 import bgOffline from '../img/bg_ending_offline.png';
 import bgRestart from '../img/bg_ending_restart.png';
 import bgBsodRoom from '../img/bg_ending_bsod.png';
-import isayaHappy     from '../img/laisa_happy.png';
-import isayaIdle      from '../img/laisa_idle.png';
-import isayaFocused   from '../img/laisa_focused.png';
-import isayaSad       from '../img/laisa_sad.png';
-import isayaTired     from '../img/laisa_tired.png';
-import isayaSurprised from '../img/laisa_surprised.png';
+import isayaHappy     from '../img/isaya_happy.png';
+import isayaIdle      from '../img/isaya_idle.png';
+import isayaFocused   from '../img/isaya_focused.png';
+import isayaSad       from '../img/isaya_sad.png';
+import isayaTired     from '../img/isaya_tired.png';
+import isayaSurprised from '../img/isaya_surprised.png';
 import NoiseCanvas from './NoiseCanvas';
 import './EndingScreen.less';
 
@@ -63,7 +63,7 @@ const EndingScreen = React.memo(
                 'Your stream encountered a problem and needs to restart.'
               )}
             </p>
-            <p className="bs-ending__bsod-code">0x0000LAISA</p>
+            <p className="bs-ending__bsod-code">0x0000ISAYA</p>
             <p className="bs-ending__bsod-code">SYSTEM_THREAD_EXCEPTION_NOT_HANDLED</p>
             <p className="bs-ending__bsod-collecting">
               {getText('正在收集错误信息', 'Collecting error info')}
@@ -77,7 +77,7 @@ const EndingScreen = React.memo(
               PLAY AGAIN
             </button>
           </div>
-          <img className="bs-ending__laisa" src={isayaSrc} alt="" draggable={false} />
+          <img className="bs-ending__isaya" src={isayaSrc} alt="" draggable={false} />
         </div>
       );
     }
@@ -88,7 +88,7 @@ const EndingScreen = React.memo(
         <img className="bs-ending__bg" src={bg} alt="" draggable={false} />
         <NoiseCanvas opacity={0.18} />
         <div className="bs-ending__overlay" />
-        <img className="bs-ending__laisa" src={isayaSrc} alt="" draggable={false} />
+        <img className="bs-ending__isaya" src={isayaSrc} alt="" draggable={false} />
 
         <div className="bs-ending__content">
           <div className="bs-ending__tag">{getText('第 13 天 · 结局', 'Day 13 · Ending')}</div>

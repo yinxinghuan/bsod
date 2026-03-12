@@ -2,7 +2,7 @@
 """
 Generate BSOD game assets:
   - Room backgrounds x4 (morning / afternoon / evening / night)
-  - Laisa pixel sprites x3 (idle-front, walk-left, walk-right)
+  - Isaya pixel sprites x3 (idle-front, walk-left, walk-right)
 
 Output: src/BSOD/img/
 Run:    python3 generate_assets.py
@@ -30,7 +30,7 @@ ROOM_BASE = (
     "no characters, empty room"
 )
 
-LAISA_BASE = (
+ISAYA_BASE = (
     "pixel art character sprite, young woman, long straight blue hair, "
     "large black over-ear headphones, black oversized hoodie, dark shorts, "
     "pale skin, blue-grey eyes, full body, "
@@ -77,36 +77,36 @@ ASSETS = [
             "streaming setup glowing, ring light on, very atmospheric",
     },
 
-    # ── Laisa sprites ───────────────────────────────────────────────────────
+    # ── Isaya sprites ───────────────────────────────────────────────────────
     {
-        "name": "laisa_pixel_idle",
-        "out": "laisa_pixel_idle.png",
+        "name": "isaya_pixel_idle",
+        "out": "isaya_pixel_idle.png",
         "w": 512, "h": 768, "steps": 32, "cfg": 7.0, "lora": 0.85,
-        "prompt": LAISA_BASE + ", "
+        "prompt": ISAYA_BASE + ", "
             "standing idle pose, facing slightly forward, neutral expression, "
             "solid flat grey background #808080, centered in frame",
     },
     {
-        "name": "laisa_pixel_walk_right",
-        "out": "laisa_pixel_walk_right.png",
+        "name": "isaya_pixel_walk_right",
+        "out": "isaya_pixel_walk_right.png",
         "w": 512, "h": 768, "steps": 32, "cfg": 7.0, "lora": 0.85,
-        "prompt": LAISA_BASE + ", "
+        "prompt": ISAYA_BASE + ", "
             "walking pose, facing right, mid-stride, slight forward lean, "
             "solid flat grey background #808080, centered in frame",
     },
     {
-        "name": "laisa_pixel_happy",
-        "out": "laisa_pixel_happy.png",
+        "name": "isaya_pixel_happy",
+        "out": "isaya_pixel_happy.png",
         "w": 512, "h": 768, "steps": 32, "cfg": 7.0, "lora": 0.85,
-        "prompt": LAISA_BASE + ", "
+        "prompt": ISAYA_BASE + ", "
             "standing, smiling happily, slight head tilt, one hand raised in small wave, "
             "bright cheerful expression, solid flat grey background, centered in frame",
     },
     {
-        "name": "laisa_pixel_sad",
-        "out": "laisa_pixel_sad.png",
+        "name": "isaya_pixel_sad",
+        "out": "isaya_pixel_sad.png",
         "w": 512, "h": 768, "steps": 32, "cfg": 7.0, "lora": 0.85,
-        "prompt": LAISA_BASE + ", "
+        "prompt": ISAYA_BASE + ", "
             "standing, looking down, sad tired expression, shoulders slightly slumped, "
             "melancholy mood, solid flat grey background, centered in frame",
     },

@@ -1,71 +1,50 @@
 #!/usr/bin/env python3
-"""Generate Laisa VN-style character sprites — anime illustration, full body, 4 expressions."""
+"""Generate Isaya full sprite set with Flux2 Klein (no LoRA)."""
 
 import json, time, random, urllib.request, urllib.parse, shutil, os
 
 COMFYUI_URL = "http://127.0.0.1:8188"
-OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_output")
-os.makedirs(OUT_DIR, exist_ok=True)
+IMG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src/BSOD/img")
+os.makedirs(IMG_DIR, exist_ok=True)
 
 BASE = (
-    "anime visual novel character sprite, full body, "
-    "young woman, long straight blue hair, no bangs, forehead fully visible, "
-    "hair falls straight down on both sides of face, middle part or side part, "
-    "no fringe, clean forehead, hair behind ears, "
-    "large black over-ear headphones resting on head, "
-    "black oversized hoodie, dark shorts, pale skin, soft blue eyes, "
-    "standing pose, centered, "
-    "simple flat light grey background #999999, "
-    "anime illustration style, soft cel shading, clean linework, "
-    "expressive eyes, detailed face"
+    "pixel art chibi character, young woman, long straight blue hair, "
+    "large black over-ear headphones with cat ears, black oversized hoodie, "
+    "pale skin, blue eyes, small black cat nearby, "
+    "full body, solid light grey background #aaaaaa, centered, "
+    "chibi proportions, large head, soft pixel shading, clean pixel edges"
 )
 
 SPRITES = [
     {
-        "name": "laisa_idle",
-        "prompt": BASE + (
-            ", neutral calm expression, slight downward gaze, "
-            "arms relaxed at sides, quiet introverted energy"
-        ),
+        "name": "isaya_idle",
+        "prompt": BASE + ", standing idle pose, neutral calm expression, looking slightly downward, arms relaxed at sides",
     },
     {
-        "name": "laisa_happy",
-        "prompt": BASE + (
-            ", warm bright smile, eyes curved happily, "
-            "slight head tilt, one hand raised in small wave, "
-            "rosy cheeks, genuine cheerful expression"
-        ),
+        "name": "isaya_happy",
+        "prompt": BASE + ", smiling warmly, slight head tilt, one hand raised in small wave, cheerful expression, rosy cheeks",
     },
     {
-        "name": "laisa_sad",
-        "prompt": BASE + (
-            ", sad tired expression, eyes downcast, "
-            "slight frown, shoulders gently slumped, "
-            "melancholy quiet mood, holding hoodie sleeve"
-        ),
+        "name": "isaya_sad",
+        "prompt": BASE + ", looking down sadly, shoulders slightly drooped, melancholy tired expression, slight frown",
     },
     {
-        "name": "laisa_focused",
-        "prompt": BASE + (
-            ", sharp focused expression, eyes narrowed in concentration, "
-            "leaning very slightly forward, determined look, "
-            "in the zone, gaming face"
-        ),
+        "name": "isaya_surprised",
+        "prompt": BASE + ", wide eyes surprised expression, mouth slightly open, hands raised slightly, startled pose",
     },
     {
-        "name": "laisa_surprised",
-        "prompt": BASE + (
-            ", surprised wide eyes, mouth slightly open, "
-            "hands raised slightly, startled but not scared, "
-            "eyebrows raised high"
-        ),
+        "name": "isaya_focused",
+        "prompt": BASE + ", determined focused expression, slight forward lean, eyes sharp and focused, gaming mode",
     },
     {
-        "name": "laisa_tired",
-        "prompt": BASE + (
-            ", exhausted half-lidded eyes, slight dark circles, "
-            "slouching posture, holding a mug of coffee with both hands, "
-            "barely awake expression, messy hair"
+        "name": "isaya_walk_right",
+        "prompt": (
+            "pixel art chibi character, young woman, long straight blue hair, "
+            "large black over-ear headphones with cat ears, black oversized hoodie, "
+            "pale skin, blue eyes, "
+            "walking pose facing right, mid-stride, slight forward lean, "
+            "solid light grey background #aaaaaa, centered, "
+            "chibi proportions, large head, soft pixel shading, side view walking"
         ),
     },
 ]
@@ -91,7 +70,7 @@ def build_workflow(prompt, seed):
         "8": {"class_type": "EmptyFlux2LatentImage",
               "inputs": {"width": W, "height": H, "batch_size": 1}},
         "9": {"class_type": "Flux2Scheduler",
-              "inputs": {"steps": 6, "width": W, "height": H}},
+              "inputs": {"steps": 4, "width": W, "height": H}},
         "10": {"class_type": "KSamplerSelect", "inputs": {"sampler_name": "euler"}},
         "11": {"class_type": "SamplerCustomAdvanced",
                "inputs": {"noise": ["7", 0], "guider": ["6", 0], "sampler": ["10", 0],
@@ -99,7 +78,7 @@ def build_workflow(prompt, seed):
         "12": {"class_type": "VAEDecode",
                "inputs": {"samples": ["11", 0], "vae": ["3", 0]}},
         "13": {"class_type": "SaveImage",
-               "inputs": {"images": ["12", 0], "filename_prefix": "laisa_vn"}},
+               "inputs": {"images": ["12", 0], "filename_prefix": "isaya_sprite"}},
     }
 
 
@@ -139,13 +118,13 @@ def download(filename, subfolder, out_path):
     with urllib.request.urlopen(f"{COMFYUI_URL}/view?{params}", timeout=60) as r:
         with open(out_path, "wb") as f:
             shutil.copyfileobj(r, f)
-    print(f"  -> {os.path.basename(out_path)}  ({os.path.getsize(out_path)//1024} KB)")
+    print(f"  → {os.path.basename(out_path)}  ({os.path.getsize(out_path)//1024} KB)")
 
 
 if __name__ == "__main__":
     try:
         v = api_get("/system_stats").get("system", {}).get("comfyui_version", "?")
-        print(f"ComfyUI v{v} — Laisa VN sprites ({len(SPRITES)} poses)\n")
+        print(f"ComfyUI v{v} — generating {len(SPRITES)} Isaya sprites\n")
     except Exception as e:
         print(f"Cannot connect: {e}"); exit(1)
 
@@ -158,8 +137,8 @@ if __name__ == "__main__":
         entry = wait(pid)
         for node_out in entry["outputs"].values():
             for img in node_out.get("images", []):
-                out = os.path.join(OUT_DIR, f"{s['name']}.png")
+                out = os.path.join(IMG_DIR, f"{s['name']}.png")
                 download(img["filename"], img["subfolder"], out)
                 break
 
-    print(f"\nAll done! -> {OUT_DIR}")
+    print(f"\nAll done! → {IMG_DIR}")

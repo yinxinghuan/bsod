@@ -7,7 +7,7 @@ COMFYUI_URL = "http://127.0.0.1:8188"
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_output")
 os.makedirs(OUT_DIR, exist_ok=True)
 
-LAISA = (
+ISAYA = (
     "young woman with long straight blue hair, large black over-ear headphones, "
     "black oversized hoodie, pale skin, cat ears, black cat nearby"
 )
@@ -19,7 +19,7 @@ TESTS = [
         "lora": None,
         "w": 512, "h": 768,
         "prompt": (
-            f"pixel art character sprite, {LAISA}, "
+            f"pixel art character sprite, {ISAYA}, "
             "chibi proportions, large head small body, "
             "full body standing idle pose, facing forward, "
             "flat color pixel art, small pixel size, clean pixel edges, "
@@ -48,7 +48,7 @@ TESTS = [
         "lora_strength": 1.0,
         "w": 512, "h": 768,
         "prompt": (
-            f"pixel art character sprite, {LAISA}, "
+            f"pixel art character sprite, {ISAYA}, "
             "chibi proportions, large head small body, "
             "full body standing idle pose, facing forward, "
             "retro anime pixel art style, soft shading, "

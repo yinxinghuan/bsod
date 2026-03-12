@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Process Laisa sprites: remove grey background, keep original resolution exactly.
+Process Isaya sprites: remove grey background, keep original resolution exactly.
 No cropping, no rescaling — transparent background only.
 
-Input:  test_output/laisa_*_ref.png  (768x1152)
-Output: src/BSOD/img/laisa_*.png    (768x1152, transparent bg)
+Input:  test_output/isaya_*_ref.png  (768x1152)
+Output: src/BSOD/img/isaya_*.png    (768x1152, transparent bg)
 """
 import os
 import numpy as np
@@ -16,12 +16,12 @@ DST_DIR = os.path.join(BASE, "src/BSOD/img")
 
 # source_name -> dest_name
 SPRITE_MAP = {
-    "laisa_idle_ref":      "laisa_idle",
-    "laisa_happy_ref":     "laisa_happy",
-    "laisa_sad_ref":       "laisa_sad",
-    "laisa_surprised_ref": "laisa_surprised",
-    "laisa_tired_ref":     "laisa_tired",
-    "laisa_focused_ref":   "laisa_focused",
+    "isaya_idle_ref":      "isaya_idle",
+    "isaya_happy_ref":     "isaya_happy",
+    "isaya_sad_ref":       "isaya_sad",
+    "isaya_surprised_ref": "isaya_surprised",
+    "isaya_tired_ref":     "isaya_tired",
+    "isaya_focused_ref":   "isaya_focused",
 }
 
 # Grey background: target ~#989898 (152,152,152)

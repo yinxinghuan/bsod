@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Remove grey background from BSOD Laisa sprites using grey-screen chroma key."""
+"""Remove grey background from BSOD Isaya sprites using grey-screen chroma key."""
 import os, sys
 import numpy as np
 from PIL import Image
@@ -8,7 +8,7 @@ IMG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src/BSOD/img
 FEATHER = 20
 MARGIN  = 0.02
 
-SPRITES = ['laisa_idle', 'laisa_happy', 'laisa_sad', 'laisa_surprised']
+SPRITES = ['isaya_idle', 'isaya_happy', 'isaya_sad', 'isaya_surprised']
 
 
 def remove_grey_bg(img_path, target_grey=152, threshold=28):

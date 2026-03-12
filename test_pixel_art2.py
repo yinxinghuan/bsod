@@ -7,7 +7,7 @@ COMFYUI_URL = "http://127.0.0.1:8188"
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_output")
 os.makedirs(OUT_DIR, exist_ok=True)
 
-LAISA = (
+ISAYA = (
     "young woman, long straight blue hair, large black over-ear headphones (no animal ears, no cat ears), "
     "black oversized hoodie, pale skin, blue-grey eyes, black cat nearby"
 )
@@ -22,7 +22,7 @@ TESTS = [
         "w": 1024, "h": 1024,
         "steps": 32, "cfg": 7.5, "lora_strength": 0.85,
         "prompt": (
-            f"fine detailed pixel art, {LAISA}, "
+            f"fine detailed pixel art, {ISAYA}, "
             "sitting at glowing computer desk in dark bedroom at night, "
             "dual monitors casting blue light, rain on window, city lights outside, "
             "lo-fi cozy aesthetic, deep blue purple night palette, "
@@ -35,7 +35,7 @@ TESTS = [
         "w": 640, "h": 960,
         "steps": 32, "cfg": 7.0, "lora_strength": 0.85,
         "prompt": (
-            f"fine pixel art character sprite, {LAISA}, "
+            f"fine pixel art character sprite, {ISAYA}, "
             "full body standing idle pose, slight three-quarter angle, "
             "clean solid color background, detailed fine pixel art, "
             "small pixel size, high resolution pixel art, "

@@ -1,5 +1,5 @@
 """
-Generate stream scene background: Laisa at streaming desk, top-down anime style.
+Generate stream scene background: Isaya at streaming desk, top-down anime style.
 Output: src/BSOD/img/bg_stream.png  (432×936 portrait)
 """
 import json, time, urllib.request, urllib.parse, random

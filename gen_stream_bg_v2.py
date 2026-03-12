@@ -1,5 +1,5 @@
 """
-Generate stream background with ReferenceLatent to keep Laisa's appearance consistent.
+Generate stream background with ReferenceLatent to keep Isaya's appearance consistent.
 More chaotic desk, correct look.
 """
 import json, time, random, shutil, urllib.request, urllib.parse
@@ -9,8 +9,8 @@ BASE = "http://127.0.0.1:8188"
 OUT  = Path(__file__).parent / "src/BSOD/img"
 
 CS_DIR = Path(__file__).parent.parent / "convenience-store-v2/src/ConvenienceStore/img/customers"
-REF1 = CS_DIR / "laisa_normal.png"
-REF2 = CS_DIR / "laisa_sad.png"
+REF1 = CS_DIR / "isaya_normal.png"
+REF2 = CS_DIR / "isaya_sad.png"
 
 W, H = 432, 936
 

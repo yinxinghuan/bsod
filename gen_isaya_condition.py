@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Generate Laisa condition-state sprites (worn / rundown / wreck) via ComfyUI,
+Generate Isaya condition-state sprites (worn / rundown / wreck) via ComfyUI,
 then auto-remove the grey background.
 
 Run:
-  python3 gen_laisa_condition.py
+  python3 gen_isaya_condition.py
 """
 
 import json, time, random, urllib.request, urllib.parse, shutil, os, sys
@@ -32,7 +32,7 @@ BASE = (
 
 SPRITES = [
     {
-        "name": "laisa_worn",
+        "name": "isaya_worn",
         "prompt": BASE + (
             ", mild fatigue, slight dark circles under eyes, "
             "slightly tired half-lidded eyes, hair a little messy at the ends only, "
@@ -41,7 +41,7 @@ SPRITES = [
         ),
     },
     {
-        "name": "laisa_rundown",
+        "name": "isaya_rundown",
         "prompt": BASE + (
             ", moderate exhaustion, obvious dark circles under eyes, "
             "dull pale complexion, hair ends noticeably messy and tangled, "
@@ -50,7 +50,7 @@ SPRITES = [
         ),
     },
     {
-        "name": "laisa_wreck",
+        "name": "isaya_wreck",
         "prompt": BASE + (
             ", severe exhaustion and burnout, deep sunken dark circles under eyes, "
             "hair very disheveled and tangled at ends, very pale almost grey skin, "
@@ -92,7 +92,7 @@ def build_workflow(prompt, seed):
         "12": {"class_type": "VAEDecode",
                "inputs": {"samples": ["11", 0], "vae": ["3", 0]}},
         "13": {"class_type": "SaveImage",
-               "inputs": {"images": ["12", 0], "filename_prefix": "laisa_condition"}},
+               "inputs": {"images": ["12", 0], "filename_prefix": "isaya_condition"}},
     }
 
 
@@ -213,4 +213,4 @@ if __name__ == "__main__":
         remove_grey_bg(out_path)
 
     print(f"\nAll done! -> {IMG_DIR}")
-    print("Sprites: laisa_worn.png, laisa_rundown.png, laisa_wreck.png")
+    print("Sprites: isaya_worn.png, isaya_rundown.png, isaya_wreck.png")

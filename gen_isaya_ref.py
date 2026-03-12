@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Generate Laisa BSOD sprites using ReferenceLatent — same method as convenience-store-v2.
-Reference: convenience store laisa_normal.png + laisa_sad.png for likeness consistency.
+Generate Isaya BSOD sprites using ReferenceLatent — same method as convenience-store-v2.
+Reference: convenience store isaya_normal.png + isaya_sad.png for likeness consistency.
 """
 import json, time, random, os, urllib.request, urllib.parse, shutil
 
@@ -12,8 +12,8 @@ os.makedirs(OUT_DIR, exist_ok=True)
 # Reference images from convenience store (established character look)
 CS_IMG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                           "../convenience-store-v2/src/ConvenienceStore/img/customers")
-REF1 = os.path.join(CS_IMG_DIR, "laisa_normal.png")
-REF2 = os.path.join(CS_IMG_DIR, "laisa_sad.png")
+REF1 = os.path.join(CS_IMG_DIR, "isaya_normal.png")
+REF2 = os.path.join(CS_IMG_DIR, "isaya_sad.png")
 
 W, H = 768, 1152
 
@@ -35,12 +35,12 @@ CHAR_BASE = (
 )
 
 EMOTIONS = {
-    "laisa_idle":      "neutral calm expression, slight downward gaze, arms relaxed at sides",
-    "laisa_happy":     "warm genuine smile, eyes curved happily, slight head tilt, rosy cheeks",
-    "laisa_sad":       "sad tired expression, eyes downcast, shoulders gently slumped, subdued mood",
-    "laisa_focused":   "sharp focused expression, eyes narrowed in concentration, leaning slightly forward",
-    "laisa_surprised": "wide eyes, mouth slightly open, eyebrows raised, startled expression",
-    "laisa_tired":     "exhausted half-lidded eyes, slight dark circles, slouching, holding coffee mug",
+    "isaya_idle":      "neutral calm expression, slight downward gaze, arms relaxed at sides",
+    "isaya_happy":     "warm genuine smile, eyes curved happily, slight head tilt, rosy cheeks",
+    "isaya_sad":       "sad tired expression, eyes downcast, shoulders gently slumped, subdued mood",
+    "isaya_focused":   "sharp focused expression, eyes narrowed in concentration, leaning slightly forward",
+    "isaya_surprised": "wide eyes, mouth slightly open, eyebrows raised, startled expression",
+    "isaya_tired":     "exhausted half-lidded eyes, slight dark circles, slouching, holding coffee mug",
 }
 
 
@@ -78,13 +78,13 @@ def build_workflow(prompt, ref1_name, ref2_name, seed):
         "10": {"class_type": "KSamplerSelect",          "inputs": {"sampler_name": "euler"}},
         "11": {"class_type": "SamplerCustomAdvanced",   "inputs": {"noise": ["7", 0], "guider": ["6", 0], "sampler": ["10", 0], "sigmas": ["9", 0], "latent_image": ["8", 0]}},
         "12": {"class_type": "VAEDecode",               "inputs": {"samples": ["11", 0], "vae": ["3", 0]}},
-        "13": {"class_type": "SaveImage",               "inputs": {"images": ["12", 0], "filename_prefix": "laisa_ref"}},
-        # Reference image 1 (laisa_normal)
+        "13": {"class_type": "SaveImage",               "inputs": {"images": ["12", 0], "filename_prefix": "isaya_ref"}},
+        # Reference image 1 (isaya_normal)
         "14": {"class_type": "LoadImage",               "inputs": {"image": ref1_name}},
         "15": {"class_type": "ImageScaleToTotalPixels", "inputs": {"image": ["14", 0], "upscale_method": "lanczos", "megapixels": 0.25, "resolution_steps": 1}},
         "16": {"class_type": "VAEEncode",               "inputs": {"pixels": ["15", 0], "vae": ["3", 0]}},
         "17": {"class_type": "ReferenceLatent",         "inputs": {"conditioning": ["4", 0], "latent": ["16", 0]}},
-        # Reference image 2 (laisa_sad)
+        # Reference image 2 (isaya_sad)
         "18": {"class_type": "LoadImage",               "inputs": {"image": ref2_name}},
         "19": {"class_type": "ImageScaleToTotalPixels", "inputs": {"image": ["18", 0], "upscale_method": "lanczos", "megapixels": 0.25, "resolution_steps": 1}},
         "20": {"class_type": "VAEEncode",               "inputs": {"pixels": ["19", 0], "vae": ["3", 0]}},

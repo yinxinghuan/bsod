@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Generate Laisa condition sprites (worn / rundown / wreck) via online img2img API,
+Generate Isaya condition sprites (worn / rundown / wreck) via online img2img API,
 then auto-remove the grey background.
 
 Usage:
-  python3 gen_laisa_condition_online.py
+  python3 gen_isaya_condition_online.py
 """
 
 import json, os, ssl, sys, time, tempfile, urllib.request, urllib.error
@@ -13,7 +13,7 @@ import math
 from collections import deque
 
 IMG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src/BSOD/img")
-REF_URL = "https://raw.githubusercontent.com/yinxinghuan/bsod/master/src/BSOD/img/laisa_idle.png"
+REF_URL = "https://raw.githubusercontent.com/yinxinghuan/bsod/master/src/BSOD/img/isaya_idle.png"
 
 API_URL     = "http://aiservice.wdabuliu.com:8019/genl_image"
 UPLOAD_URL  = "https://0x0.st"
@@ -25,7 +25,7 @@ _SSL_CTX = ssl.create_default_context()
 _SSL_CTX.check_hostname = False
 _SSL_CTX.verify_mode = ssl.CERT_NONE
 
-# ── Character base — mirrors gen_laisa_vn.py BASE exactly ─────────────────────
+# ── Character base — mirrors gen_isaya_vn.py BASE exactly ─────────────────────
 
 BASE = (
     "anime visual novel character sprite, full body, "
@@ -41,7 +41,7 @@ BASE = (
 
 SPRITES = [
     {
-        "name": "laisa_worn",
+        "name": "isaya_worn",
         "prompt": BASE + (
             ", mild fatigue state, "
             "slight dark circles under eyes, slightly tired half-lidded eyes, "
@@ -51,7 +51,7 @@ SPRITES = [
         ),
     },
     {
-        "name": "laisa_rundown",
+        "name": "isaya_rundown",
         "prompt": BASE + (
             ", moderate exhaustion state, "
             "obvious dark circles under eyes, dull pale complexion, "
@@ -61,7 +61,7 @@ SPRITES = [
         ),
     },
     {
-        "name": "laisa_wreck",
+        "name": "isaya_wreck",
         "prompt": BASE + (
             ", severe burnout and exhaustion state, "
             "deep sunken dark circles, very pale almost grey skin tone, "
@@ -242,4 +242,4 @@ if __name__ == "__main__":
             time.sleep(RATE_WAIT)
 
     print(f"\n── Done ──")
-    print(f"laisa_worn / laisa_rundown / laisa_wreck → {IMG_DIR}")
+    print(f"isaya_worn / isaya_rundown / isaya_wreck → {IMG_DIR}")

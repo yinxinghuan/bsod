@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test pixel art style for BSOD game — generates 3 variations of Laisa.
+Test pixel art style for BSOD game — generates 3 variations of Isaya.
 Uses SDXL + pixel-art-xl LoRA.
 
 Run: python3 test_pixel_art.py
@@ -13,7 +13,7 @@ COMFYUI_URL = "http://127.0.0.1:8188"
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_output")
 os.makedirs(OUT_DIR, exist_ok=True)
 
-LAISA = (
+ISAYA = (
     "young woman, long straight blue hair, large black over-ear headphones, "
     "black oversized hoodie, pale skin, blue-grey eyes, black cat nearby"
 )
@@ -25,7 +25,7 @@ TESTS = [
         "w": 512, "h": 768,
         "steps": 28, "cfg": 7.0,
         "prompt": (
-            f"pixel art character sprite, {LAISA}, "
+            f"pixel art character sprite, {ISAYA}, "
             "full body standing idle pose, facing forward slightly angled, "
             "clean solid white background, 16-bit RPG sprite style, "
             "sharp clean pixel edges, limited color palette, "
@@ -37,7 +37,7 @@ TESTS = [
         "w": 768, "h": 768,
         "steps": 30, "cfg": 7.5,
         "prompt": (
-            f"pixel art scene, {LAISA}, "
+            f"pixel art scene, {ISAYA}, "
             "sitting at glowing computer desk in dark bedroom at night, "
             "dual monitors casting blue light, city view through window, "
             "lo-fi cozy aesthetic, deep blue and purple night palette, "
@@ -50,7 +50,7 @@ TESTS = [
         "w": 512, "h": 512,
         "steps": 28, "cfg": 7.0,
         "prompt": (
-            f"pixel art portrait, {LAISA}, "
+            f"pixel art portrait, {ISAYA}, "
             "bust shot, slight smile, headphones on head, "
             "soft glowing monitor light from below, dark background, "
             "detailed pixel art face, expressive, 32-bit style, "
