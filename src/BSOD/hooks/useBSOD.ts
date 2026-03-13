@@ -117,6 +117,7 @@ function initialState(): GameState {
     streamFollowersGained: 0,
     streamLastEvent: null,
     streamPendingEnd: false,
+    streamResultPending: false,
     dayLogStart: { ...INITIAL_STATS },
     streamedToday: false,
     showDrainNotice: false,
@@ -216,6 +217,7 @@ export function useBSOD() {
           streamFollowersGained: 0,
           streamLastEvent: null,
           streamPendingEnd: false,
+          streamResultPending: false,
           streamedToday: true,
           streamStartStats: before,
           statAnimFrom: null,
@@ -355,12 +357,18 @@ export function useBSOD() {
         : s.streamLastEvent;
       next = { ...next, streamFollowersGained: s.streamFollowersGained + Math.max(0, gained), streamLastEvent: lastEvent };
 
+      return { ...next, streamResultPending: true };
+    });
+  }, []);
+
+  const advanceStream = useCallback(() => {
+    setState(s => {
+      if (s.phase !== 'stream' || !s.streamResultPending) return s;
       const nextIndex = s.streamIndex + 1;
       if (nextIndex >= s.streamQueue.length) {
-        // Last event — stay in stream phase so flash has time to display
-        return { ...next, streamPendingEnd: true };
+        return { ...s, streamResultPending: false, streamPendingEnd: true };
       }
-      return { ...next, streamIndex: nextIndex };
+      return { ...s, streamResultPending: false, streamIndex: nextIndex };
     });
   }, []);
 
@@ -419,6 +427,7 @@ export function useBSOD() {
       chooseAction,
       dismissActionResult,
       chooseStreamOption,
+      advanceStream,
       confirmStreamEnd,
       confirmDayEnd,
       clearStatAnim,

@@ -145,6 +145,7 @@ export interface GameState {
   streamFollowersGained: number;
   streamLastEvent: { delta: number; type: VolatileType; key: number } | null;
   streamPendingEnd: boolean;       // last event chosen, waiting for player to confirm
+  streamResultPending: boolean;    // choice applied, waiting for tap to advance
   dayLogStart: GameStats;          // stats snapshot at day start (for delta)
   streamedToday: boolean;
   showDrainNotice: boolean;
