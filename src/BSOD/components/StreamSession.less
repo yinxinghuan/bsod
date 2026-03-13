@@ -167,11 +167,12 @@
   }
 
   &__volatile-delta {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 40px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 48px;
     font-weight: 700;
     letter-spacing: 0.04em;
     line-height: 1;
+    text-shadow: 0 4px 0 rgba(0, 0, 0, 0.5), 0 0 24px currentColor;
   }
 
   &__volatile-desc {
@@ -268,6 +269,10 @@
     color: rgba(200, 170, 120, 0.5);
     letter-spacing: 0.06em;
     animation: bs-result-pulse 1.2s ease-in-out infinite;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    touch-action: none;
   }
 
   @keyframes bs-result-pulse {
