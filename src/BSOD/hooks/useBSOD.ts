@@ -272,6 +272,11 @@ export function useBSOD() {
       if (action.isStream) {
         const queue = pickStreamEvents();
         let next = applyEffect(s, action.effect);
+        const death = checkDeath(next);
+        if (death) { const d = deathDelta(action.effect, death); return { ...next, phase: 'dead', deathCause: death, deathContext: {
+          labelZh: action.labelZh, labelEn: action.labelEn,
+          delta: d, displayValue: preStat(s, death) + d,
+        }}; }
         return {
           ...next,
           phase: 'stream' as Phase,
@@ -375,6 +380,11 @@ export function useBSOD() {
   const confirmStreamEnd = useCallback(() => {
     setState(s => {
       if (s.phase !== 'stream' || !s.streamPendingEnd) return s;
+      const death = checkDeath(s);
+      if (death) { return { ...s, phase: 'dead', deathCause: death, deathContext: {
+        labelZh: '直播结束', labelEn: 'Stream ended',
+        delta: 0, displayValue: preStat(s, death),
+      }}; }
       const result = advancePhase({ ...s, streamPendingEnd: false }, s.prevPhase);
       if ((PHASE_ORDER as string[]).includes(result.phase) && s.streamStartStats) {
         return { ...result, statAnimFrom: s.streamStartStats };
