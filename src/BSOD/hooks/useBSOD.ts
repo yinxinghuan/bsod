@@ -1,10 +1,38 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type {
   GameState, Phase, ActionPhase, StatEffect, GameStats,
   DeathCause, EndingType, GameAction, StoryChoice, ResponseSpeed, VolatileType,
 } from '../types';
 import { STORY_EVENTS, pickStreamEvents, pickPrologueStreamEvents } from '../data/events';
 import { getActionsForPhase } from '../data/actions';
+
+// ── Save / Load ───────────────────────────────────────────────────────────────
+
+const SAVE_KEY = 'bsod_v1_save';
+
+type SaveExcluded = 'statAnimFrom' | 'showDrainNotice' | 'showConditionSprite' | 'checkEventAfterDrain';
+
+function writeSave(state: GameState): void {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { statAnimFrom, showDrainNotice, showConditionSprite, checkEventAfterDrain, ...data } = state;
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+  } catch { /* quota / private mode */ }
+}
+
+function readSave(): (Omit<GameState, SaveExcluded>) | null {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (!data.phase || data.phase === 'start') return null;
+    return data;
+  } catch { return null; }
+}
+
+function eraseSave(): void {
+  localStorage.removeItem(SAVE_KEY);
+}
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -186,6 +214,20 @@ function enterPhase(state: GameState, phase: ActionPhase): GameState {
 
 export function useBSOD() {
   const [state, setState] = useState<GameState>(initialState);
+
+  // ── Save info (read once at mount) ────────────────────────────────────────
+  const [hasSave] = useState<{ day: number } | null>(() => {
+    const s = readSave();
+    return s ? { day: s.day ?? 1 } : null;
+  });
+
+  // ── Auto-save on state change ─────────────────────────────────────────────
+  useEffect(() => {
+    const { phase } = state;
+    if (phase === 'start') return;
+    if (phase === 'dead' || phase === 'ending') { eraseSave(); return; }
+    writeSave(state);
+  }, [state]);
 
   const startGame = useCallback(() => {
     setState(s => enterPhase({ ...s, phase: 'start' }, 'morning'));
@@ -425,11 +467,26 @@ export function useBSOD() {
   }, []);
 
   const restart = useCallback(() => {
+    eraseSave();
     setState(initialState());
+  }, []);
+
+  const resumeGame = useCallback(() => {
+    const saved = readSave();
+    if (!saved) return;
+    setState(s => ({
+      ...s,
+      ...saved,
+      statAnimFrom: null,
+      showDrainNotice: false,
+      showConditionSprite: false,
+      checkEventAfterDrain: false,
+    }));
   }, []);
 
   return {
     state,
+    hasSave,
     actions: {
       startGame,
       chooseEventOption,
@@ -442,6 +499,7 @@ export function useBSOD() {
       confirmDayEnd,
       clearStatAnim,
       restart,
+      resumeGame,
     },
     // Derived helpers
     currentPhaseActions: PHASE_ORDER.includes(state.phase as ActionPhase)

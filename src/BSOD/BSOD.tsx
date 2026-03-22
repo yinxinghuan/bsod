@@ -74,12 +74,13 @@ const PHASE_FILTER: Record<string, string> = {
 
 const BSOD = React.memo(
   forwardRef<HTMLDivElement, Record<string, never>>(function BSOD(_props, ref) {
-    const { state, actions, currentPhaseActions } = useBSOD();
+    const { state, actions, currentPhaseActions, hasSave } = useBSOD();
     const { phase, day, energy, mood, focus, followers, streamedToday } = state;
 
     const [showSplash, setShowSplash] = useState(true);
     const [showHelp, setShowHelp] = useState(false);
     const [showLeaderboard, setShowLeaderboard] = useState(false);
+    const [showResume, setShowResume] = useState(() => !!hasSave);
     const { isInAigram, submitScore, fetchGlobalLeaderboard, fetchFriendsLeaderboard } = useGameScore('bsod');
 
     // 游戏结束时提交分数
@@ -133,6 +134,12 @@ const BSOD = React.memo(
         stopAmbient();
         startAmbient('morning');
         actions.restart();
+      },
+      resumeGame: () => {
+        resumeAudio();
+        playGameStart();
+        startAmbient('morning');
+        actions.resumeGame();
       },
       chooseAction: (action: Parameters<typeof actions.chooseAction>[0]) => {
         playConfirm();
@@ -191,6 +198,21 @@ const BSOD = React.memo(
               fetchGlobal={fetchGlobalLeaderboard}
               fetchFriends={fetchFriendsLeaderboard}
             />
+          )}
+          {showResume && hasSave && (
+            <div className="bs-resume">
+              <div className="bs-resume__panel">
+                <div className="bs-resume__icon">💾</div>
+                <div className="bs-resume__title">继续上次游戏？</div>
+                <div className="bs-resume__sub">第 {hasSave.day} 天的进度已保存</div>
+                <button className="bs-resume__btn bs-resume__btn--yes" onPointerDown={() => { setShowResume(false); sfx.resumeGame(); }}>
+                  继续
+                </button>
+                <button className="bs-resume__btn bs-resume__btn--no" onPointerDown={() => setShowResume(false)}>
+                  重新开始
+                </button>
+              </div>
+            </div>
           )}
           <img className="bs__start-bg" src={bgRoom} alt="" draggable={false} />
           <NoiseCanvas opacity={0.72} className="bs__start-noise" />
