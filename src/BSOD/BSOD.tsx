@@ -1,4 +1,5 @@
 import React, { forwardRef, useState, useEffect, useRef } from 'react';
+import { useGameScore, Leaderboard } from '@shared/leaderboard';
 import { useBSOD } from './hooks/useBSOD';
 import type { GameState } from './types';
 import StatusBar from './components/StatusBar';
@@ -78,6 +79,16 @@ const BSOD = React.memo(
 
     const [showSplash, setShowSplash] = useState(true);
     const [showHelp, setShowHelp] = useState(false);
+    const [showLeaderboard, setShowLeaderboard] = useState(false);
+    const { isInAigram, submitScore, fetchGlobalLeaderboard, fetchFriendsLeaderboard } = useGameScore('bsod');
+
+    // 游戏结束时提交分数
+    useEffect(() => {
+      if (phase === 'ending' || phase === 'dead') {
+        const score = followers + day * 100;
+        if (score > 0) submitScore(score);
+      }
+    }, [phase]);
 
     // ── Phase-change sound effects ────────────────────────────────────────────
     const prevPhase = useRef(phase);
@@ -172,6 +183,15 @@ const BSOD = React.memo(
     if (phase === 'start') {
       return (
         <div className="bs" ref={ref}>
+          {showLeaderboard && (
+            <Leaderboard
+              gameName="BSOD"
+              isInAigram={isInAigram}
+              onClose={() => setShowLeaderboard(false)}
+              fetchGlobal={fetchGlobalLeaderboard}
+              fetchFriends={fetchFriendsLeaderboard}
+            />
+          )}
           <img className="bs__start-bg" src={bgRoom} alt="" draggable={false} />
           <NoiseCanvas opacity={0.72} className="bs__start-noise" />
           <div className="bs__start">
@@ -182,6 +202,7 @@ const BSOD = React.memo(
               <button className="bs__start-btn" onPointerDown={sfx.startGame}>
                 START GAME
               </button>
+              <button className="bs__lb-icon" onPointerDown={() => setShowLeaderboard(true)}>🏆</button>
             </div>
           </div>
         </div>
