@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   GameState, Phase, ActionPhase, StatEffect, GameStats,
   DeathCause, EndingType, GameAction, StoryChoice, ResponseSpeed, VolatileType,
@@ -221,6 +221,10 @@ export function useBSOD() {
     return s ? { day: s.day ?? 1 } : null;
   });
 
+  // Keep a ref so visibilitychange/pagehide handlers always see the latest state
+  const stateRef = useRef(state);
+  stateRef.current = state;
+
   // ── Auto-save on state change ─────────────────────────────────────────────
   useEffect(() => {
     const { phase } = state;
@@ -228,6 +232,21 @@ export function useBSOD() {
     if (phase === 'dead' || phase === 'ending') { eraseSave(); return; }
     writeSave(state);
   }, [state]);
+
+  // ── Reliable save on page hide (mobile app-switch / tab close) ────────────
+  useEffect(() => {
+    function saveOnHide() {
+      const { phase } = stateRef.current;
+      if (phase === 'start' || phase === 'dead' || phase === 'ending') return;
+      writeSave(stateRef.current);
+    }
+    window.addEventListener('visibilitychange', saveOnHide);
+    window.addEventListener('pagehide', saveOnHide);
+    return () => {
+      window.removeEventListener('visibilitychange', saveOnHide);
+      window.removeEventListener('pagehide', saveOnHide);
+    };
+  }, []);
 
   const startGame = useCallback(() => {
     setState(s => enterPhase({ ...s, phase: 'start' }, 'morning'));
