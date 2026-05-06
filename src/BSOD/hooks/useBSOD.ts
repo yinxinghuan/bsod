@@ -6,32 +6,16 @@ import type {
 import { STORY_EVENTS, pickStreamEvents, pickPrologueStreamEvents } from '../data/events';
 import { getActionsForPhase } from '../data/actions';
 
-// ── Save / Load ───────────────────────────────────────────────────────────────
-
-const SAVE_KEY = 'bsod_v1_save';
+// ── Save shape ────────────────────────────────────────────────────────────────
 
 type SaveExcluded = 'statAnimFrom' | 'showDrainNotice' | 'showConditionSprite' | 'checkEventAfterDrain';
+export type BsodSave = Omit<GameState, SaveExcluded>;
 
-function writeSave(state: GameState): void {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { statAnimFrom, showDrainNotice, showConditionSprite, checkEventAfterDrain, ...data } = state;
-    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
-  } catch { /* quota / private mode */ }
-}
-
-function readSave(): (Omit<GameState, SaveExcluded>) | null {
-  try {
-    const raw = localStorage.getItem(SAVE_KEY);
-    if (!raw) return null;
-    const data = JSON.parse(raw);
-    if (!data.phase || data.phase === 'start') return null;
-    return data;
-  } catch { return null; }
-}
-
-function eraseSave(): void {
-  localStorage.removeItem(SAVE_KEY);
+/** Strip transient UI fields before persisting. */
+function stripTransient(state: GameState): BsodSave {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { statAnimFrom, showDrainNotice, showConditionSprite, checkEventAfterDrain, ...data } = state;
+  return data;
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -212,14 +196,17 @@ function enterPhase(state: GameState, phase: ActionPhase): GameState {
 
 // ── Hook ──────────────────────────────────────────────────────────────────────
 
-export function useBSOD() {
-  const [state, setState] = useState<GameState>(initialState);
+export interface UseBSODOptions {
+  /** Returns the saved snapshot (cloud-or-local), used by `resumeGame()`. */
+  loadSave?: () => BsodSave | null;
+  /** Persist a non-terminal state. */
+  persist?: (snapshot: BsodSave) => void;
+  /** Erase save on terminal phase or restart. */
+  clearSave?: () => void;
+}
 
-  // ── Save info (read once at mount) ────────────────────────────────────────
-  const [hasSave] = useState<{ day: number } | null>(() => {
-    const s = readSave();
-    return s ? { day: s.day ?? 1 } : null;
-  });
+export function useBSOD({ loadSave, persist, clearSave }: UseBSODOptions = {}) {
+  const [state, setState] = useState<GameState>(initialState);
 
   // Keep a ref so visibilitychange/pagehide handlers always see the latest state
   const stateRef = useRef(state);
@@ -229,16 +216,16 @@ export function useBSOD() {
   useEffect(() => {
     const { phase } = state;
     if (phase === 'start') return;
-    if (phase === 'dead' || phase === 'ending') { eraseSave(); return; }
-    writeSave(state);
-  }, [state]);
+    if (phase === 'dead' || phase === 'ending') { clearSave?.(); return; }
+    persist?.(stripTransient(state));
+  }, [state, persist, clearSave]);
 
   // ── Reliable save on page hide (mobile app-switch / tab close) ────────────
   useEffect(() => {
     function saveOnHide() {
       const { phase } = stateRef.current;
       if (phase === 'start' || phase === 'dead' || phase === 'ending') return;
-      writeSave(stateRef.current);
+      persist?.(stripTransient(stateRef.current));
     }
     window.addEventListener('visibilitychange', saveOnHide);
     window.addEventListener('pagehide', saveOnHide);
@@ -246,7 +233,7 @@ export function useBSOD() {
       window.removeEventListener('visibilitychange', saveOnHide);
       window.removeEventListener('pagehide', saveOnHide);
     };
-  }, []);
+  }, [persist]);
 
   const startGame = useCallback(() => {
     setState(s => enterPhase({ ...s, phase: 'start' }, 'morning'));
@@ -486,12 +473,12 @@ export function useBSOD() {
   }, []);
 
   const restart = useCallback(() => {
-    eraseSave();
+    clearSave?.();
     setState(initialState());
-  }, []);
+  }, [clearSave]);
 
   const resumeGame = useCallback(() => {
-    const saved = readSave();
+    const saved = loadSave?.();
     if (!saved) return;
     setState(s => ({
       ...s,
@@ -501,11 +488,10 @@ export function useBSOD() {
       showConditionSprite: false,
       checkEventAfterDrain: false,
     }));
-  }, []);
+  }, [loadSave]);
 
   return {
     state,
-    hasSave,
     actions: {
       startGame,
       chooseEventOption,

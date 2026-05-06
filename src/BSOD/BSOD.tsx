@@ -1,7 +1,21 @@
-import React, { forwardRef, useState, useEffect, useRef } from 'react';
+import React, { forwardRef, useState, useEffect, useRef, useCallback } from 'react';
 import { useGameScore, Leaderboard } from '@shared/leaderboard';
-import { useBSOD } from './hooks/useBSOD';
+import { useGameSave } from '@shared/save';
+import { useBSOD, type BsodSave } from './hooks/useBSOD';
 import type { GameState } from './types';
+
+// One-time migration: rename the legacy `bsod_v1_save` localStorage key to
+// the unified `bsod-save` key used by useGameSave so existing players don't
+// lose their progress when this update lands.
+(function migrateLegacySave() {
+  try {
+    const old = localStorage.getItem('bsod_v1_save');
+    if (old && !localStorage.getItem('bsod-save')) {
+      localStorage.setItem('bsod-save', old);
+      localStorage.removeItem('bsod_v1_save');
+    }
+  } catch { /* private mode / quota — ignore */ }
+})();
 import StatusBar from './components/StatusBar';
 import ActionPanel from './components/ActionPanel';
 import EventOverlay from './components/EventOverlay';
@@ -74,13 +88,34 @@ const PHASE_FILTER: Record<string, string> = {
 
 const BSOD = React.memo(
   forwardRef<HTMLDivElement, Record<string, never>>(function BSOD(_props, ref) {
-    const { state, actions, currentPhaseActions, hasSave } = useBSOD();
+    const { savedData, persist, clear } = useGameSave<BsodSave>('bsod');
+
+    // Wrap into stable callbacks for useBSOD.
+    const loadSave = useCallback(() => savedData ?? null, [savedData]);
+    const persistRef = useRef(persist);
+    persistRef.current = persist;
+    const persistCb = useCallback((s: BsodSave) => persistRef.current(s), []);
+    const clearRef = useRef(clear);
+    clearRef.current = clear;
+    const clearCb = useCallback(() => { void clearRef.current(); }, []);
+
+    const { state, actions, currentPhaseActions } = useBSOD({
+      loadSave,
+      persist: persistCb,
+      clearSave: clearCb,
+    });
     const { phase, day, energy, mood, focus, followers, streamedToday } = state;
 
+    const hasSave = savedData ? { day: savedData.day ?? 1 } : null;
     const [showSplash, setShowSplash] = useState(true);
     const [showHelp, setShowHelp] = useState(false);
     const [showLeaderboard, setShowLeaderboard] = useState(false);
-    const [showResume, setShowResume] = useState(() => !!hasSave);
+    const [showResume, setShowResume] = useState(false);
+    // Reveal the resume prompt once the cloud probe completes — covers the case
+    // where a save lives only in the cloud (different device / first visit).
+    useEffect(() => {
+      if (hasSave) setShowResume(true);
+    }, [hasSave?.day]);
     const { isInAigram, submitScore, fetchGlobalLeaderboard, fetchFriendsLeaderboard } = useGameScore('bsod');
 
     // 游戏结束时提交分数
@@ -208,7 +243,7 @@ const BSOD = React.memo(
                 <button className="bs-resume__btn bs-resume__btn--yes" onPointerDown={() => { setShowResume(false); sfx.resumeGame(); }}>
                   继续
                 </button>
-                <button className="bs-resume__btn bs-resume__btn--no" onPointerDown={() => setShowResume(false)}>
+                <button className="bs-resume__btn bs-resume__btn--no" onPointerDown={() => { void clear(); setShowResume(false); }}>
                   重新开始
                 </button>
               </div>
