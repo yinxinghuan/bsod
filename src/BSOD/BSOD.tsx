@@ -28,6 +28,7 @@ import SplashScreen from './components/SplashScreen';
 import NoiseCanvas from './components/NoiseCanvas';
 import HelpPanel from './components/HelpPanel';
 import DailyDrainNotice from './components/DailyDrainNotice';
+import BsodChatField from './components/BsodChatField';
 import bgRoom from './img/bg_room.png';
 import isayaIdle from './img/isaya_idle.png';
 import isayaHappy from './img/isaya_happy.png';
@@ -251,6 +252,7 @@ const BSOD = React.memo(
           )}
           <img className="bs__start-bg" src={bgRoom} alt="" draggable={false} />
           <NoiseCanvas opacity={0.72} className="bs__start-noise" />
+          <BsodChatField />
           <div className="bs__start">
             <div className="bs__start-content">
               <h1 className="bs__start-title">BSOD</h1>
