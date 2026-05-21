@@ -117,7 +117,7 @@ const BSOD = React.memo(
     useEffect(() => {
       if (hasSave) setShowResume(true);
     }, [hasSave?.day]);
-    const { isInAigram, submitScore, fetchGlobalLeaderboard, fetchFriendsLeaderboard } = useGameScore('bsod');
+    const { isInAigram, submitScore, fetchLeaderboard } = useGameScore();
 
     // 游戏结束时提交分数
     useEffect(() => {
@@ -231,8 +231,7 @@ const BSOD = React.memo(
               gameName="BSOD"
               isInAigram={isInAigram}
               onClose={() => setShowLeaderboard(false)}
-              fetchGlobal={fetchGlobalLeaderboard}
-              fetchFriends={fetchFriendsLeaderboard}
+              fetch={fetchLeaderboard}
             />
           )}
           {showResume && hasSave && (
