@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>Isaya Animation Demo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #111827;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .stage {
+    position: relative;
+    width: 768px;
+    height: 768px;
+  }
+
+  .layer {
+    position: absolute;
+    image-rendering: pixelated;
+  }
+
+  /* ── Hair sway ── */
+  .back-hair {
+    transform-origin: top center;
+    animation: hair-back 4.5s ease-in-out infinite;
+  }
+  .front-hair {
+    transform-origin: top center;
+    animation: hair-front 3.8s ease-in-out infinite;
+  }
+  @keyframes hair-back {
+    0%, 100% { transform: rotate(0deg) translateX(0px); }
+    40%       { transform: rotate(1.2deg) translateX(2px); }
+    70%       { transform: rotate(-0.6deg) translateX(-1px); }
+  }
+  @keyframes hair-front {
+    0%, 100% { transform: rotate(0deg) translateX(0px); }
+    35%       { transform: rotate(-1deg) translateX(-2px); }
+    65%       { transform: rotate(0.5deg) translateX(1px); }
+  }
+
+  /* ── Eyelash blink ── */
+  .eyelash {
+    transform-origin: bottom center;
+  }
+
+  /* ── Headphones subtle bob (tied to back-hair rhythm) ── */
+  .headwear {
+    transform-origin: bottom center;
+    animation: hw-bob 4.5s ease-in-out infinite;
+  }
+  @keyframes hw-bob {
+    0%, 100% { transform: rotate(0deg); }
+    40%       { transform: rotate(0.6deg); }
+    70%       { transform: rotate(-0.3deg); }
+  }
+
+  /* ── Arms idle sway ── */
+  .handwear {
+    transform-origin: top center;
+    animation: arms-sway 4s ease-in-out infinite;
+  }
+  @keyframes arms-sway {
+    0%, 100% { transform: rotate(0deg)    translateX(0px); }
+    30%       { transform: rotate(1.2deg)  translateX(2px); }
+    70%       { transform: rotate(-0.9deg) translateX(-2px); }
+  }
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+
+<script>
+// Layer data: [filename, left, top, width, height, cssClass, id]
+// Render order: back → front (semantic depth order)
+const LAYERS = [
+  // ── Background: back hair ──
+  ['01_back_hair.png',  325, 17, 120,190,  'back-hair',  ''],
+  // ── Body ──
+  ['04_legwear.png',    312,426, 143,287,  '',           ''],
+  ['03_footwear.png',   317,691, 135, 60,  '',           ''],
+  ['06_bottomwear.png', 308,367, 151, 84,  '',           ''],
+  ['07_topwear.png',    303,135, 161,267,  '',           ''],
+  ['02_handwear.png',   268,167, 234,285,  'handwear',   ''],
+  // ── Face base ──
+  ['05_neck.png',       358,105,  57, 74,  '',           ''],
+  // ears hidden — covered by headwear earcups in original art
+  ['09_face.png',       345, 46,  78, 99,  '',           ''],
+  // ── Eye layers (back to front) ──
+  ['14_eyewhite.png',   354, 95,  61,  9,  '',           'eyewhite'],
+  ['16_irides.png',     358, 95,  53,  9,  '',           'irides'],
+  ['13_eyelash.png',    350, 87,  68, 18,  'eyelash',    'eyelash'],
+  ['12_eyebrow.png',    351, 85,  66,  4,  '',           ''],
+  // ── Nose & mouth ──
+  ['10_nose.png',       381,108,   7, 10,  '',           ''],
+  ['11_mouth.png',      379,125,  12,  7,  '',           ''],
+  // ── Front hair ──
+  ['15_front_hair.png', 332, 26, 108, 250, 'front-hair', ''],
+  // ── Headwear on top of everything ──
+  ['00_headwear.png',   325, 22, 119, 93,  'headwear',   ''],
+];
+
+const stage = document.getElementById('stage');
+const dir = 'seethrough_output_layers/';
+
+// Build DOM (back to front)
+LAYERS.forEach(([file, left, top, w, h, cls, id]) => {
+  const img = document.createElement('img');
+  img.src = dir + file;
+  img.className = 'layer' + (cls ? ' ' + cls : '');
+  if (id) img.id = id;
+  img.draggable = false;
+  img.style.left = left + 'px';
+  img.style.top  = top  + 'px';
+  img.style.width  = w + 'px';
+  img.style.height = h + 'px';
+  stage.appendChild(img);
+});
+
+// ── Blink logic ──
+function blink() {
+  const eyelash  = document.getElementById('eyelash');
+  const eyewhite = document.getElementById('eyewhite');
+  const irides   = document.getElementById('irides');
+
+  // Close
+  eyelash.style.transition  = 'transform 70ms ease-in';
+  eyelash.style.transform   = 'scaleY(0.05)';
+  eyewhite.style.transition = 'opacity 50ms';
+  eyewhite.style.opacity    = '0';
+  irides.style.transition   = 'opacity 50ms';
+  irides.style.opacity      = '0';
+
+  setTimeout(() => {
+    // Open
+    eyelash.style.transition  = 'transform 120ms ease-out';
+    eyelash.style.transform   = 'scaleY(1)';
+    eyewhite.style.transition = 'opacity 80ms 30ms';
+    eyewhite.style.opacity    = '1';
+    irides.style.transition   = 'opacity 80ms 30ms';
+    irides.style.opacity      = '1';
+
+    setTimeout(blink, 2500 + Math.random() * 3500);
+  }, 150);
+}
+
+setTimeout(blink, 1500);
+</script>
+</body>
+</html>
